@@ -24,12 +24,6 @@ export default {
     };
     ui.start("#firebaseui-auth-container", uiConfig);
   }
-  // data() {
-  //   return {
-  //     email: "",
-  //     password: ""
-  //   };
-  // },
 };
 </script>
 
