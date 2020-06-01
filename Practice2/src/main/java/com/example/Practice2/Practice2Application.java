@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 @RestController
 @SpringBootApplication
-public class Practice2Application {
+public class SMBKiranaApplication {
 
 	public static void main(String[] args)
 	{
