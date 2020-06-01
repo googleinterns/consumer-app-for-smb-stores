@@ -11,7 +11,7 @@
 	<groupId>com.googleinterns.smb</groupId>
 	<artifactId>consumer-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Practice2</name>
+	<name>SMBKirana</name>
 	<description>Backend Project for Smb Kirana store project</description>
 
 	<properties>
