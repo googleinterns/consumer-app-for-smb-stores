@@ -1,4 +1,4 @@
-package com.example.Practice2;
+package com.googleinterns.smb;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.boot.SpringApplication;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 @RestController
 @SpringBootApplication
-public class Practice2Application {
+public class SMBApplication {
 
 	public static void main(String[] args)
 	{
