@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 @RestController
 @SpringBootApplication
-<<<<<<< HEAD:backend/src/main/java/com/googleinterns.smb/consumer-backend/SMBKiranaApplication.java
-public class SMBKiranaApplication {
->>>>>>> a4d78c478aedc8db67c62642a7f8002bef85cc35:Practice2/src/main/java/com/example/Practice2/Practice2Application.java
 
+public class SMBKiranaApplication {
+	
 	public static void main(String[] args)
 	{
 		SpringApplication.run(SMBKiranaApplication.class,args);
