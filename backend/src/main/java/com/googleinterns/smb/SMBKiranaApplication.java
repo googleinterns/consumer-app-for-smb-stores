@@ -6,21 +6,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.HashMap;
 import java.util.Map;
-@RestController
-@SpringBootApplication
 
+@SpringBootApplication
+@RestController
 public class SMBKiranaApplication {
 	
-	public static void main(String[] args)
-	{
-		SpringApplication.run(SMBKiranaApplication.class,args);
+	public static void main(String[] args) {
+		SpringApplication.run(SMBKiranaApplication.class, args);
 	}
+
 	@RequestMapping("/about")
-	public Map<String,String> hello()
-	{
-		HashMap<String,String> temp=new HashMap<>();
-		temp.put("A","B");
-		return temp;
+	public Map<String, String> hello() {
+		Map<String, String> response = new HashMap<>();
+		response.put("key", "value");
+		return response;
 	}
+	
 }
 
