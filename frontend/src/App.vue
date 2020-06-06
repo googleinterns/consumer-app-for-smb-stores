@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <section id="installBanner" class="banner">
       <button id="installBtn" class="button is-rounded is-success is-small">Install app</button>
     </section>
@@ -39,22 +39,30 @@ window.addEventListener("beforeinstallprompt", event => {
   // Update UI notify the user they can add to home screen
   document.querySelector("#installBanner").style.display = "flex";
 });
+export default {
+  metaInfo: {
+    title: "BharatKaNayaKirana",
+    meta: [
+      {name: "viewport"},
+      {content: "width=device-width, initial-scale=1.0"}
+    ]
+  }
+}
 </script>
 
-
-<style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-.banner {
-  align-content: center;
-  display: none;
-  justify-content: center;
-  width: 100%;
-}
+<style>
+   @import '../node_modules/bulma/css/bulma.css';
+   .banner {
+    align-content: center;
+    display: none;
+    justify-content: center;
+    width: 100%;
+  }
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
 </style>
