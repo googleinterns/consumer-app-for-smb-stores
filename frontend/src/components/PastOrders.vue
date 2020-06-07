@@ -1,49 +1,51 @@
 <template>
-  <div class="container is-fullhd">
+  <div class="bd-lead">
     <div v-if="pastOrders.length">
       <section class="section">
-      <div v-for="order in pastOrders" v-bind:key="order.orderID">
-          <div class="card column">
-            <header class="card-header">
-              <p class="card-header-title">
-                {{order.order.date_of_order.slice(0, 10)}}
-              </p>
-            </header>
-            <div class="card-content">
-              <div class="content">
-                <p><b>Items:</b> <content v-for="(item, index) in order.allItems" v-bind:key="index">
-                  {{item.item_name}} 
-                  <content v-if="index != (order.allItems.length-1)">, </content>
-                  </content></p>
-                <p><b>Status:</b> {{order.order.order_status}}</p>
-                <p><b>Delivered By:</b> {{order.order.merchant_name}}</p>
+        <div>
+            <div class="panel" v-for="order in pastOrders" v-bind:key="order.orderID">
+              <div class="card">
+                <div class="card-content">
+                  <div class="content">
+                    <p align="left"><b>Ordered On:</b> {{order.order.date_of_order | formatDate}}</p>
+                    <p :style="{color: order.order.order_status == 'COMPLETED' ? 'green':'red'}" align="left"><b>Status:</b> {{order.order.order_status}}</p>
+                    <p align="left"><b>Served By:</b> {{order.order.merchant_name}}, {{order.order.merchant_address}}</p>
+                    <p align="left"><b>Offers Availed: </b>{{order.order.offers_availed}}</p>
+                    <div class="table-container">
+                      <table class="table is-narrow">
+                        <thead>
+                          <th>Item</th>
+                          <th align="center">Quantity</th>
+                          <th align="center">Unit Price</th>
+                          <th align="center">Total</th>
+                        </thead>
+                        <tr v-for="(item, index) in order.allItems" v-bind:key="index">
+                          <td>{{item.item_name}}</td>
+                          <td align="center">{{item.quantity}}</td>
+                          <td align="center">{{item.unit_price}}</td>
+                          <td align="center">{{item.quantity * item.unit_price}}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
         </div>
-      </div>
       </section>
     </div>
     <div v-else>
-      <section class="section">
-        <div class="container">
-            <img  src="../assets/cart.png" alt="Cart">
-            <div class="content">
-                <br>
-              <p>No orders yet!<br></p>
-              <p>Start with creating your order on Order Now!</p> 
-            </div>
-      </div>
-      </section>
-    </div>
-    <section class="section">
       <div class="container">
-      <div class="columns is-mobile is-centered">
-        <div class="column is-half">
-          <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
-        </div>
+          <img src="../assets/cart.png" alt="Cart">
+          <div>
+              <section class="section">
+                <p class="content is-medium">No orders yet!</p>
+                <p class="content is-medium">Start with creating your order on Order Now!</p> 
+              </section>
+          </div>
       </div>
-      </div>
-    </section>
+    </div>
+    <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
   </div>
 </template>
 
@@ -72,6 +74,12 @@ export default {
         this.$log.debug(e)
         this.errors = e;
       })
-  }
+  },
 }
 </script>
+
+<style scoped>
+.bd-lead{
+    padding: 0.75rem;
+}
+</style>

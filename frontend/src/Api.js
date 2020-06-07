@@ -4,7 +4,7 @@ const instance = axios.create({
   timeout: 10000 
 });
 
-console.log(process.env.VUE_APP_SERVER_URL)
+// console.log(process.env.VUE_APP_SERVER_URL)
 
 export default {  
 

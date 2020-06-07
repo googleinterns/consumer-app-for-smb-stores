@@ -3,7 +3,7 @@
       <div class="container">
         <div class="navbar-brand">
           <a class="navbar-item" href="#" style="font-weight:bold;">
-          <img src="../assets/googlelogo.png" alt="SMB Kirana">
+          <img src="../assets/google-logo-png.png" alt="SMB Kirana">
           </a>
           <span onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" class="navbar-burger burger" data-target="navMenu">
             <span></span>

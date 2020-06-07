@@ -26,12 +26,20 @@
                                         <tr v-bind:key="index" v-for="(item, index) in itemsInCart">
                                             <td>{{item.item_name}}</td>
                                             <td align="right">
-                                                <button  class="button  is-small" v-on:click="decrementQuantity(item)">-</button>
-                                                <label  class="button is-small is-static">{{item.quantity}}</label>
-                                                <button  class="button  is-small" v-on:click="incrementQuantity(item)">+</button>
-                                                <span v-on:click="removeItem(item)" class="icon is-medium is-left" style="color: red"> 
-                                                    <i class="fa fa-trash-alt"></i>
-                                                </span>
+                                                <div class="field has-addons has-addons-right">
+                                                    <p class="control">
+                                                        <a class="button is-link is-small" v-on:click="decrementQuantity(item)">-</a>
+                                                    </p>
+                                                    <p class="control">
+                                                        <input v-model=item.quantity class="input is-small" style="text-align: center;" type="text" placeholder="Quantity" disabled>
+                                                    </p>
+                                                    <p class="control">
+                                                        <a class="button is-link is-small" v-on:click="incrementQuantity(item)">+</a>
+                                                    </p>
+                                                    <span v-on:click="removeItem(item)" class="icon is-medium is-left" style="color: red"> 
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </span>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
