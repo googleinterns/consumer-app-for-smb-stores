@@ -1,23 +1,20 @@
 <template>
-  <button @click="logout">Logout</button>
+  <div>
+    <Logout/>
+    <PastOrders/>
+  </div>
 </template>
 
 <script>
-// @ is an alias to /src
 
-import firebase from "firebase";
+import PastOrders from '@/components/PastOrders.vue'
+import Logout from '@/components/Logout.vue'
 
 export default {
   name: "Home",
-  methods: {
-    logout: function() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.replace("login");
-        });
-    }
-  }
+   components: {
+    PastOrders,
+    Logout
+  },
 };
 </script>
