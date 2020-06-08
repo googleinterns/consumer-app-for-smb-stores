@@ -9,7 +9,6 @@
           <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
         </div>
       </div>
-      <section class="section">
         <div>
             <div class="panel" v-for="order in pastOrders" v-bind:key="order.orderID">
               <div class="card">
@@ -40,7 +39,6 @@
               </div>
             </div>
         </div>
-      </section>
     </div>
     <div v-else>
       <div class="container">
