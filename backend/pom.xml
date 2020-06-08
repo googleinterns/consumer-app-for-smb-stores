@@ -15,7 +15,7 @@
 	<description>Backend Project for Smb Kirana store project</description>
 
 	<properties>
-		<java.version>8</java.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<dependencyManagement>
@@ -34,6 +34,24 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.fabiomaffioletti</groupId>
+			<artifactId>spring-boot-starter-data-firebase</artifactId>
+			<version>1.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>6.13.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-server-sdk</artifactId>
+			<version>3.0.1</version>
 		</dependency>
 
 		<dependency>

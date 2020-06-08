@@ -59,8 +59,9 @@
                     <span>Empty Cart</span>
                 </button>&nbsp;
                 <button v-on:click="placeOrder()" class="button is-primary is-light" type="submit" value="Place Order">
-                    <span>Place Order
+                    <router-link to="/biddingMerchants"><span >Place Order 
                     </span>
+                    </router-link>
                 </button>
             </p>
         </div>

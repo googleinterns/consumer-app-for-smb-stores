@@ -18,7 +18,7 @@ const options = {
   showConsoleColors: true
 };
 
-firebase.initializeApp(firebaseConfig);
+export var appfirebase =firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 let app = '';

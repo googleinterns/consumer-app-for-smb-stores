@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import firebase from 'firebase'
+import itemDetails from '../views/itemdetails.vue'
+import merchantList from '../views/merchantsList.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +38,22 @@ const routes = [
     name: 'Login',
     component: Login
   },
+  {
+    path: '/biddingMerchants',
+    name : 'merchantList',
+    component : merchantList,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/details',
+    name : 'itemDetails',
+    component : itemDetails,
+    meta: {
+      requiresAuth: true
+    }
+  }
 ]
 
 const router = new VueRouter({
