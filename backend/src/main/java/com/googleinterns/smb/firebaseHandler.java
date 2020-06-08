@@ -18,25 +18,30 @@ public class firebaseHandler {
         Merchant merchant;
 
         public firebaseHandler() throws IOException {
-
-                FileInputStream serviceAccount = new FileInputStream("./service_account_pk.json");
-
-                Map<String, Object> auth = new HashMap<String, Object>();
-                auth.put("uid", "my-service-worker");
-
                 FirebaseOptions options = new FirebaseOptions.Builder()
-                                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                                .setDatabaseUrl("https://kirana-g.firebaseio.com").build();
+                                .setCredentials(GoogleCredentials.getApplicationDefault())
+                                .setDatabaseUrl("https://kirana-g.firebaseio.com/").build();
 
                 FirebaseApp.initializeApp(options);
 
-                DatabaseReference ref = FirebaseDatabase.getInstance()
-                                .getReference("restricted_access/secret_document");
+                // FileInputStream serviceAccount = new
+                // FileInputStream("./service_account_pk.json");
+
+                // Map<String, Object> auth = new HashMap<String, Object>();
+                // auth.put("uid", "my-service-worker");
+
+                // FirebaseOptions options = new FirebaseOptions.Builder()
+                // .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                // .setDatabaseUrl("https://kirana-g.firebaseio.com").build();
+
+                // FirebaseApp.initializeApp(options);
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
                 ref.addListenerForSingleValueEvent((ValueEventListener) new ValueEventListener() {
                         // @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                                 Object document = dataSnapshot.getValue();
-                                System.out.println(document);
+                              //  System.out.println(document);
                         }
 
                         @Override
