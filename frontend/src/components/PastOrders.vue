@@ -1,6 +1,14 @@
 <template>
   <div class="bd-lead">
     <div v-if="pastOrders.length">
+      <div class="columns is-mobile">
+        <div class="column">
+          <h1 class="title is-4" align="left">Order History</h1>
+        </div>
+        <div class="column" align="right">
+          <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
+        </div>
+      </div>
       <section class="section">
         <div>
             <div class="panel" v-for="order in pastOrders" v-bind:key="order.orderID">
@@ -11,18 +19,18 @@
                     <p :style="{color: order.order.order_status == 'COMPLETED' ? 'green':'red'}" align="left"><b>Status:</b> {{order.order.order_status}}</p>
                     <p align="left"><b>Served By:</b> {{order.order.merchant_name}}, {{order.order.merchant_address}}</p>
                     <p align="left"><b>Offers Availed: </b>{{order.order.offers_availed}}</p>
-                    <div class="table-container">
-                      <table class="table is-narrow">
+                    <div>
+                      <table class="table is-narrow is-striped" style="table-layout:fixed;word-wrap:break-word;">
                         <thead>
                           <th>Item</th>
-                          <th align="center">Quantity</th>
-                          <th align="center">Unit Price</th>
-                          <th align="center">Total</th>
+                          <th align="center">Price</th>
                         </thead>
+                         <tfoot>
+                          <th>Total:</th>
+                          <th align="center">{{order.total}}</th>
+                        </tfoot>
                         <tr v-for="(item, index) in order.allItems" v-bind:key="index">
-                          <td>{{item.item_name}}</td>
-                          <td align="center">{{item.quantity}}</td>
-                          <td align="center">{{item.unit_price}}</td>
+                          <td>{{item.item_name}}<div v-if="item.quantity > 1"><small><strong>Qty:</strong> {{item.quantity}}</small></div></td>
                           <td align="center">{{item.quantity * item.unit_price}}</td>
                         </tr>
                       </table>
@@ -44,8 +52,8 @@
               </section>
           </div>
       </div>
+      <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
     </div>
-    <button class="button is-info is-light"><router-link to="/placeOrder">Order Now</router-link></button>
   </div>
 </template>
 
@@ -57,8 +65,7 @@ export default {
 
   data: function(){
     return{
-      pastOrders:[
-      ], 
+      pastOrders:"", 
       response: "",
       errors: ""
     }
@@ -68,7 +75,14 @@ export default {
       api.fetchPastOrders(firebase.auth().currentUser.uid)
       .then( response => {
           this.pastOrders = response.data
-          this.$log.debug("Orders :", response);
+
+          for (var i = 0; i<this.pastOrders.length; i++){
+            var sum = 0
+            for (var j = 0; j<this.pastOrders[i].allItems.length; j++){
+              sum += this.pastOrders[i].allItems[j].unit_price * this.pastOrders[i].allItems[j].quantity
+            }
+            this.$set(this.pastOrders[i], "total", sum)
+          }
       })
       .catch(e => {
         this.$log.debug(e)

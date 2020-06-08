@@ -27,18 +27,20 @@
                                             <td>{{item.item_name}}</td>
                                             <td align="right">
                                                 <div class="field has-addons has-addons-right">
-                                                    <p class="control">
-                                                        <a class="button is-link is-small" v-on:click="decrementQuantity(item)">-</a>
-                                                    </p>
-                                                    <p class="control">
-                                                        <input v-model=item.quantity class="input is-small" style="text-align: center;" type="text" placeholder="Quantity" disabled>
-                                                    </p>
-                                                    <p class="control">
-                                                        <a class="button is-link is-small" v-on:click="incrementQuantity(item)">+</a>
-                                                    </p>
-                                                    <span v-on:click="removeItem(item)" class="icon is-medium is-left" style="color: red"> 
-                                                        <i class="fa fa-trash-alt"></i>
+                                                    <span v-on:click="decrementQuantity(item)" class="icon is-medium is-left" style="color: #17a1b9c7">
+                                                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
                                                     </span>
+                                                    <p class="control">
+                                                        <input v-model=item.quantity class="input is-small" size=2 style="text-align: center;" type="text" placeholder="Quantity" disabled>
+                                                    </p>
+                                                    <span v-on:click="incrementQuantity(item)" class="icon is-medium is-left" style="color: #17a1b9c7">
+                                                         <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </span>
+                                                    <div>
+                                                        <span v-on:click="removeItem(item)" class="icon is-medium is-left" style="color: red"> 
+                                                            <i class="fa fa-trash-alt"></i>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -127,7 +129,7 @@ export default {
         },
 
         decrementQuantity(itemObj){
-            if (itemObj.quantity >= 1){
+            if (itemObj.quantity >= 2){
                 itemObj.quantity -= 1
                 this.updateItemQuantity(itemObj)
             }else {
@@ -178,7 +180,7 @@ export default {
             api.placeOrder(userId, "Merchant A", "New Street, Delhi", "Free delivery",itemsForOrder)
             .then(response => {
                 this.$log.info("Order placed", response)
-                this.itemsInCart = []
+                this.itemsInCart = []   //Need to update based on items
             }).catch((error) => {  
                 this.$log.debug(error)  
                 this.error = "Failed to place order"  

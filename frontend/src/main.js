@@ -27,7 +27,7 @@ firebase.auth().onAuthStateChanged(() => {
     app =
       Vue.filter('formatDate', function(value) {
         if (value) {
-          return moment(String(value)).format('DD-MM-YYYY')
+          return moment(String(value)).format('DD-MMM-YYYY')
         }
       })
       Vue.use(VueLogger, options);

@@ -1,6 +1,6 @@
 {
-  "name": "SMB_Kirana",
-  "short_name": "SMB_Kirana",
+  "name": "Bharat Ka Naya Kirana",
+  "short_name": "Bharat Ka Naya Kirana",
   "lang": "en-US",
   "start_url": "/index.html",
   "display": "standalone",
@@ -8,7 +8,7 @@
   "background_color": "#FFFFFF",
   "icons": [
     {
-      "src": "images/logo.png",
+      "src": "images/googlelogo.png",
       "sizes": "512x512"
     },
     {

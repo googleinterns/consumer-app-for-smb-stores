@@ -41,7 +41,7 @@ window.addEventListener("beforeinstallprompt", event => {
 });
 export default {
   metaInfo: {
-    title: "BharatKaNayaKirana",
+    title: "Bharat Ka Naya Kirana",
     meta: [
       {name: "viewport"},
       {content: "width=device-width, initial-scale=1.0"}

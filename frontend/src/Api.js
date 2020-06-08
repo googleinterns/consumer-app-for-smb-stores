@@ -17,7 +17,7 @@ export default {
 
   fetchPastOrders: (userID)=> instance.get(process.env.VUE_APP_SERVER_URL + '/getOrderDetails?user=' + userID, {
       transformResponse: [function(data) {
-        console.log(data);
+        // console.log(data);
         return data? JSON.parse(data) : data;
       }]
     }),

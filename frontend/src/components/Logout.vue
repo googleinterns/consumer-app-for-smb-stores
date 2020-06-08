@@ -2,8 +2,10 @@
     <nav class="navbar is-light">
       <div class="container">
         <div class="navbar-brand">
-          <a class="navbar-item" href="#" style="font-weight:bold;">
-          <img src="../assets/google-logo-png.png" alt="SMB Kirana">
+          <a class="navbar-item" style="font-weight:bold;">
+            <router-link to="/home">
+              <img src="../assets/google-logo-png.png" alt="SMB Kirana">
+            </router-link>
           </a>
           <span onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" class="navbar-burger burger" data-target="navMenu">
             <span></span>
