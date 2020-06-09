@@ -1,4 +1,5 @@
 HELP.md
+service_account_pk.json
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
