@@ -3,10 +3,9 @@ import firebase from 'firebase'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
-
 import { firebaseConfig } from '../firebase-config.js';
 
-firebase.initializeApp(firebaseConfig);
+export var appfirebase =firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 let app = '';

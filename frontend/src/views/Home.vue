@@ -3,8 +3,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import firebase from "firebase";
 
 export default {
