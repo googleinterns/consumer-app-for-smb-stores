@@ -10,10 +10,10 @@ import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 const options = {
   isEnabled: true,
-  logLevel : 'debug',
-  stringifyArguments : false,
-  showLogLevel : true,
-  showMethodName : false,
+  logLevel: 'debug',
+  stringifyArguments: false,
+  showLogLevel: true,
+  showMethodName: false,
   separator: '|',
   showConsoleColors: true
 };
@@ -25,20 +25,20 @@ let app = '';
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {
     app =
-      Vue.filter('formatDate', function(value) {
+      Vue.filter('formatDate', function (value) {
         if (value) {
           return moment(String(value)).format('DD-MMM-YYYY')
         }
       })
-      Vue.use(VueLogger, options);
-      Vue.use(VueMeta, {
-        keyname: 'head'
-      })
+    Vue.use(VueLogger, options);
+    Vue.use(VueMeta, {
+      keyname: 'head'
+    })
 
-      new Vue({
-        router,
-        render: h => h(App)
-      }).$mount('#app');
+    new Vue({
+      router,
+      render: h => h(App)
+    }).$mount('#app');
   }
 });
 

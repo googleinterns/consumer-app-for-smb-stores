@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Logout/>
-    <SelectItems/>
+    <Logout />
+    <SelectItems />
   </div>
 </template>
 
 <script>
-import SelectItems from '@/components/SelectItems.vue'
-import Logout from '@/components/Logout.vue'
+import SelectItems from "@/components/SelectItems.vue";
+import Logout from "@/components/Logout.vue";
 
 export default {
-  name: 'PlaceOrder',
+  name: "PlaceOrder",
   components: {
     SelectItems,
     Logout
   }
-}
+};
 </script>

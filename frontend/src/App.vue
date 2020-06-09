@@ -43,26 +43,26 @@ export default {
   metaInfo: {
     title: "Bharat Ka Naya Kirana",
     meta: [
-      {name: "viewport"},
-      {content: "width=device-width, initial-scale=1.0"}
+      { name: "viewport" },
+      { content: "width=device-width, initial-scale=1.0" }
     ]
   }
-}
+};
 </script>
 
 <style>
-   @import '../node_modules/bulma/css/bulma.css';
-   .banner {
-    align-content: center;
-    display: none;
-    justify-content: center;
-    width: 100%;
-  }
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
+@import "../node_modules/bulma/css/bulma.css";
+.banner {
+  align-content: center;
+  display: none;
+  justify-content: center;
+  width: 100%;
+}
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
 </style>

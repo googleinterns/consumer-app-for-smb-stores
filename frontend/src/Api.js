@@ -1,44 +1,45 @@
-import axios from 'axios' 
+import axios from 'axios'
 
-const instance = axios.create({ 
-  timeout: 10000 
+const instance = axios.create({
+  timeout: 10000
 });
 
-// console.log(process.env.VUE_APP_SERVER_URL)
 
-export default {  
+export default {
 
-  data(){
-    return{
+  data() {
+    return {
       response: [],
       errors: []
     }
   },
 
-  fetchPastOrders: (userID)=> instance.get(process.env.VUE_APP_SERVER_URL + '/getOrderDetails?user=' + userID, {
-      transformResponse: [function(data) {
-        // console.log(data);
-        return data? JSON.parse(data) : data;
-      }]
-    }),
-
-  placeOrder: (userId, servicingMerchantName, servicingMerchantAddress, offers, itemDetails) => 
-  instance.post(process.env.VUE_APP_SERVER_URL + '/placeOrder', {userId: userId, servicingMerchantName: servicingMerchantName, 
-                                servicingMerchantAddress: servicingMerchantAddress, 
-                                offers: offers, 
-                                itemDetails: itemDetails}),
-
-  addItem: (userIdentifier, itemName, quantity) => instance.post(process.env.VUE_APP_SERVER_URL + '/addNewItem', {userID: userIdentifier, itemName: itemName, quantity: quantity}),
-  
-  getAllItemsInCart: (userID) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemsInCart?user=' + userID, {
-    transformResponse: [function(data) {
-      console.log(data);
-      return data? JSON.parse(data) : data;
+  fetchPastOrders: (user_id) => instance.get(process.env.VUE_APP_SERVER_URL + '/getOrderDetails?user=' + user_id, {
+    transformResponse: [function (data) {
+      return data ? JSON.parse(data) : data;
     }]
   }),
 
-  changeItemQuantity: (userID, itemName, quantity) => instance.post(process.env.VUE_APP_SERVER_URL + '/updateItemQuantity', {userID: userID, itemName: itemName, quantity: quantity}),
+  placeOrder: (user_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
+    instance.post(process.env.VUE_APP_SERVER_URL + '/placeOrder', {
+      user_id: user_id,
+      servicing_merchant_name: servicing_merchant_name,
+      servicing_merchant_address: servicing_merchant_address,
+      offers: offers,
+      item_details: item_details
+    }),
 
-  deleteItem: (userID, itemName) => instance.post(process.env.VUE_APP_SERVER_URL + '/removeItemFromCart', {userID: userID, itemName: itemName})
+  addItem: (user_id, item_name, quantity) => instance.post(process.env.VUE_APP_SERVER_URL + '/addNewItem', { user_id: user_id, item_name: item_name, quantity: quantity }),
+
+  getAllItemsInCart: (user_id) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemsInCart?user=' + user_id, {
+    transformResponse: [function (data) {
+      console.log(data);
+      return data ? JSON.parse(data) : data;
+    }]
+  }),
+
+  changeItemQuantity: (user_id, item_name, quantity) => instance.post(process.env.VUE_APP_SERVER_URL + '/updateItemQuantity', { user_id: user_id, item_name: item_name, quantity: quantity }),
+
+  deleteItem: (user_id, item_name) => instance.post(process.env.VUE_APP_SERVER_URL + '/removeItemFromCart', { user_id: user_id, item_name: item_name })
 
 }
