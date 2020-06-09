@@ -1,29 +1,30 @@
 package com.googleinterns.smb;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.cloud.firestore.annotation.PropertyName;
 
-public class CartItem {
+
+public class ItemDetails {
+
+    @JsonProperty("user_id")
+    private String userId;
 
     @JsonProperty("item_name")
     private String itemName;
-    private int quantity;
 
-    public CartItem() {
+    private int quantity = 0;
 
+    public String getUserId() {
+        return userId;
     }
 
-    public CartItem(String itemName, int quantity) {
-        this.itemName = itemName;
-        this.quantity = quantity;
+    public void setUserID(String userId) {
+        this.userId = userId;
     }
 
-    @PropertyName("item_name")
     public String getItemName() {
         return itemName;
     }
 
-    @PropertyName("item_name")
     public void setItemName(String itemName) {
         this.itemName = itemName;
     }
@@ -31,4 +32,9 @@ public class CartItem {
     public int getQuantity() {
         return quantity;
     }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
 }

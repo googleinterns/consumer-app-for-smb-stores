@@ -1,43 +1,32 @@
 package com.googleinterns.smb;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-class User{
-    public String userID;
-}
-
-class OrderGeneration{
-    public String userId;
-    public String servicingMerchantName;
-    public String servicingMerchantAddress;
-    public String offers;
-    public List<Item> itemDetails;
-}
-
+@CrossOrigin(origins = "*")
 @RestController
 public class OrderDocumentsController {
-    
-    @RequestMapping(value = "/placeOrder", method = RequestMethod.POST)
-	public void placeOrder(@RequestBody OrderGeneration orderRequest) throws Exception {
-        Order order = new Order(orderRequest.userId, orderRequest.servicingMerchantName, 
-              orderRequest.servicingMerchantAddress, orderRequest.offers);
 
+    @Autowired
+    private FireStoreInstance fireStoreInstance;
+
+    @PostMapping(value = "/placeOrder")
+    public void placeOrder(@RequestBody OrderGeneration orderRequest) throws ExecutionException, InterruptedException {
+        Order order = new Order(orderRequest.getUserId(), orderRequest.getServicingMerchantName(), orderRequest.getServicingMerchantAddress(), orderRequest.getOffers());
         OrderDocuments orderDoc = new OrderDocuments(order);
 
-        for (Item item: orderRequest.itemDetails){
+        for (Item item : orderRequest.getItemDetails()) {
             orderDoc.addItem(item);
-            SMBKiranaApplication.fireStoreInstance.deleteItem(orderRequest.userId, item.item_name);
+            fireStoreInstance.deleteItem(orderRequest.getUserId(), item.getItemName());
         }
+        fireStoreInstance.addOrderDoc(orderDoc);
+    }
 
-		SMBKiranaApplication.fireStoreInstance.addOrderDoc(orderDoc);
-	}
-
-	@RequestMapping(value="/getOrderDetails")
-	public ArrayList<OrderDocuments> getOrderDetails(@RequestParam String user) throws Exception{
-		ArrayList<OrderDocuments> allOrders = SMBKiranaApplication.fireStoreInstance.retrieveOrderDetails(user);
-		return allOrders;
-	}
+    @GetMapping(value = "/getOrderDetails")
+    public List<OrderDocuments> getOrderDetails(@RequestParam String user) throws ExecutionException, InterruptedException {
+        return fireStoreInstance.retrieveOrderDetails(user);
+    }
 }

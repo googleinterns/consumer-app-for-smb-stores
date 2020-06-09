@@ -1,49 +1,39 @@
 package com.googleinterns.smb;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-class ItemDetails{
-	public String userID;
-	public String itemName;
-	public int quantity = 0;
-
-	@Override
-	public String toString(){
-		return userID;
-	}
-}
-
+@CrossOrigin(origins = "*")
 @RestController
 public class CartDocumentsController {
 
-	@RequestMapping(value="/getItemsInCart")
-	public ArrayList<CartItem> getItemsInCart(@RequestParam String user)
-			throws InterruptedException, ExecutionException {
-		ArrayList<CartItem> allItemsInCart = SMBKiranaApplication.fireStoreInstance.retrieveCartItems(user);
-		return allItemsInCart;
-	}
+    @Autowired
+    private FireStoreInstance fireStoreInstance;
 
-	@RequestMapping(value="/updateItemQuantity", method=RequestMethod.POST)
-	public List<CartItem> updateItemQuantity(@RequestBody ItemDetails itemDetails)
-			throws InterruptedException, ExecutionException {
-		return SMBKiranaApplication.fireStoreInstance.updateQuantity(itemDetails.userID, itemDetails.itemName, itemDetails.quantity);
-	}
+    @GetMapping(value = "/getItemsInCart")
+    public List<CartItem> getItemsInCart(@RequestParam String user) throws InterruptedException, ExecutionException {
+        return fireStoreInstance.retrieveCartItems(user);
+    }
 
-	@RequestMapping(value="/removeItemFromCart", method=RequestMethod.POST)
-	public List<CartItem> removeItem(@RequestBody ItemDetails itemDetails) throws InterruptedException, ExecutionException {
-		return SMBKiranaApplication.fireStoreInstance.deleteItem(itemDetails.userID, itemDetails.itemName);
-	}
-	
+    @PostMapping(value = "/updateItemQuantity")
+    public List<CartItem> updateItemQuantity(@RequestBody ItemDetails itemDetails) throws InterruptedException, ExecutionException {
+        return fireStoreInstance.updateQuantity(itemDetails.getUserId(), itemDetails.getItemName(), itemDetails.getQuantity());
+    }
 
-	@RequestMapping(value="/addNewItem", method=RequestMethod.POST)
-	public CartItem addNewItem(@RequestBody ItemDetails itemRequest) throws InterruptedException, ExecutionException {
-		String userId = itemRequest.userID;
-		CartItem item = new CartItem(itemRequest.itemName, itemRequest.quantity);
+    @PostMapping(value = "/removeItemFromCart")
+    public List<CartItem> removeItem(@RequestBody ItemDetails itemDetails) throws InterruptedException, ExecutionException {
+        return fireStoreInstance.deleteItem(itemDetails.getUserId(), itemDetails.getItemName());
+    }
 
-		return SMBKiranaApplication.fireStoreInstance.addItemToCart(userId, item);
-	}
+
+    @PostMapping(value = "/addNewItem")
+    public CartItem addNewItem(@RequestBody ItemDetails itemRequest) throws InterruptedException, ExecutionException {
+        String userId = itemRequest.getUserId();
+        CartItem item = new CartItem(itemRequest.getItemName(), itemRequest.getQuantity());
+
+        return fireStoreInstance.addItemToCart(userId, item);
+    }
 }

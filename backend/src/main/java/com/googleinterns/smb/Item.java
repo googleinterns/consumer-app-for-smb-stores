@@ -1,23 +1,52 @@
 package com.googleinterns.smb;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.cloud.firestore.annotation.PropertyName;
+
 public class Item {
-    
-    public String item_name;
-    public int quantity;
-    public float unit_price;
 
-    public Item(){
+    @JsonProperty("item_name")
+    private String itemName;
+    private int quantity;
+    @JsonProperty("unit_price")
+    private float unitPrice;
+
+    public Item() {
 
     }
 
-    public Item(String itemName, int quantity, float price){
-        this.item_name = itemName;
+    public Item(String itemName, int quantity, float price) {
+        this.itemName = itemName;
         this.quantity = quantity;
-        this.unit_price = price;
+        this.unitPrice = price;
     }
 
-    @Override
-    public String toString(){
-        return this.item_name + " " + this.quantity + " " + this.unit_price;
+    @PropertyName("item_name")
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    @PropertyName("unit_price")
+    public void setUnitPrice(float unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    @PropertyName("item_name")
+    public String getItemName() {
+        return itemName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    @PropertyName("unit_price")
+    public float getUnitPrice() {
+        return unitPrice;
+    }
+
 }
