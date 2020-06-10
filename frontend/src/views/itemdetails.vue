@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Logout />
   <div class="container">
     <h1 class="title">Order Details</h1>
     <div class="card-content">
@@ -48,12 +50,14 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import { itemexp } from "./merchantsList.vue";
 import { merchantexp } from "./merchantsList.vue";
-import {timeString} from "./merchantsList.vue";
+import {time} from "./merchantsList.vue";
+import Logout from "@/components/Logout.vue";
 
 export default {
   name: "itemDetails",
@@ -72,7 +76,7 @@ export default {
   mounted() {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
-    this.deliveryTime=timeString;
+    this.deliveryTime=time;
   }
 };
 </script>

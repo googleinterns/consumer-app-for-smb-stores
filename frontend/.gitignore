@@ -3,7 +3,6 @@ node_modules
 /dist
 firebase-config.js
 .firebase
-database.rules.json
 
 
 # local env files

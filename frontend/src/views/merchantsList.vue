@@ -1,4 +1,6 @@
 <template>
+<div>
+  <Logout />
   <div class="container">
     <div
       @click="ItemDetails(merchant)"
@@ -25,27 +27,30 @@
       <p>Click on merchant to get more details and placing the order</p>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import { appfirebase } from "../main.js";
 import firebase from "firebase";
+import Logout from "@/components/Logout.vue";
 
 export var merchantexp;
 export var itemexp;
-export var timeString;
+export var time;
 
 export default {
   name: "merchantList",
   data() {
     return {
-      merchants: []
+      merchants: [],timeString:""
     };
   },
   methods: {
     ItemDetails(merchantdetails) {
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
+      time=this.timeString;
       this.$router.push("/orderDetails");
     }
   },
@@ -63,10 +68,9 @@ export default {
            var minutes = dateObj.getUTCMinutes(); 
            var seconds = dateObj.getSeconds(); 
   
-           timeString = hours.toString().padStart(2, '0') 
+          this.timeString = hours.toString().padStart(2, '0') 
                 + ':' + minutes.toString().padStart(2, '0') 
                 + ':' + seconds.toString().padStart(2, '0'); 
-
     });
   }
 };
