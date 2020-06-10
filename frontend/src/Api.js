@@ -4,7 +4,6 @@ const instance = axios.create({
   timeout: 10000
 });
 
-
 export default {
 
   data() {
@@ -33,7 +32,6 @@ export default {
 
   getAllItemsInCart: (user_id) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemsInCart?user=' + user_id, {
     transformResponse: [function (data) {
-      console.log(data);
       return data ? JSON.parse(data) : data;
     }]
   }),

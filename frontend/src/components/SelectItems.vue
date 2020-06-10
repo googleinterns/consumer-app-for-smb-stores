@@ -107,20 +107,15 @@ export default {
     api
       .getAllItemsInCart(userId)
       .then(response => {
-        this.$log.debug("Data loaded: ", response.data);
-        this.$log.debug(userId);
-        this.$log.debug("Over here");
         this.itemsInCart = response.data;
       })
       .catch(error => {
         this.$log.debug(error);
         this.error = "Failed to load data";
-      })
-      .finally(() => (this.loading = false));
+      });
   },
   data: function() {
     return {
-      loading: true,
       inputValue: "",
       itemsInCart: []
     };
@@ -141,7 +136,6 @@ export default {
           api
             .addItem(userId, item, 1)
             .then(response => {
-              this.$log.debug("New item added:", response);
               this.itemsInCart.push({
                 item_name: response.data.item_name,
                 quantity: response.data.quantity
@@ -149,7 +143,6 @@ export default {
             })
             .catch(error => {
               this.$log.debug(error);
-              this.error = "Failed to add item";
             });
           this.inputValue = "";
         }
@@ -175,27 +168,21 @@ export default {
       api
         .deleteItem(userId, itemObj.item_name)
         .then(response => {
-          this.$log.debug("Item removed:", itemObj);
-          this.$log.info("Item deleted:", response.data);
-          this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
+          if (response) {
+            this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
+          }
         })
         .catch(error => {
           this.$log.debug(error);
-          this.error = "Failed to remove item";
         });
     },
 
     updateItemQuantity(itemObj) {
       var userId = firebase.auth().currentUser.uid;
-      this.$log.info(itemObj.item_name, itemObj.quantity);
       api
         .changeItemQuantity(userId, itemObj.item_name, itemObj.quantity)
-        .then(response => {
-          this.$log.info("Item quantity updated:", response.data);
-        })
         .catch(error => {
           this.$log.debug(error);
-          this.error = "Failed to update quantity";
         });
     },
 
@@ -224,12 +211,12 @@ export default {
           itemsForOrder
         )
         .then(response => {
-          this.$log.info("Order placed", response);
-          this.itemsInCart = []; //Need to update based on items
+          if (response) {
+            this.itemsInCart = []; //Need to update based on items
+          }
         })
         .catch(error => {
           this.$log.debug(error);
-          this.error = "Failed to place order";
         });
     }
   }
