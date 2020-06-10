@@ -1,8 +1,12 @@
 <template>
-  <div class="container">
-    <img src="../assets/googlelogo.png" alt="googlelogo" />
-    <p>Bharat ka digital Kirana</p>
-    <section id="firebaseui-auth-container"></section>
+  <div>
+    <div class="Site-content">
+      <div style="margin-top: 11%"></div>
+
+      <img src="../assets/googlelogo.png" alt="googlelogo" />
+      <p style="font-size: 1.2em; padding-top: 15px;">Bharat Ka Digital Kirana</p>
+      <section id="firebaseui-auth-container"></section>
+    </div>
   </div>
 </template>
 
@@ -26,13 +30,3 @@ export default {
   }
 };
 </script>
-
-<style  scoped>
-.container {
-  margin-top: 150px;
-  margin-bottom: 50px;
-}
-p {
-  margin-bottom: 50px;
-}
-</style>

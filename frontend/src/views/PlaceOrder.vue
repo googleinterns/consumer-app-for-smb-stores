@@ -1,18 +1,18 @@
 <template>
   <div>
     <Logout />
-    <PastOrders />
+    <SelectItems />
   </div>
 </template>
 
 <script>
-import PastOrders from "@/components/PastOrders.vue";
+import SelectItems from "@/components/SelectItems.vue";
 import Logout from "@/components/Logout.vue";
 
 export default {
-  name: "Home",
+  name: "PlaceOrder",
   components: {
-    PastOrders,
+    SelectItems,
     Logout
   }
 };

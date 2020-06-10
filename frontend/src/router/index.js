@@ -24,6 +24,14 @@ const routes = [
     }
   },
   {
+    path: '/placeOrder',
+    name: 'PlaceOrder',
+    component: () => import('../views/PlaceOrder.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login
