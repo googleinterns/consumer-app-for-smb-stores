@@ -2,14 +2,12 @@ package com.googleinterns.smb;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class availableMerchantsController {
+public class MerchantsController {
 
     @RequestMapping(value = "/sendBid", method = RequestMethod.POST)
     public void sendBid(@RequestBody Merchant merchantRequest) throws Exception {

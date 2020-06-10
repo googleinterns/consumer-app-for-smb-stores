@@ -1,8 +1,6 @@
 package com.googleinterns.smb;
 
-
 import org.springframework.boot.SpringApplication;
-
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
@@ -10,9 +8,7 @@ import java.io.IOException;
 public class SMBKiranaApplication {
 
 	public static void main(String[] args) throws IOException {
-
-		firebaseHandler handler = new firebaseHandler();
-
+		FirebaseHandler handler = new FirebaseHandler();
 		SpringApplication.run(SMBKiranaApplication.class, args);
 	}
 }

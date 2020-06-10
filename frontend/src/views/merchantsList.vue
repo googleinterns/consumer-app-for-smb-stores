@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { appfirebase } from "../main.js";
 import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
 
@@ -41,6 +40,9 @@ export var time;
 
 export default {
   name: "merchantList",
+  components:{
+    Logout
+  },
   data() {
     return {
       merchants: [],timeString:""
@@ -55,7 +57,7 @@ export default {
     }
   },
   created() {
-    let dbref = appfirebase.database();
+    let dbref = firebase.database();
     var userId = firebase.auth().currentUser.uid;
     var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
     mdb.on("child_added", snapshot => {
