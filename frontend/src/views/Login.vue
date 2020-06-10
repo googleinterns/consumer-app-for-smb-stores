@@ -23,7 +23,7 @@ export default {
       ui = new firebaseui.auth.AuthUI(firebase.auth());
     }
     var uiConfig = {
-      signInSuccessUrl: "/home", // This redirect can be achived by route using callback.
+      signInSuccessUrl: "/home",
       signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID]
     };
     ui.start("#firebaseui-auth-container", uiConfig);

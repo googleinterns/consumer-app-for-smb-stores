@@ -90,7 +90,9 @@
           type="submit"
           value="Place Order"
         >
-          <span>Place Order</span>
+           <router-link to="/merchantBids"><span >Place Order 
+                    </span>
+                    </router-link>
         </button>
       </p>
     </div>

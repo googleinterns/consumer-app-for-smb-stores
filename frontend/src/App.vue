@@ -12,9 +12,9 @@
 
 <script>
 let deferredPrompt;
+
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
-
   deferredPrompt = event;
 
   document.querySelector("#installBtn").addEventListener("click", event => {
@@ -30,7 +30,6 @@ window.addEventListener("beforeinstallprompt", event => {
       deferredPrompt = null;
     });
   });
-
   document.querySelector("#installBanner").style.display = "flex";
 });
 export default {
