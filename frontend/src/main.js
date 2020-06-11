@@ -6,7 +6,7 @@ import router from './router'
 import VueMeta from 'vue-meta';
 import moment from 'moment';
 import * as VueGoogleMaps from "vue2-google-maps";
-
+import {config} from '../googleMap-config.js';
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 const options = {
@@ -47,7 +47,7 @@ Vue.config.productionTip = false
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: "AIzaSyBlJGX_4DP97htDmkrBfSnYzvZ2X3DLSz8",
+    key: config.MY_KEY,
   }
 });
 
