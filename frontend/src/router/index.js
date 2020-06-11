@@ -26,6 +26,14 @@ const routes = [
     }
   },
   {
+    path: '/orderHistory',
+    name: 'OrderHistory',
+    component: () => import('../views/OrderHistory.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/placeOrder',
     name: 'PlaceOrder',
     component: () => import('../views/PlaceOrder.vue'),
