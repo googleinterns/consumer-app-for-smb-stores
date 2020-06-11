@@ -28,7 +28,10 @@
                   </figure>
                 </center>
               </div>
-              <div  class="box is-shadowless" style="padding-top: 5px; padding-bottom: 10px; padding-right: 10px; padding-left: 10px;">
+              <div
+                class="box is-shadowless"
+                style="padding-top: 5px; padding-bottom: 10px; padding-right: 10px; padding-left: 10px;"
+              >
                 <div>
                   <div>
                     <small>
@@ -37,14 +40,30 @@
                           <strong>{{card.item_name}}</strong>
                         </p>
                       </span>
-                      <p align="left">MRP: <strike> ₹ {{card.item_mrp}}</strike></p>
-                      <small><p align="left" style="color: #df7518">Least Price: ₹ {{card.item_lowest_price}}</p></small>
+                      <p align="left">
+                        MRP:
+                        <strike>₹ {{card.item_mrp}}</strike>
+                      </p>
+                      <small>
+                        <p
+                          align="left"
+                          style="color: #df7518"
+                        >Least Price: ₹ {{card.item_lowest_price}}</p>
+                      </small>
                     </small>
                   </div>
                 </div>
                 <div>
-                  <button class="button is-link is-small is-fullwidth" style="background-color: #0ca1e5;" v-on:click="addItemToCart(card)">
-                    <span><strong><big>Add to cart</big></strong></span>
+                  <button
+                    class="button is-link is-small is-fullwidth"
+                    style="background-color: #0ca1e5;"
+                    v-on:click="addItemToCart(card)"
+                  >
+                    <span>
+                      <strong>
+                        <big>Add to cart</big>
+                      </strong>
+                    </span>
                   </button>
                 </div>
               </div>
@@ -69,64 +88,64 @@ export default {
           item_image: require("../assets/surfExcel.jpg"),
           item_name: "Surf Excel 1 kg",
           item_mrp: 180,
-          item_lowest_price: 160,
+          item_lowest_price: 160
         },
         {
           item_key: 2,
           item_image: require("../assets/biscuit.jpeg"),
           item_name: "Britannia Good Day 100 gm",
           item_mrp: 20,
-          item_lowest_price: 17,
+          item_lowest_price: 17
         },
         {
           item_key: 3,
           item_image: require("../assets/realJuice.jpg"),
           item_name: "Real Apple Juice 1L",
           item_mrp: 130,
-          item_lowest_price: 100,
+          item_lowest_price: 100
         },
         {
           item_key: 4,
           item_image: require("../assets/rin.jpg"),
           item_name: "Rin 250 gm",
           item_mrp: 60,
-          item_lowest_price: 56,
+          item_lowest_price: 56
         },
         {
           item_key: 5,
           item_image: require("../assets/lifebuoy.jpeg"),
           item_name: "Lifebuoy 190 ml",
           item_mrp: 85,
-          item_lowest_price: 70,
+          item_lowest_price: 70
         },
         {
           item_key: 6,
           item_image: require("../assets/head&shoulder.jpg"),
           item_name: "Head & Shoulder 650 ml",
           item_mrp: 550,
-          item_lowest_price: 500,
+          item_lowest_price: 500
         },
         {
           item_key: 7,
           item_image: require("../assets/dettol.jpg"),
           item_name: "Dettol 250 ml",
           item_mrp: 100,
-          item_lowest_price: 95,
+          item_lowest_price: 95
         },
         {
           item_key: 8,
           item_image: require("../assets/haldiramChips.jpeg"),
           item_name: "Haldiram Chips",
           item_mrp: 20,
-          item_lowest_price: 18,
+          item_lowest_price: 18
         },
         {
           item_key: 9,
           item_image: require("../assets/fortune-sunflower-oil.jpg"),
           item_name: "Fortune Sunflower Oil 1L",
           item_mrp: 120,
-          item_lowest_price: 105,
-        },
+          item_lowest_price: 105
+        }
       ]
     };
   },

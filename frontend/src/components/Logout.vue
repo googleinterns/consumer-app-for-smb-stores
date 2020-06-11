@@ -19,12 +19,14 @@
       </div>
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
-          <a class="navbar-item"><router-link to="/placeOrder">
-            <a class="is-fullwidth">My Cart</a>
+          <a class="navbar-item">
+            <router-link to="/placeOrder">
+              <a class="is-fullwidth">My Cart</a>
             </router-link>
           </a>
-          <a class="navbar-item"><router-link to="/orderHistory">
-            <a class="is-fullwidth">Order History</a>
+          <a class="navbar-item">
+            <router-link to="/orderHistory">
+              <a class="is-fullwidth">Order History</a>
             </router-link>
           </a>
           <a @click="logout" class="navbar-item">
