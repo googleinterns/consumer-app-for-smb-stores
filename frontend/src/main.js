@@ -5,6 +5,7 @@ import './registerServiceWorker'
 import router from './router'
 import VueMeta from 'vue-meta';
 import moment from 'moment';
+import * as VueGoogleMaps from "vue2-google-maps";
 
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
@@ -43,4 +44,10 @@ firebase.auth().onAuthStateChanged(() => {
 });
 
 Vue.config.productionTip = false
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyBlJGX_4DP97htDmkrBfSnYzvZ2X3DLSz8",
+  }
+});
 
