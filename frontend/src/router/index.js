@@ -26,6 +26,14 @@ const routes = [
     }
   },
   {
+    path: '/orderHistory',
+    name: 'OrderHistory',
+    component: () => import('../views/OrderHistory.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/placeOrder',
     name: 'PlaceOrder',
     component: () => import('../views/PlaceOrder.vue'),
@@ -40,16 +48,16 @@ const routes = [
   },
   {
     path: '/merchantBids',
-    name : 'merchantList',
-    component : merchantList,
+    name: 'merchantList',
+    component: merchantList,
     meta: {
       requiresAuth: true
     }
   },
   {
     path: '/orderDetails',
-    name : 'itemDetails',
-    component : itemDetails,
+    name: 'itemDetails',
+    component: itemDetails,
     meta: {
       requiresAuth: true
     }
