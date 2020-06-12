@@ -106,21 +106,19 @@ export default {
   name: "SelectItems",
   mounted() {
     var userId = firebase.auth().currentUser.uid;
-    var tempArray = [];
     let self = this;
     firebase
       .database()
       .ref("user_cart/" + userId)
       .once("value")
-      .then(function(snapshot) {
-        snapshot.forEach(function(childSnapshot) {
-          tempArray.push({
-            item_id: childSnapshot.key,
-            item_name: childSnapshot.val().item_name,
-            item_quantity: childSnapshot.val().item_quantity
+      .then(function(cart) {
+        cart.forEach(function(cartItem) {
+          self.itemsInCart.push({
+            item_id: cartItem.key,
+            item_name: cartItem.val().item_name,
+            item_quantity: cartItem.val().item_quantity
           });
         });
-        self.itemsInCart = tempArray;
       });
   },
   data: function() {

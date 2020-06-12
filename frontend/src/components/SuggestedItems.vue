@@ -157,8 +157,8 @@ export default {
         .ref("user_cart/" + userId + "/")
         .orderByChild("item_name")
         .equalTo(item.item_name);
-      reference.once("value").then(function(snapshot) {
-        if (!snapshot.exists()) {
+      reference.once("value").then(function(cartItem) {
+        if (!cartItem.exists()) {
           pushRef.push({
             item_name: item.item_name,
             item_quantity: 1
