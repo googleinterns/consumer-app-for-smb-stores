@@ -20,7 +20,6 @@ public class OrderDocumentsController {
 
         for (Item item : orderRequest.getItemDetails()) {
             orderDoc.addItem(item);
-            fireStoreInstance.deleteItem(orderRequest.getUserId(), item.getItemName());
         }
         fireStoreInstance.addOrderDoc(orderDoc);
     }

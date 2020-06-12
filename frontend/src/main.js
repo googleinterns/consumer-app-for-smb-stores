@@ -43,4 +43,3 @@ firebase.auth().onAuthStateChanged(() => {
 });
 
 Vue.config.productionTip = false
-
