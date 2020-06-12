@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import api from "../Api";
 import firebase from "firebase";
 export default {
   name: "SuggestedItems",
@@ -152,8 +151,19 @@ export default {
   methods: {
     addItemToCart(item) {
       var userId = firebase.auth().currentUser.uid;
-      api.addItem(userId, item.item_name, 1).catch(error => {
-        this.$log.debug(error);
+      var pushRef = firebase.database().ref("user_cart/" + userId + "/");
+      var reference = firebase
+        .database()
+        .ref("user_cart/" + userId + "/")
+        .orderByChild("item_name")
+        .equalTo(item.item_name);
+      reference.once("value").then(function(snapshot) {
+        if (!snapshot.exists()) {
+          pushRef.push({
+            item_name: item.item_name,
+            item_quantity: 1
+          });
+        }
       });
     }
   }
