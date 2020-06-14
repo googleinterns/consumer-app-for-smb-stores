@@ -62,7 +62,7 @@
               <div class="panel-block table-container is-flex-widescreen-only">
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
-                    <tr v-bind:key="index" v-for="(item, index) in itemsInCart">
+                    <tr v-bind:key="item.item_id" v-for="(item) in itemsInCart">
                       <td>{{item.item_name}}</td>
                       <td align="right">
                         <div class="field has-addons has-addons-right">
@@ -75,7 +75,7 @@
                           </span>
                           <p class="control">
                             <input
-                              v-model="item.quantity"
+                              v-model="item.item_quantity"
                               class="input is-small"
                               size="2"
                               style="text-align: center;"
@@ -147,14 +147,19 @@ export default {
   name: "SelectItems",
   mounted() {
     var userId = firebase.auth().currentUser.uid;
-    api
-      .getAllItemsInCart(userId)
-      .then(response => {
-        this.itemsInCart = response.data;
-      })
-      .catch(error => {
-        this.$log.debug(error);
-        this.error = "Failed to load data";
+    let self = this;
+    firebase
+      .database()
+      .ref("user_cart/" + userId)
+      .once("value")
+      .then(function(cart) {
+        cart.forEach(function(cartItem) {
+          self.itemsInCart.push({
+            item_id: cartItem.key,
+            item_name: cartItem.val().item_name,
+            item_quantity: cartItem.val().item_quantity
+          });
+        });
       });
   },
   data: function() {
@@ -201,6 +206,39 @@ export default {
           }
         });
     },
+    addToCart(item) {
+      var userId = firebase.auth().currentUser.uid;
+      var reference = firebase.database().ref("user_cart/" + userId + "/");
+      var itemDoc = reference.push({
+        item_name: item,
+        item_quantity: 1
+      });
+      var item_id = itemDoc.key;
+      this.itemsInCart.push({
+        item_id: item_id,
+        item_name: item,
+        item_quantity: 1
+      });
+    },
+
+    updateQuantityInCart(item_id, value) {
+      var userId = firebase.auth().currentUser.uid;
+      var update = {};
+      update["user_cart/" + userId + "/" + item_id + "/item_quantity"] = value;
+      firebase
+        .database()
+        .ref()
+        .update(update);
+    },
+
+    removeItemFromCart(item_id) {
+      var userId = firebase.auth().currentUser.uid;
+      firebase
+        .database()
+        .ref()
+        .child("user_cart/" + userId + "/" + item_id)
+        .remove();
+    },
 
     addItem(item) {
       this.products = [];
@@ -209,67 +247,45 @@ export default {
           return obj.item_name.toLowerCase() === item.toLowerCase();
         });
         if (result) {
-          result.quantity += 1;
+          result.item_quantity += 1;
           this.inputValue = "";
-          this.updateItemQuantity(result);
+          this.updateQuantityInCart(result.item_id, result.item_quantity);
         } else {
           item = item.replace(/^./, item[0].toUpperCase());
-          var userId = firebase.auth().currentUser.uid;
-          api
-            .addItem(userId, item, 1)
-            .then(response => {
-              this.itemsInCart.push({
-                item_name: response.data.item_name,
-                quantity: response.data.quantity
-              });
-            })
-            .catch(error => {
-              this.$log.debug(error);
-            });
+          this.addToCart(item);
           this.inputValue = "";
         }
       }
     },
 
     incrementQuantity(itemObj) {
-      itemObj.quantity += 1;
-      this.updateItemQuantity(itemObj);
+      itemObj.item_quantity += 1;
+      this.updateQuantityInCart(itemObj.item_id, itemObj.item_quantity);
     },
 
     decrementQuantity(itemObj) {
-      if (itemObj.quantity >= 2) {
-        itemObj.quantity -= 1;
-        this.updateItemQuantity(itemObj);
+      if (itemObj.item_quantity >= 2) {
+        itemObj.item_quantity -= 1;
+        this.updateQuantityInCart(itemObj.item_id, itemObj.item_quantity);
       } else {
         this.removeItem(itemObj);
       }
     },
 
     removeItem(itemObj) {
-      var userId = firebase.auth().currentUser.uid;
-      api
-        .deleteItem(userId, itemObj.item_name)
-        .then(response => {
-          if (response) {
-            this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
-          }
-        })
-        .catch(error => {
-          this.$log.debug(error);
-        });
-    },
-
-    updateItemQuantity(itemObj) {
-      var userId = firebase.auth().currentUser.uid;
-      api
-        .changeItemQuantity(userId, itemObj.item_name, itemObj.quantity)
-        .catch(error => {
-          this.$log.debug(error);
-        });
+      console.log(itemObj.item_id, "item");
+      this.removeItemFromCart(itemObj.item_id, itemObj.item_quantity);
+      this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
     },
 
     emptyCart() {
-      this.itemsInCart.forEach(this.removeItem);
+      var userId = firebase.auth().currentUser.uid;
+      firebase
+        .database()
+        .ref()
+        .child("user_cart/" + userId)
+        .remove();
+      this.itemsInCart = [];
     },
 
     placeOrder() {
@@ -279,7 +295,7 @@ export default {
       this.itemsInCart.forEach(item =>
         itemsForOrder.push({
           item_name: item.item_name,
-          quantity: item.quantity,
+          quantity: item.item_quantity,
           unit_price: 30
         })
       );
@@ -294,7 +310,8 @@ export default {
         )
         .then(response => {
           if (response) {
-            this.itemsInCart = [];
+            this.emptyCart(); //Need to be done as per response
+            this.itemsInCart = []; //Need to update based on items
           }
         })
         .catch(error => {

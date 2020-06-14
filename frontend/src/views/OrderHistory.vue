@@ -1,19 +1,19 @@
 <template>
   <div>
     <Logout />
-    <SuggestedItems />
+    <PastOrders />
   </div>
 </template>
 
 <script>
-import SuggestedItems from "@/components/SuggestedItems.vue";
+import PastOrders from "@/components/PastOrders.vue";
 import Logout from "@/components/Logout.vue";
 
 export default {
-  name: "Home",
+  name: "OrderHistory",
   components: {
-    Logout,
-    SuggestedItems
+    PastOrders,
+    Logout
   }
 };
 </script>
