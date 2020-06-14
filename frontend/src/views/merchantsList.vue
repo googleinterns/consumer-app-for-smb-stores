@@ -1,32 +1,41 @@
 <template>
-<div>
-  <Logout />
-  <div class="container">
+  <div>
+    <Logout />
     <div
       @click="ItemDetails(merchant)"
       v-for="merchant in merchants"
-      class="card"
+      class="box"
       v-bind:key="merchant.key"
     >
-      <div class="card-content">
-        <div class="media">
-          <div class="media-content">
-            <p class="title is-4 has-text-info is-size-2.5">
-              {{merchant.merchantName}}
-              <span class="is-pulled-right">{{merchant.totalPrice}} ₹</span>
+      <article class="media">
+        <div class="media-left">
+          <i class="fa fa-user-circle is-size-3" aria-hidden="true"></i>
+        </div>
+        <div class="media-content">
+          <strong class="is-size-5">{{merchant.merchantName}}</strong>
+          <span class="is-size-6">,{{merchant.merchantAddress}}</span>
+          <div></div>
+          <div
+            class="content has-text-danger is-size-6"
+            v-for="item in merchant.itemDetails"
+            v-bind:key="item.key"
+          >
+            <p>
+              <small v-if="!item.isAvailable">{{item.merchantItemName}} not available</small>
             </p>
           </div>
         </div>
-        <div class="has-text-grey-light" v-for="item in merchant.itemDetails" v-bind:key="item.key">
-          <span v-if="!item.isAvailable">{{item.merchantItemName}} not available</span>
+      </article>
+      <nav class="level is-mobile">
+        <div class="level-left">
+          <strong class="has-text-danger is-size-6">Total Price: {{merchant.totalPrice}} ₹</strong>
         </div>
-        <p class="subtitle is-6 is-pulled-left">Delivery in <span class="has-text-info">{{timeString}}</span></p>
-      </div>
+        <strong class="has-text-success is-pulled-right">Delivery in {{timeString}}</strong>
+      </nav>
     </div>
-    <div id="delivery" class="card">
-      <p>Click on merchant to get more details and placing the order</p>
+    <div class="box">
+      <strong>Click on merchant to get more details and placing the order</strong>
     </div>
-  </div>
   </div>
 </template>
 
@@ -40,19 +49,20 @@ export var time;
 
 export default {
   name: "merchantList",
-  components:{
+  components: {
     Logout
   },
   data() {
     return {
-      merchants: [],timeString:""
+      merchants: [],
+      timeString: ""
     };
   },
   methods: {
     ItemDetails(merchantdetails) {
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
-      time=this.timeString;
+      time = this.timeString;
       this.$router.push("/orderDetails");
     }
   },
@@ -63,30 +73,23 @@ export default {
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
       this.merchants.push(data);
-      console.log(this.merchants);
 
-      var dateObj = new Date(data.deliveryTime * 1000); 
-           var hours = dateObj.getUTCHours(); 
-           var minutes = dateObj.getUTCMinutes(); 
-           var seconds = dateObj.getSeconds(); 
-  
-          this.timeString = hours.toString().padStart(2, '0') 
-                + ':' + minutes.toString().padStart(2, '0') 
-                + ':' + seconds.toString().padStart(2, '0'); 
+      var dateObj = new Date(data.deliveryTime * 1000);
+      var hours = dateObj.getUTCHours();
+      var minutes = dateObj.getUTCMinutes();
+
+      this.timeString =
+        hours.toString().padStart(2, "0") +
+        ":" +
+        minutes.toString().padStart(2, "0") +
+        " hours";
     });
   }
 };
 </script>
 
 <style  scoped>
-.container {
-  margin-top: 50px;
-}
-.card-content {
-  margin-bottom: 0px;
-}
-#delivery {
-  min-height: 30px;
-  margin-top: 2px;
+.box {
+  margin-top: 10px;
 }
 </style>

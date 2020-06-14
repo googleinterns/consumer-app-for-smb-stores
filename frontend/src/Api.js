@@ -19,6 +19,12 @@ export default {
     }]
   }),
 
+  // getProducts:(product)=> instance.get(process.env.VUE_APP_SERVER_URL+'/getProducts?product='+product,{
+  //   transformRequest: [function(data) {
+  //     return data ? JSON.parse(data) : data;
+  //   }]
+  // }),
+
   placeOrder: (user_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
     instance.post(process.env.VUE_APP_SERVER_URL + '/placeOrder', {
       user_id: user_id,

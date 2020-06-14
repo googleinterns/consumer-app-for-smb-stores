@@ -25,9 +25,9 @@ public class FireStoreInstance {
         this.db = FirestoreOptions.getDefaultInstance().getService();
     }
 
-
     public List<CartItem> deleteItem(String userId, String itemName) throws InterruptedException, ExecutionException {
-        ApiFuture<QuerySnapshot> future = db.collection("cart").document(userId).collection(CART_ITEMS_PATH).whereEqualTo("item_name", itemName).get();
+        ApiFuture<QuerySnapshot> future = db.collection("cart").document(userId).collection(CART_ITEMS_PATH)
+                .whereEqualTo("item_name", itemName).get();
         QuerySnapshot querySnapshot = future.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
@@ -35,7 +35,8 @@ public class FireStoreInstance {
 
         for (QueryDocumentSnapshot document : documents) {
             String itemDocID = document.getId();
-            DocumentReference docRef = db.collection("cart").document(userId).collection(CART_ITEMS_PATH).document(itemDocID);
+            DocumentReference docRef = db.collection("cart").document(userId).collection(CART_ITEMS_PATH)
+                    .document(itemDocID);
             docRef.delete();
             deletedItems.add(docRef.get().get().toObject(CartItem.class));
         }
@@ -43,8 +44,10 @@ public class FireStoreInstance {
         return deletedItems;
     }
 
-    public List<CartItem> updateQuantity(String userID, String itemName, int quantity) throws InterruptedException, ExecutionException {
-        ApiFuture<QuerySnapshot> future = db.collection("cart").document(userID).collection(CART_ITEMS_PATH).whereEqualTo("item_name", itemName).get();
+    public List<CartItem> updateQuantity(String userID, String itemName, int quantity)
+            throws InterruptedException, ExecutionException {
+        ApiFuture<QuerySnapshot> future = db.collection("cart").document(userID).collection(CART_ITEMS_PATH)
+                .whereEqualTo("item_name", itemName).get();
         QuerySnapshot querySnapshot = future.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
@@ -53,7 +56,8 @@ public class FireStoreInstance {
         for (QueryDocumentSnapshot document : documents) {
 
             String itemDocID = document.getId();
-            DocumentReference docRef = db.collection("cart").document(userID).collection(CART_ITEMS_PATH).document(itemDocID);
+            DocumentReference docRef = db.collection("cart").document(userID).collection(CART_ITEMS_PATH)
+                    .document(itemDocID);
 
             docRef.update("quantity", quantity);
 
@@ -63,7 +67,6 @@ public class FireStoreInstance {
 
         return updatedItems;
     }
-
 
     public List<CartItem> retrieveCartItems(String userId) throws InterruptedException, ExecutionException {
         ApiFuture<QuerySnapshot> future = db.collection("cart").document(userId).collection(CART_ITEMS_PATH).get();
@@ -77,10 +80,8 @@ public class FireStoreInstance {
             allItems.add(item);
         }
 
-
         return allItems;
     }
-
 
     public List<OrderDocuments> retrieveOrderDetails(String userId) throws InterruptedException, ExecutionException {
 
@@ -109,12 +110,12 @@ public class FireStoreInstance {
 
     }
 
-
     public CartItem addItemToCart(String userID, CartItem item) throws InterruptedException, ExecutionException {
         DocumentReference docRef = db.collection("cart").document(userID);
 
         db.collection("cart").document(userID).collection(CART_ITEMS_PATH).get();
-        ApiFuture<DocumentReference> addedDoc = db.collection("cart").document(userID).collection(CART_ITEMS_PATH).add(item);
+        ApiFuture<DocumentReference> addedDoc = db.collection("cart").document(userID).collection(CART_ITEMS_PATH)
+                .add(item);
 
         String addedDocId = addedDoc.get().getId();
 
@@ -132,5 +133,4 @@ public class FireStoreInstance {
             db.collection(ORDER_PATH).document(docID).collection("items").add(item);
         }
     }
-
 }

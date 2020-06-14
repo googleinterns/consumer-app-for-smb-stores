@@ -2,52 +2,62 @@
   <div>
     <Logout />
     <div class="container">
-      <h1 class="title">Order Details</h1>
-      <div class="card-content">
-        <div class="media">
+      <div class="box">
+        <article class="media">
+          <br />
+          <div class="media-left">
+            <i class="fa fa-user-circle is-size-3" aria-hidden="true"></i>
+          </div>
           <div class="media-content">
-            <p class="title is-4 has-text-info is-size-4">
-              {{merchantvalue.merchantName}}
-              <span
-                class="is-pulled-right"
-              >{{merchantvalue.totalPrice}} ₹</span>
-            </p>
-            <div>
-              <span class="icon">
-                <i class="fas fa-home has-text-info"></i>
-              </span>
-              {{merchantvalue.merchantAddress}}
+            <div class="content">
+              <strong class="is-size-5">{{merchantvalue.merchantName}}</strong>
+              <div class="is-size-6">{{merchantvalue.merchantAddress}}</div>
+              <br />
             </div>
-            <div>Discount offer for: {{merchantvalue.offers}} ₹</div>
           </div>
-        </div>
+        </article>
+        <nav class="level is-mobile">
+          <div class="level-left">
+            <strong class="has-text-danger is-size-6.5">Order Price: ₹ {{merchantvalue.totalPrice}}</strong>
+          </div>
+          <button
+            class="button is-success is-rounded is-focussed is-pulled-right"
+            @click="confirm"
+          >Confirm Order</button>
+        </nav>
       </div>
-      <div id="itemslist" v-for="item in itemvalues" class="card" v-bind:key="item.key">
-        <div v-if="item.isAvailable" class="card-content">
-          <div class="media">
+      <div id="itemslist" v-for="item in itemvalues" v-bind:key="item.key">
+        <div v-if="item.isAvailable" class="box">
+          <article class="media">
             <div class="media-content">
-              <p class="title is-4 has-text-info is-size-5">
-                {{item.merchantItemName}}
-                <span class="is-pulled-right">{{item.unitPrice}} ₹</span>
-              </p>
+              <div class="content">
+                <strong class="is-size-5">{{item.merchantItemName}}</strong>
+                <div class="has-text-grey is-size-6.5">
+                  Price:
+                  <strong
+                    class="has-text-danger is-size-6.5 is-pulled-right"
+                  >₹ {{item.unitPrice}}</strong>
+                </div>
+                <div class="has-text-grey is-size-6.5">
+                  Qty:
+                  <strong class="has-text-danger is-size-6. is-pulled-right">{{item.quantity}}</strong>
+                </div>
+                <strong class="has-text-grey is-size-6.5">
+                  Total Price:
+                  <strong
+                    class="has-text-danger is-size-6.5 is-pulled-right"
+                  >₹ {{item.unitPrice*item.quantity}}</strong>
+                </strong>
+              </div>
             </div>
-          </div>
-          <div>
-            <div class="content has-text-grey-light is-pulled-left">quantity : {{item.quantity}}</div>
-          </div>
+          </article>
         </div>
       </div>
-      <div class="card" id="bottom">
-        <p id="time">
-          Estimated time for delivery to your location is
-          <span
-            class="has-text-info"
-          >{{deliveryTime}}</span>
-        </p>
-
-        <div class="content has-text-centered">
-          <button id="bot" @click="confirm" class="button is-success is-large">Confirm Order</button>
-        </div>
+      <div class="box">
+        <strong>
+          Estimated time for delivery:
+          <strong class="has-text-success">{{deliveryTime}}</strong>
+        </strong>
       </div>
     </div>
   </div>
@@ -83,20 +93,3 @@ export default {
   }
 };
 </script>
-
-<style  scoped>
-.container {
-  margin-top: 50px;
-}
-#bottom {
-  flex-flow: column;
-  display: flex;
-}
-#bot {
-  margin-top: 10px;
-  margin-bottom: 50px;
-}
-#time {
-  margin-top: 15px;
-}
-</style>
