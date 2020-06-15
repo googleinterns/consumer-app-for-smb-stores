@@ -3,7 +3,14 @@
     <div class="container">
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
-          <input v-model.trim="inputValue" class="input" type="search" placeholder="Find Item" />
+          <input
+            v-on:keyup.enter="addProduct(inputValue)"
+            @keyup="findSuggestedProducts(inputValue)"
+            v-model="inputValue"
+            class="input is-capitalized is-family-primary"
+            type="search"
+            placeholder="Find Item"
+          />
           <span class="icon is-medium is-left" style="cursor: pointer">
             <i class="fa fa-search"></i>
           </span>
@@ -12,19 +19,50 @@
           <button v-on:click="addItem(inputValue)" class="button is-primary">Add</button>
         </p>
       </div>
-    </div>
-    <div>
-      <div class="container is-shadowless" v-if="itemsInCart.length  > 0">
+      <div class="is-shadowless" v-if="products.length>0">
         <div class="columns is-vcentered">
           <div class="column is-full-mobile">
-            <section class="panel is-shadowless">
+            <section class="panel">
               <div class="panel-block table-container is-flex-widescreen-only">
-                <table
-                  class="table is-striped is-fullwidth"
-                  style="table-layout:fixed;word-wrap:break-word;"
-                >
+                <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
-                    <tr v-bind:key="index" v-for="(item, index) in itemsInCart">
+                    <tr
+                      @click="addProduct(item.ItemName)"
+                      v-bind:key="index"
+                      v-for="(item, index) in products"
+                    >
+                      <td class="field is-grouped is-size-5-desktop is-vcentered">
+                        <figure id="product" class="image is-48x48">
+                          <img :src="item.ItemImage" />
+                        </figure>
+                        <div class="is-family-primary">
+                          {{item.ItemName}}
+                          <div>
+                            <strong
+                              class="is-size-7-mobile is-size-6 has-text-danger"
+                            >MRP: ₹{{item.price}}</strong>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <br />
+      <div class="container" v-if="itemsInCart.length  > 0">
+        <div class="columns is-vcentered">
+          <div class="column is-full-mobile">
+            <section class="panel">
+              <div class="panel-block table-container is-flex-widescreen-only">
+                <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
+                  <tbody>
+                    <tr v-bind:key="item.item_id" v-for="(item) in itemsInCart">
                       <td>{{item.item_name}}</td>
                       <td align="right">
                         <div class="field has-addons has-addons-right">
@@ -37,7 +75,7 @@
                           </span>
                           <p class="control">
                             <input
-                              v-model="item.quantity"
+                              v-model="item.item_quantity"
                               class="input is-small"
                               size="2"
                               style="text-align: center;"
@@ -73,7 +111,6 @@
         </div>
       </div>
     </div>
-
     <div v-if="itemsInCart.length  > 0" class="column has-text-centered">
       <p>
         <button
@@ -90,9 +127,9 @@
           type="submit"
           value="Place Order"
         >
-           <router-link to="/merchantBids"><span >Place Order 
-                    </span>
-                    </router-link>
+          <router-link to="/merchantBids">
+            <span>Place Order</span>
+          </router-link>
         </button>
       </p>
     </div>
@@ -102,94 +139,153 @@
 <script>
 import api from "../Api";
 import firebase from "firebase";
+import PriorityQueue from "js-priority-queue";
+
+var levenshtein = require("levenshtein-edit-distance");
+
 export default {
   name: "SelectItems",
   mounted() {
     var userId = firebase.auth().currentUser.uid;
-    api
-      .getAllItemsInCart(userId)
-      .then(response => {
-        this.itemsInCart = response.data;
-      })
-      .catch(error => {
-        this.$log.debug(error);
-        this.error = "Failed to load data";
+    let self = this;
+    firebase
+      .database()
+      .ref("user_cart/" + userId)
+      .once("value")
+      .then(function(cart) {
+        cart.forEach(function(cartItem) {
+          self.itemsInCart.push({
+            item_id: cartItem.key,
+            item_name: cartItem.val().item_name,
+            item_quantity: cartItem.val().item_quantity
+          });
+        });
       });
   },
   data: function() {
     return {
       inputValue: "",
-      itemsInCart: []
+      itemsInCart: [],
+      products: []
     };
   },
   methods: {
+    addProduct(item) {
+      this.products = [];
+      this.addItem(item);
+    },
+
+    findSuggestedProducts(productName) {
+      if (productName == "") {
+        this.products = [];
+        return;
+      }
+
+      var vm = this;
+      var productsQueue = new PriorityQueue({
+        comparator: function(item1, item2) {
+          var distance1 = levenshtein(productName, item1.ItemName);
+          var distance2 = levenshtein(productName, item2.ItemName);
+          return distance1 / item1.ItemName.length - distance2 / item2.ItemName.length;
+        }
+      });
+
+      firebase
+        .firestore()
+        .collection("Items")
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            productsQueue.queue(doc.data());
+          });
+
+          while (vm.products.length > 0) vm.products.pop();
+          while (vm.products.length < 5) {
+            var d = productsQueue.dequeue();
+            vm.products.push(d);
+          }
+        });
+    },
+    addToCart(item) {
+      var userId = firebase.auth().currentUser.uid;
+      var reference = firebase.database().ref("user_cart/" + userId + "/");
+      var itemDoc = reference.push({
+        item_name: item,
+        item_quantity: 1
+      });
+      var item_id = itemDoc.key;
+      this.itemsInCart.push({
+        item_id: item_id,
+        item_name: item,
+        item_quantity: 1
+      });
+    },
+
+    updateQuantityInCart(item_id, value) {
+      var userId = firebase.auth().currentUser.uid;
+      var update = {};
+      update["user_cart/" + userId + "/" + item_id + "/item_quantity"] = value;
+      firebase
+        .database()
+        .ref()
+        .update(update);
+    },
+
+    removeItemFromCart(item_id) {
+      var userId = firebase.auth().currentUser.uid;
+      firebase
+        .database()
+        .ref()
+        .child("user_cart/" + userId + "/" + item_id)
+        .remove();
+    },
+
     addItem(item) {
+      this.products = [];
       if (item.length != 0) {
         var result = this.itemsInCart.find(obj => {
           return obj.item_name.toLowerCase() === item.toLowerCase();
         });
         if (result) {
-          result.quantity += 1;
+          result.item_quantity += 1;
           this.inputValue = "";
-          this.updateItemQuantity(result);
+          this.updateQuantityInCart(result.item_id, result.item_quantity);
         } else {
           item = item.replace(/^./, item[0].toUpperCase());
-          var userId = firebase.auth().currentUser.uid;
-          api
-            .addItem(userId, item, 1)
-            .then(response => {
-              this.itemsInCart.push({
-                item_name: response.data.item_name,
-                quantity: response.data.quantity
-              });
-            })
-            .catch(error => {
-              this.$log.debug(error);
-            });
+          this.addToCart(item);
           this.inputValue = "";
         }
       }
     },
 
     incrementQuantity(itemObj) {
-      itemObj.quantity += 1;
-      this.updateItemQuantity(itemObj);
+      itemObj.item_quantity += 1;
+      this.updateQuantityInCart(itemObj.item_id, itemObj.item_quantity);
     },
 
     decrementQuantity(itemObj) {
-      if (itemObj.quantity >= 2) {
-        itemObj.quantity -= 1;
-        this.updateItemQuantity(itemObj);
+      if (itemObj.item_quantity >= 2) {
+        itemObj.item_quantity -= 1;
+        this.updateQuantityInCart(itemObj.item_id, itemObj.item_quantity);
       } else {
         this.removeItem(itemObj);
       }
     },
 
     removeItem(itemObj) {
-      var userId = firebase.auth().currentUser.uid;
-      api
-        .deleteItem(userId, itemObj.item_name)
-        .then(response => {
-          if (response) {
-            this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
-          }
-        })
-        .catch(error => {
-          this.$log.debug(error);
-        });
-    },
-
-    updateItemQuantity(itemObj) {
-      var userId = firebase.auth().currentUser.uid;
-      api
-        .changeItemQuantity(userId, itemObj.item_name, itemObj.quantity)
-        .catch(error => {
-          this.$log.debug(error);
-        });
+      console.log(itemObj.item_id, "item");
+      this.removeItemFromCart(itemObj.item_id, itemObj.item_quantity);
+      this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
     },
 
     emptyCart() {
-      this.itemsInCart.forEach(this.removeItem);
+      var userId = firebase.auth().currentUser.uid;
+      firebase
+        .database()
+        .ref()
+        .child("user_cart/" + userId)
+        .remove();
+      this.itemsInCart = [];
     },
 
     placeOrder() {
@@ -199,7 +295,7 @@ export default {
       this.itemsInCart.forEach(item =>
         itemsForOrder.push({
           item_name: item.item_name,
-          quantity: item.quantity,
+          quantity: item.item_quantity,
           unit_price: 30
         })
       );
@@ -214,6 +310,7 @@ export default {
         )
         .then(response => {
           if (response) {
+            this.emptyCart(); //Need to be done as per response
             this.itemsInCart = []; //Need to update based on items
           }
         })
@@ -227,5 +324,8 @@ export default {
 <style scoped>
 .bd-lead {
   padding: 0.75rem;
+}
+#product {
+  margin-right: 0.75rem;
 }
 </style>

@@ -47,6 +47,7 @@ firebase.auth().onAuthStateChanged(() => {
 
 Vue.config.productionTip = false
 
+
 Vue.use(VueGoogleMaps, {
   load: {
     key: config.apiKey,
@@ -55,4 +56,5 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();
+
 
