@@ -16,10 +16,13 @@
     "moment": "^2.26.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
+    "vue-2-bulma-pagination": "0.0.8",
     "vue-meta": "^2.3.4",
     "vue-router": "^3.2.0",
+    "vue-select": "^3.10.3",
     "vuefire": "^2.2.2",
-    "vuejs-logger": "^1.5.4"
+    "vuejs-logger": "^1.5.4",
+    "vuejs-paginate": "^2.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

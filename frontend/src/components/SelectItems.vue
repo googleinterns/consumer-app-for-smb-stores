@@ -80,7 +80,7 @@
           v-on:click="emptyCart()"
           class="button is-danger is-light"
           type="submit"
-          value="Place Order"
+          value="Empty Cart"
         >
           <span>Empty Cart</span>
         </button>&nbsp;
@@ -104,8 +104,8 @@ import api from "../Api";
 import firebase from "firebase";
 export default {
   name: "SelectItems",
-  mounted() {
-    var userId = firebase.auth().currentUser.uid;
+  created() {
+    var userId = this.$getUserId();
     let self = this;
     firebase
       .database()
@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     addToCart(item) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
@@ -144,7 +144,7 @@ export default {
     },
 
     updateQuantityInCart(item_id, value) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var update = {};
       update["user_cart/" + userId + "/" + item_id + "/item_quantity"] = value;
       firebase
@@ -154,7 +154,7 @@ export default {
     },
 
     removeItemFromCart(item_id) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -200,7 +200,7 @@ export default {
     },
 
     emptyCart() {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -210,7 +210,7 @@ export default {
     },
 
     placeOrder() {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item =>

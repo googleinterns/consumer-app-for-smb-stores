@@ -34,6 +34,14 @@ const routes = [
     }
   },
   {
+    path: '/selectMerchant',
+    name: 'SelectMerchant',
+    component: () => import('../views/SelectMerchant.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/placeOrder',
     name: 'PlaceOrder',
     component: () => import('../views/PlaceOrder.vue'),
@@ -58,6 +66,15 @@ const routes = [
     path: '/orderDetails',
     name: 'itemDetails',
     component: itemDetails,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/merchantWiseProducts/:merchant',
+    name: 'PaginatedProducts',
+    props: true,
+    component: () => import('../views/PaginatedProducts.vue'),
     meta: {
       requiresAuth: true
     }

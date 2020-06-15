@@ -58,7 +58,7 @@ export default {
   },
   created() {
     let dbref = firebase.database();
-    var userId = firebase.auth().currentUser.uid;
+    var userId = this.$getUserId();
     var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
