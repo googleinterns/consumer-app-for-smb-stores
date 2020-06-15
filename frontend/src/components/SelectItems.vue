@@ -4,8 +4,8 @@
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
           <input
-            v-on:keyup.enter="itemFound(inputValue)"
-            @keyup="getAllProducts(inputValue)"
+            v-on:keyup.enter="addProduct(inputValue)"
+            @keyup="findSuggestedProducts(inputValue)"
             v-model="inputValue"
             class="input is-capitalized is-family-primary"
             type="search"
@@ -27,7 +27,7 @@
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
                     <tr
-                      @click="itemFound(item.ItemName)"
+                      @click="addProduct(item.ItemName)"
                       v-bind:key="index"
                       v-for="(item, index) in products"
                     >
@@ -170,12 +170,12 @@ export default {
     };
   },
   methods: {
-    itemFound(item) {
+    addProduct(item) {
       this.products = [];
       this.addItem(item);
     },
 
-    getAllProducts(productName) {
+    findSuggestedProducts(productName) {
       if (productName == "") {
         this.products = [];
         return;

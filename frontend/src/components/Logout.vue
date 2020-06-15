@@ -56,10 +56,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.navbar {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-</style>
