@@ -6,7 +6,9 @@ import firebase from 'firebase'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
 
+
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -62,6 +64,7 @@ const routes = [
       requiresAuth: true
     }
   },
+
 ]
 
 const router = new VueRouter({

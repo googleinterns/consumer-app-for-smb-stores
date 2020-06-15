@@ -1,6 +1,26 @@
 <template>
   <div>
     <Logout />
+    <div class="bd-lead">
+      <div class="container">
+        <gmap-map :center="center" :zoom="16" style="width:100%;  height: 400px;">
+          <gmap-marker
+            :key="index"
+            v-for="(marker, index) in customer_markers"
+            :position="marker.position"
+            icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+          />
+
+          <gmap-marker
+            :key="index"
+            v-for="(marker, index) in merchant_markers"
+            :position="marker.position"
+            icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
+          />
+        </gmap-map>
+      </div>
+    </div>
+
     <div
       @click="ItemDetails(merchant)"
       v-for="merchant in merchants"
@@ -42,11 +62,11 @@
 <script>
 import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
+import * as Geofire from "geofire";
 
 export var merchantexp;
 export var itemexp;
 export var time;
-
 export default {
   name: "merchantList",
   components: {
@@ -55,15 +75,56 @@ export default {
   data() {
     return {
       merchants: [],
-      timeString: ""
+      timeString: "",
+      center: null,
+      customer_markers: [],
+      merchant_markers: [],
+      FirebaseRef: null,
+      geoFireRef: null,
+      geoQuery: null
     };
   },
+  mounted() {
+    this.FirebaseRef = firebase.database().ref("MerchantLocation");
+    this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
+    this.geolocate();
+  },
+
   methods: {
     ItemDetails(merchantdetails) {
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
       time = this.timeString;
       this.$router.push("/orderDetails");
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        const marker = {
+          lat: this.center.lat,
+          lng: this.center.lng
+        };
+        this.customer_markers.push({ position: marker });
+        this.GeoQueryFn();
+      });
+    },
+    GeoQueryFn() {
+      this.geoQuery = this.geoFireRef.query({
+        center: [this.center.lat, this.center.lng],
+        radius: 1
+      });
+      var that = this;
+      this.geoQuery.on("key_entered", (key, location) => {
+        console.log("Entered " + key + " with location " + location);
+        const marker = {
+          lat: location[0],
+          lng: location[1]
+        };
+        that.merchant_markers.push({ position: marker });
+      });
     }
   },
   created() {
@@ -91,5 +152,8 @@ export default {
 <style  scoped>
 .box {
   margin-top: 10px;
+}
+.bd-lead {
+  padding: 0.75rem;
 }
 </style>
