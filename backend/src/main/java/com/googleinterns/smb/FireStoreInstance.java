@@ -59,5 +59,4 @@ public class FireStoreInstance {
             db.collection(ORDER_PATH).document(docID).collection("items").add(item);
         }
     }
-
 }

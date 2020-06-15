@@ -48,16 +48,16 @@ const routes = [
   },
   {
     path: '/merchantBids',
-    name: 'merchantList',
-    component: merchantList,
+    name : 'merchantList',
+    component : merchantList,
     meta: {
       requiresAuth: true
     }
   },
   {
     path: '/orderDetails',
-    name: 'itemDetails',
-    component: itemDetails,
+    name : 'itemDetails',
+    component : itemDetails,
     meta: {
       requiresAuth: true
     }
