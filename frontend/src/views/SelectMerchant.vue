@@ -5,18 +5,22 @@
       <div v-for="merchant in merchantsList" v-bind:key="merchant.mid" class="panel is-shadowless">
         <div class="card">
           <div class="card-content">
-            <div class="columns is-mobile">
-              <p class="column" align="left" style="color: #435ad6;">
-                <strong style="color: #435ad6;">{{merchant.merName}}</strong>
-              </p>
-              <p class="column" align="right">
-                <button class="button is-small is-primary is-light">
-                  <router-link
-                    :to="{ name: 'PaginatedProducts', params: {merchant: merchant}}"
-                  >View Products</router-link>
-                </button>
-              </p>
+            <div class="media">
+              <div class="media-left">
+                <i class="fa fa-user-circle is-size-3" aria-hidden="true"></i>
+              </div>
+              <div class="media-content">
+                <p class="title is-4" style="color: #009c55;">{{merchant.name}}</p>
+                <p class="subtitle is-6">{{merchant.address}}</p>
+              </div>
             </div>
+            <div align="right">
+            <button class="button">
+              <router-link
+                :to="{ name: 'PaginatedProducts', params: {merchant: merchant}}"
+              >View Products</router-link>
+            </button>
+          </div>
           </div>
         </div>
       </div>
@@ -26,52 +30,30 @@
 
 <script>
 import Logout from "@/components/Logout.vue";
+import axios from "axios";
 export default {
   name: "SelectMerchant",
   components: {
     Logout
   },
 
+  created: function() {
+    this.getMerchants();
+  },
+
+  methods: {
+    getMerchants() {
+      axios
+        .get(process.env.VUE_APP_MERCHANT_SERVER + "/merchants/all")
+        .then(response => {
+          this.merchantsList = response.data.merchants;
+        });
+    }
+  },
+
   data: function() {
     return {
-      merchantsList: [
-        {
-          merName: "Goel Stores",
-          merchantAddress: "New Avalon Street, Delhi",
-          mid: "VxWQKTpSLLRlsuhQzdb3rapz5zv1"
-        },
-        {
-          merName: "Kondli Baazar",
-
-          merchantAddress: "Park Avenue Street, Delhi",
-          mid: 234
-        },
-        {
-          merName: "Ask for More",
-          merchantAddress: "Govindpuri Street, Delhi",
-          mid: 456
-        },
-        {
-          merName: "Satkar Shop",
-          merchantAddress: "RamGhat road, Delhi",
-          mid: 34456
-        },
-        {
-          merName: "Sai Store",
-          merchantAddress: "Rajnagar, Delhi",
-          mid: 346
-        },
-        {
-          merName: "Singh Kirana Store",
-          merchantAddress: "BR Road, Delhi",
-          mid: 3444456
-        },
-        {
-          merName: "Smile Store",
-          merchantAddress: "New Avalon Street, Delhi",
-          mid: 34465456
-        }
-      ]
+      merchantsList: []
     };
   }
 };

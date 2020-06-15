@@ -186,7 +186,10 @@ export default {
         comparator: function(item1, item2) {
           var distance1 = levenshtein(productName, item1.ItemName);
           var distance2 = levenshtein(productName, item2.ItemName);
-          return distance1 / item1.ItemName.length - distance2 / item2.ItemName.length;
+          return (
+            distance1 / item1.ItemName.length -
+            distance2 / item2.ItemName.length
+          );
         }
       });
 

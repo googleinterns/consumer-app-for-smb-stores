@@ -34,10 +34,7 @@
                           <strike>₹ {{item.MRP}}</strike>
                         </p>
                         <small>
-                          <p
-                            align="left"
-                            style="color: #df7518"
-                          >Get At: ₹ {{item.discounted_price}}</p>
+                          <p align="left" style="color: #df7518">Get At: ₹ {{item.discounted_price}}</p>
                         </small>
                       </small>
                     </div>
@@ -66,7 +63,7 @@
 </template>
 
 <script>
-import firebase from 'firebase';
+import firebase from "firebase";
 export default {
   name: "ProductPage",
   props: ["itemsavailable"],

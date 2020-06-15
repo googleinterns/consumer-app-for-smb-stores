@@ -4,39 +4,42 @@
     <div class="bd-lead">
       <div class="columns">
         <div class="container">
-          <div class="content has-text-weight-bold column">{{merchant.merName}}</div>
+          <div class="content has-text-weight-bold column">{{merchant.name}}</div>
         </div>
       </div>
       <div class="container">
         <ProductPage v-bind:itemsavailable="this.products" />
       </div>
       <div v-if="reachedLastPage" class="container">
-        <!-- <div > -->
-          <!-- <div class="card"> -->
-            <div class="card-content"><p style="color: #ff0300">Hey! You have reached the last page!</p></div>
-          <!-- </div> -->
-        <!-- </div> -->
+        <div class="card-content">
+          <p style="color: #ff0300">Hey! You have reached the last page!</p>
+        </div>
       </div>
       <div class="columns is-mobile is-centered">
         <div class="column is-half">
-      <div class="field is-grouped is-grouped-centered">
-        <p class="control">
-          <button class="button" v-on:click="getPrevPage()">
-            <span class="icon is-medium is-left" style="color: #17a1b9c7">
-              <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-            </span>
-          </button>
-        </p>
-        <p class="control">
-          <button class="button disabled">{{page}}</button>
-        </p>
-        <p class="control">
-          <button class="button" v-on:click="getNextPage()"><span class="icon is-medium is-left" style="color: #17a1b9c7">
-              <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            </span></button>
-        </p>
-      </div>
+          <div class="field is-grouped is-grouped-centered">
+            <p class="control">
+              <button class="button" v-on:click="getPrevPage()">
+                <span class="icon is-medium is-left" style="color: #17a1b9c7">
+                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+                </span>
+              </button>
+            </p>
+            <p class="control">
+              <button class="button disabled">{{page}}</button>
+            </p>
+            <p class="control">
+              <button class="button" v-on:click="getNextPage()">
+                <span class="icon is-medium is-left" style="color: #17a1b9c7">
+                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                </span>
+              </button>
+            </p>
+          </div>
         </div>
+      </div>
+      <div>
+        <button v-on:click="backToMerchant()" class="button">Change Merchant</button>
       </div>
     </div>
   </div>
@@ -79,7 +82,11 @@ export default {
         )
         .then(response => {
           this.products = response.data.products;
-          this.EANstack.push(this.products[this.products.length - 1].EAN);
+          if (this.products.length != 0) {
+            this.EANstack.push(this.products[this.products.length - 1].EAN);
+          }else{
+            this.reachedLastPage = true
+          }
         });
     },
 
@@ -131,6 +138,10 @@ export default {
         this.getFirstPage();
         this.page -= 1;
       }
+    },
+
+    backToMerchant() {
+      this.$router.go(-1);
     }
   }
 };
