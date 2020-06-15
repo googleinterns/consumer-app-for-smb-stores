@@ -2,8 +2,8 @@
 node_modules
 /dist
 firebase-config.js
+googleMap-config.js
 .firebase
-
 
 # local env files
 .env.local

@@ -53,6 +53,22 @@
           </article>
         </div>
       </div>
+      <div class="card" id="bottom">
+        <p id="time">
+          Estimated time for delivery to your location is
+          <span
+            class="has-text-info"
+          >{{deliveryTime}}</span>
+        </p>
+
+        <div class="content has-text-centered">
+          <button
+            id="bot"
+            @click="confirm"
+            class="button is-success is-large"
+          >Confirm Order</button>
+        
+        </div>
       <div class="box">
         <strong>
           Estimated time for delivery:
@@ -93,3 +109,22 @@ export default {
   }
 };
 </script>
+
+<style  scoped>
+.container {
+  margin-top: 50px;
+}
+#bottom {
+  flex-flow: column;
+  display: flex;
+}
+#bot {
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+#time {
+  margin-top: 15px;
+}
+
+
+</style>

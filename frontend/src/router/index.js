@@ -6,7 +6,9 @@ import firebase from 'firebase'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
 
+
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -48,20 +50,21 @@ const routes = [
   },
   {
     path: '/merchantBids',
-    name : 'merchantList',
-    component : merchantList,
+    name: 'merchantList',
+    component: merchantList,
     meta: {
       requiresAuth: true
     }
   },
   {
     path: '/orderDetails',
-    name : 'itemDetails',
-    component : itemDetails,
+    name: 'itemDetails',
+    component: itemDetails,
     meta: {
       requiresAuth: true
     }
   },
+
 ]
 
 const router = new VueRouter({

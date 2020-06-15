@@ -5,9 +5,12 @@ import './registerServiceWorker'
 import router from './router'
 import VueMeta from 'vue-meta';
 import moment from 'moment';
-
+import * as VueGoogleMaps from "vue2-google-maps";
+import { config } from '../googleMap-config.js';
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
+import { firestorePlugin } from 'vuefire'
+
 const options = {
   isEnabled: true,
   logLevel: 'debug',
@@ -43,3 +46,15 @@ firebase.auth().onAuthStateChanged(() => {
 });
 
 Vue.config.productionTip = false
+
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: config.apiKey,
+  }
+});
+
+Vue.use(firestorePlugin);
+export const db = firebase.firestore();
+
+
