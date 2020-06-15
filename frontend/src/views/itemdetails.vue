@@ -69,7 +69,6 @@
           >Confirm Order</button>
         
         </div>
-=======
       <div class="box">
         <strong>
           Estimated time for delivery:
