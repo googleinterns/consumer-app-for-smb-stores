@@ -46,7 +46,12 @@
         </p>
 
         <div class="content has-text-centered">
-          <button id="bot" @click="confirm" class="button is-success is-large">Confirm Order</button>
+          <button
+            id="bot"
+            @click="confirm"
+            class="button is-success is-large"
+          >Confirm Order</button>
+        
         </div>
       </div>
     </div>
@@ -99,4 +104,6 @@ export default {
 #time {
   margin-top: 15px;
 }
+
+
 </style>
