@@ -56,6 +56,7 @@
     <div class="box">
       <strong>Click on merchant to get more details and placing the order</strong>
     </div>
+
   </div>
 </template>
 
@@ -76,7 +77,10 @@ export default {
     return {
       merchants: [],
       timeString: "",
-      center: null,
+      center: {
+        lat: null,
+        lng: null
+      },
       customer_markers: [],
       merchant_markers: [],
       FirebaseRef: null,
@@ -119,7 +123,6 @@ export default {
       });
       var that = this;
       this.geoQuery.on("key_entered", (key, location) => {
-        console.log("Entered " + key + " with location " + location);
         const marker = {
           lat: location[0],
           lng: location[1]
@@ -142,14 +145,18 @@ export default {
 
       var seconds = dateObj.getSeconds();
 
+
       this.timeString =
         hours.toString().padStart(2, "0") +
         ":" +
         minutes.toString().padStart(2, "0") +
+
         ":" +
         seconds.toString().padStart(2, "0");
       (" hours");
+
     });
+    console.log(this.merchants.length);
   }
 };
 </script>

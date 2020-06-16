@@ -111,4 +111,5 @@ export default {
 #time {
   margin-top: 15px;
 }
+
 </style>

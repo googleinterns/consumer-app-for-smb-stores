@@ -68,6 +68,7 @@ const routes = [
     path: '/orderDetails',
     name: 'itemDetails',
     component: itemDetails,
+
     meta: {
       requiresAuth: true
     }
@@ -77,10 +78,12 @@ const routes = [
     name: 'PaginatedProducts',
     props: true,
     component: () => import('../views/PaginatedProducts.vue'),
+
     meta: {
       requiresAuth: true
     }
   },
+
 ]
 
 const router = new VueRouter({
