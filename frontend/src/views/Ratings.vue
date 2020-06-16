@@ -9,7 +9,7 @@
     <br>
     <h2>Kindly rate us!</h2>
     <br>
-    <p><i>Timeliness  </i><StarRating v-model="rating1"  
+    <p><i>Timeliness  </i><StarRating v-model="timelinessRating"  
             :inline=true
              inactive-color="#FFFFFF"  
              active-color="#FFD700"
@@ -23,7 +23,7 @@
              :show-rating=false
              ></StarRating></p>
     <br>
-    <p><i>Quality   </i> <StarRating v-model="rating2"  
+    <p><i>Quality   </i> <StarRating v-model="qualityRating"  
             :inline=true
              inactive-color="#FFFFFF"  
              active-color="#FFD700"
@@ -74,8 +74,8 @@ export default {
   },
  data(){
  return  {
-  rating1: 0,
-  rating2: 0
+  timelinessRating: 0,
+  qualityRating: 0
 };
 },
 methods: {
