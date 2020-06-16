@@ -70,7 +70,7 @@ const routes = [
     path: '/orderDetails',
     name: 'itemDetails',
     component: itemDetails,
-<<<<<<< HEAD
+
     meta: {
       requiresAuth: true
     }
@@ -79,15 +79,14 @@ const routes = [
     path: '/ratings',
     name : 'Ratings',
     component : Ratings,
-=======
 
->>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
+
+
     meta: {
       requiresAuth: true
     }
   },
-<<<<<<< HEAD
-=======
+
   {
     path: '/merchantWiseProducts/:merchant',
     name: 'PaginatedProducts',
@@ -98,7 +97,7 @@ const routes = [
       requiresAuth: true
     }
   },
->>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
+
 
 ]
 
