@@ -34,7 +34,7 @@ public class OrderDocumentsController {
         return fireStoreInstance.getOngoingOrders(user);
     }
 
-    @PostMapping(value="/updateOrderDetails")
+    @PostMapping(value = "/updateOrderDetails")
     public void updateDetails(@RequestBody OrderGeneration orderRequest) throws ExecutionException, InterruptedException {
         Order order = new Order(orderRequest.getUserId(), orderRequest.getOrderId(), orderRequest.getServicingMerchantName(), orderRequest.getServicingMerchantAddress(), orderRequest.getOffers());
         OrderDocuments orderDoc = new OrderDocuments(order);

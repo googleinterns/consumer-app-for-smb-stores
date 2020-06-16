@@ -84,8 +84,8 @@ export default {
           this.products = response.data.products;
           if (this.products.length != 0) {
             this.EANstack.push(this.products[this.products.length - 1].EAN);
-          }else{
-            this.reachedLastPage = true
+          } else {
+            this.reachedLastPage = true;
           }
         });
     },

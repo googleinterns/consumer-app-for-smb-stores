@@ -104,14 +104,14 @@ public class FireStoreInstance {
 
             docRef.update(updates);
 
-            for (Item item: orderDoc.getItemDetails()) {
+            for (Item item : orderDoc.getItemDetails()) {
                 ApiFuture<QuerySnapshot> itemFuture = db.collection(ORDER_PATH).document(orderDocID).
                         collection("items").whereEqualTo("item_name", item.getItemName()).get();
 
                 QuerySnapshot itemQuerySnapshot = itemFuture.get();
                 List<QueryDocumentSnapshot> itemDocuments = itemQuerySnapshot.getDocuments();
 
-                for (QueryDocumentSnapshot queryDocumentSnapshot: itemDocuments){
+                for (QueryDocumentSnapshot queryDocumentSnapshot : itemDocuments) {
                     String itemDocID = queryDocumentSnapshot.getId();
                     DocumentReference documentReference = db.collection(ORDER_PATH).document(orderDocID).
                             collection("items").document(itemDocID);

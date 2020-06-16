@@ -87,8 +87,9 @@ const routes = [
   },
   {
     path: '/ratings',
-    name : 'Ratings',
-    component : Ratings,
+    name: 'Ratings',
+    component: Ratings,
+    props: true,
     meta: {
       requiresAuth: true
     }

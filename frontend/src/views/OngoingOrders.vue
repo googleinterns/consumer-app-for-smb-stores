@@ -6,7 +6,9 @@
         <div class="columns is-mobile">
           <div class="column">
             <h1 class="title is-4" align="left">Ongoing Orders</h1>
-            <p align="left"><small> Click on order to see bids</small></p>
+            <p align="left">
+              <small>Click on order to see bids</small>
+            </p>
           </div>
         </div>
         <div>
@@ -28,9 +30,7 @@
                         <th align="center">Quantity</th>
                       </thead>
                       <tr v-for="(item, index) in order.all_items" v-bind:key="index">
-                        <td>
-                          {{item.item_name}}
-                        </td>
+                        <td>{{item.item_name}}</td>
                         <td align="center">{{item.quantity}}</td>
                       </tr>
                     </table>
@@ -80,13 +80,13 @@ export default {
       var userId = this.$getUserId();
       api.fetchOngoingOrders(userId).then(response => {
         this.ongoingOrders = response.data;
-        console.log(this.ongoingOrders, "these are ongoing orders")
+        console.log(this.ongoingOrders, "these are ongoing orders");
       });
     },
 
-    getOngoingOrderDetails(orderId){
-        console.log("pushing id", orderId)
-        this.$router.push({name: 'merchantList', params: {"orderId": orderId}})
+    getOngoingOrderDetails(orderId) {
+      console.log("pushing id", orderId);
+      this.$router.push({ name: "merchantList", params: { orderId: orderId } });
     }
   }
 };

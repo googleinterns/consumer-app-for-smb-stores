@@ -241,7 +241,7 @@ export default {
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
-        item_quantity: 1
+        item_quantity: 1,
       });
       var item_id = itemDoc.key;
       this.itemsInCart.push({
@@ -351,7 +351,6 @@ export default {
           quantity: item.item_quantity,
           unit_price: ""
         })
-        
       );
 
       this.$router.push({

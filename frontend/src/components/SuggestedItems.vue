@@ -105,16 +105,8 @@ export default {
           item_name: "Real Apple Juice 1L",
           item_mrp: 130,
           item_lowest_price: 100,
-          EAN: 3289196260321 
+          EAN: 3289196260321
         },
-        // {
-        //   item_key: 4,
-        //   item_image: require("../assets/rin.jpg"),
-        //   item_name: "Rin 250 gm",
-        //   item_mrp: 60,
-        //   item_lowest_price: 56,
-        //   EAN: 
-        // },
         {
           item_key: 5,
           item_image: require("../assets/lifebuoy.jpeg"),

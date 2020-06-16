@@ -5,7 +5,6 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.io.InputStream;
 
 public class FirebaseHandler {

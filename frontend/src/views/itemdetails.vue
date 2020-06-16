@@ -22,7 +22,7 @@
           </div>
           <button
             class="button is-success is-rounded is-focussed is-pulled-right"
-            @click="collectContact = true; confirm()"
+            @click="collectContact = true"
           >Confirm Order</button>
         </nav>
       </div>
@@ -68,7 +68,7 @@
           <input class="input" type="text" v-model="contactNo" placeholder="Enter Phone No." />
         </p>
         <p class="control">
-          <a class="button is-info" v-on:click="placeOrder()">OK</a>
+          <a class="button is-info" v-on:click="confirm()">OK</a>
         </p>
       </div>
     </div>
@@ -82,7 +82,7 @@ import { time } from "./merchantsList.vue";
 import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
-import firebase from 'firebase';
+import firebase from "firebase";
 
 export default {
   props: ["orderId", "merchantId"],
@@ -111,16 +111,16 @@ export default {
         }
       );
 
-      let confirmedItems = []
+      let confirmedItems = [];
 
       this.itemvalues.forEach(item => {
         confirmedItems.push({
-          "item_name": item.merchantItemName,
-          "quantity": item.quantity,
-          "unit_price": item.unitPrice
-        })
-        this.removeItemFromCart(item.merchantItemName)
-      })
+          item_name: item.merchantItemName,
+          quantity: item.quantity,
+          unit_price: item.unitPrice
+        });
+        this.removeItemFromCart(item.merchantItemName);
+      });
 
       api.updateOrderStatusToProcessing(
         this.$getUserId(),
@@ -131,11 +131,16 @@ export default {
         confirmedItems
       );
 
-      this.$router.push("/orderHistory");
+      this.$router.push({
+        name: "Ratings",
+        params: {
+          merchantId: this.merchantId,
+          merchantvalue: this.merchantvalue.merchantName
+        }
+      });
     },
 
     removeItemFromCart(item_name) {
-
       var userId = this.$getUserId();
       var itemKeyFound = "";
       var reference = firebase
@@ -144,17 +149,18 @@ export default {
         .orderByChild("item_name")
         .equalTo(item_name);
       reference.on("value", function(cartItem) {
-        cartItem.forEach(function(data){
-          itemKeyFound = data.key
-        })
+        cartItem.forEach(function(data) {
+          console.log("item_name");
+          itemKeyFound = data.key;
+        });
       });
 
-      if (itemKeyFound.length != 0){
-      firebase
-        .database()
-        .ref()
-        .child("user_cart/" + userId + "/" + itemKeyFound)
-        .remove();
+      if (itemKeyFound.length != 0) {
+        firebase
+          .database()
+          .ref()
+          .child("user_cart/" + userId + "/" + itemKeyFound)
+          .remove();
       }
     }
   },
@@ -162,7 +168,7 @@ export default {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
     this.deliveryTime = time;
-    console.log(this.merchantvalue)
+    console.log(this.merchantvalue);
   }
 };
 </script>

@@ -2,6 +2,7 @@ package com.googleinterns.smb;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,7 @@ public class MerchantsController {
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        DatabaseReference merchantbase = mDatabase.child("users").child(merchantRequest.getUserId())
-                .child(merchantRequest.getOrderId()).child("merchants");
+        DatabaseReference merchantbase = mDatabase.child("users").child(merchantRequest.getUserId()).child(merchantRequest.getOrderId()).child("merchants");
 
         merchantbase.updateChildrenAsync(merchantChildUpdates);
     }

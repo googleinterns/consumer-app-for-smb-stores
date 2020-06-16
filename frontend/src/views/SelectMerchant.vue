@@ -15,12 +15,12 @@
               </div>
             </div>
             <div align="right">
-            <button class="button">
-              <router-link
-                :to="{ name: 'PaginatedProducts', params: {merchant: merchant}}"
-              >View Products</router-link>
-            </button>
-          </div>
+              <button class="button">
+                <router-link
+                  :to="{ name: 'PaginatedProducts', params: {merchant: merchant}}"
+                >View Products</router-link>
+              </button>
+            </div>
           </div>
         </div>
       </div>

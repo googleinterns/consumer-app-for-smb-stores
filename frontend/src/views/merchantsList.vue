@@ -20,7 +20,6 @@
         </gmap-map>
       </div>
     </div>
-    <button v-on:click="notifyMerchants();">Test</button>
 
     <div
       @click="ItemDetails(merchant)"
@@ -113,32 +112,40 @@ export default {
       });
     },
     notifyMerchants() {
-      var itemsList = []
+      var itemsList = [];
       this.items.forEach(item => {
         itemsList.push({
-           "product_name": item.item_name,
-           "quantity": item.item_quantity,
-           "EAN": ""
-        })
+          product_name: item.item_name,
+          quantity: item.item_quantity,
+          EAN: item.EAN
+        });
       });
-      console.log("In notify merchants")
-      var customer_name= ""
-      if (!firebase.auth().currentUser.isAnonymous){
-        customer_name = firebase.auth().currentUser.displayName
-      }else{
-        customer_name = this.name
+      console.log("In notify merchants");
+      var customer_name = "";
+      if (!firebase.auth().currentUser.isAnonymous) {
+        customer_name = firebase.auth().currentUser.displayName;
+      } else {
+        customer_name = this.name;
       }
 
-      var merchantIDs = ["1NIEhX1qQfPZv7oUZnSZjJdCkzf1", "4snEL5lq06WM2nTxAT3BQ82RNAl1", "VxWQKTpSLLRlsuhQzdb3rapz5zv1", "cG4TthNTwwMSbtCeTRZbc38qyVi2"]
+      var merchantIDs = [
+        "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
+        "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
+        "cG4TthNTwwMSbtCeTRZbc38qyVi2"
+      ];
 
-      merchantIDs.forEach(mid=> {
-      axios.post(process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid, {
-        "oid": this.orderId,
-        "items": itemsList,
-        "location": [this.center.lat,this.center.lng],
-        "customer_name": customer_name,
-        "customer_address": this.address,
-      });})
+      merchantIDs.forEach(mid => {
+        axios.post(
+          process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
+          {
+            oid: this.orderId,
+            items: itemsList,
+            location: [this.center.lat, this.center.lng],
+            customer_name: customer_name,
+            customer_address: this.address
+          }
+        );
+      });
     },
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
@@ -167,6 +174,7 @@ export default {
         };
         that.merchant_markers.push({ position: marker });
       });
+      this.notifyMerchants();
     }
   },
   created() {

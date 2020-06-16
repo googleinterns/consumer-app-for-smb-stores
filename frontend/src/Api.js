@@ -23,15 +23,19 @@ export default {
     }]
   }),
 
-  updateOrderStatusToProcessing: (user_id, order_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
-    instance.post(process.env.VUE_APP_SERVER_URL + '/updateOrderDetails', {
+  updateOrderStatusToProcessing: (user_id, order_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) => {
+    /* eslint-disable no-debugger */
+    debugger;
+    /* eslint-enable no-debugger */
+    return instance.post(process.env.VUE_APP_SERVER_URL + '/updateOrderDetails', {
       user_id: user_id,
       order_id: order_id,
       servicing_merchant_name: servicing_merchant_name,
       servicing_merchant_address: servicing_merchant_address,
       offers: offers,
       item_details: item_details
-    }),
+    })
+  },
 
   placeOrder: (user_id, order_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
     instance.post(process.env.VUE_APP_SERVER_URL + '/placeOrder', {
