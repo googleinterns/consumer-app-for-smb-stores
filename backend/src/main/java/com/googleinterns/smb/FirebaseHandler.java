@@ -11,19 +11,7 @@ import java.util.Map;
 import java.io.InputStream;
 
 public class FirebaseHandler {
-         static String convertInputStreamToString(InputStream inputStream)
-                throws IOException {
-
-                ByteArrayOutputStream result = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int length;
-                while ((length = inputStream.read(buffer)) != -1) {
-                        result.write(buffer, 0, length);
-                }
-
-                return result.toString(StandardCharsets.UTF_8.name());
-
-        }
+         
         public FirebaseHandler() throws IOException {
                 InputStream service= FirebaseHandler.class
                 .getClassLoader().getResourceAsStream("./service_account_pk.json");
