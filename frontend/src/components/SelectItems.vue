@@ -351,6 +351,7 @@ export default {
           quantity: item.item_quantity,
           unit_price: ""
         })
+        
       );
 
       this.$router.push({
