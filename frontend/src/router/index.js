@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import firebase from 'firebase'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
+import Ratings from '../views/Ratings.vue'
 
 
 Vue.use(VueRouter)
@@ -60,6 +61,14 @@ const routes = [
     path: '/orderDetails',
     name: 'itemDetails',
     component: itemDetails,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/ratings',
+    name : 'Ratings',
+    component : Ratings,
     meta: {
       requiresAuth: true
     }

@@ -289,6 +289,7 @@ export default {
     },
 
     placeOrder() {
+      console.log(process.env.VUE_APP_SERVER_URL)
       var userId = firebase.auth().currentUser.uid;
       var itemsForOrder = [];
 
@@ -298,6 +299,7 @@ export default {
           quantity: item.item_quantity,
           unit_price: 30
         })
+        
       );
 
       api
