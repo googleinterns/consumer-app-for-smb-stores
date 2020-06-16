@@ -18,6 +18,7 @@
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
           />
         </gmap-map>
+<<<<<<< HEAD
         <div
           @click="ItemDetails(merchant)"
           v-for="merchant in merchants"
@@ -49,6 +50,8 @@
         <div id="delivery" class="card">
           <p>Click on merchant to get more details and placing the order</p>
         </div>
+=======
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
       </div>
     </div>
 
@@ -127,6 +130,7 @@ export default {
 
   methods: {
     ItemDetails(merchantdetails) {
+      console.log(merchantdetails, "from prev page");
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
       time = this.timeString;
@@ -163,7 +167,7 @@ export default {
   },
   created() {
     let dbref = firebase.database();
-    var userId = firebase.auth().currentUser.uid;
+    var userId = this.$getUserId();
     var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
@@ -183,7 +187,11 @@ export default {
 
         ":" +
         seconds.toString().padStart(2, "0");
+<<<<<<< HEAD
         " hours";
+=======
+      (" hours");
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
 
     });
     console.log(this.merchants.length);

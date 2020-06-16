@@ -8,6 +8,7 @@ import merchantList from '../views/merchantsList.vue'
 import Ratings from '../views/Ratings.vue'
 
 
+
 Vue.use(VueRouter)
 
 
@@ -37,6 +38,14 @@ const routes = [
     }
   },
   {
+    path: '/selectMerchant',
+    name: 'SelectMerchant',
+    component: () => import('../views/SelectMerchant.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/placeOrder',
     name: 'PlaceOrder',
     component: () => import('../views/PlaceOrder.vue'),
@@ -61,6 +70,7 @@ const routes = [
     path: '/orderDetails',
     name: 'itemDetails',
     component: itemDetails,
+<<<<<<< HEAD
     meta: {
       requiresAuth: true
     }
@@ -69,10 +79,26 @@ const routes = [
     path: '/ratings',
     name : 'Ratings',
     component : Ratings,
+=======
+
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
     meta: {
       requiresAuth: true
     }
   },
+<<<<<<< HEAD
+=======
+  {
+    path: '/merchantWiseProducts/:merchant',
+    name: 'PaginatedProducts',
+    props: true,
+    component: () => import('../views/PaginatedProducts.vue'),
+
+    meta: {
+      requiresAuth: true
+    }
+  },
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
 
 ]
 

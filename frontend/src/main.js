@@ -37,6 +37,13 @@ firebase.auth().onAuthStateChanged(() => {
     Vue.use(VueMeta, {
       keyname: 'head'
     })
+    Vue.mixin({
+      methods: {
+        $getUserId() {
+          return firebase.auth().currentUser.uid
+        }
+      }
+    })
 
     new Vue({
       router,

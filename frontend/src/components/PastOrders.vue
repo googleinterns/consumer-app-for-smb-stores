@@ -93,7 +93,6 @@
 
 <script>
 import api from "../Api";
-import firebase from "firebase";
 export default {
   name: "PastOrders",
 
@@ -107,7 +106,7 @@ export default {
 
   mounted() {
     api
-      .fetchPastOrders(firebase.auth().currentUser.uid)
+      .fetchPastOrders(this.$getUserId())
       .then(response => {
         this.pastOrders = response.data;
 

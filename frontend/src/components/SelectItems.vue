@@ -117,7 +117,7 @@
           v-on:click="emptyCart()"
           class="button is-danger is-light"
           type="submit"
-          value="Place Order"
+          value="Empty Cart"
         >
           <span>Empty Cart</span>
         </button>&nbsp;
@@ -145,8 +145,8 @@ var levenshtein = require("levenshtein-edit-distance");
 
 export default {
   name: "SelectItems",
-  mounted() {
-    var userId = firebase.auth().currentUser.uid;
+  created() {
+    var userId = this.$getUserId();
     let self = this;
     firebase
       .database()
@@ -186,7 +186,10 @@ export default {
         comparator: function(item1, item2) {
           var distance1 = levenshtein(productName, item1.ItemName);
           var distance2 = levenshtein(productName, item2.ItemName);
-          return distance1 / item1.ItemName.length - distance2 / item2.ItemName.length;
+          return (
+            distance1 / item1.ItemName.length -
+            distance2 / item2.ItemName.length
+          );
         }
       });
 
@@ -207,7 +210,7 @@ export default {
         });
     },
     addToCart(item) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
@@ -222,7 +225,7 @@ export default {
     },
 
     updateQuantityInCart(item_id, value) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var update = {};
       update["user_cart/" + userId + "/" + item_id + "/item_quantity"] = value;
       firebase
@@ -232,7 +235,7 @@ export default {
     },
 
     removeItemFromCart(item_id) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -279,7 +282,7 @@ export default {
     },
 
     emptyCart() {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -289,8 +292,12 @@ export default {
     },
 
     placeOrder() {
+<<<<<<< HEAD
       console.log(process.env.VUE_APP_SERVER_URL)
       var userId = firebase.auth().currentUser.uid;
+=======
+      var userId = this.$getUserId();
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item =>

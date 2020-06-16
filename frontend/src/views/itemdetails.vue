@@ -60,6 +60,7 @@
             class="has-text-info"
           >{{deliveryTime}}</span>
         </p>
+<<<<<<< HEAD
 
         <div class="content has-text-centered">
           <button
@@ -74,6 +75,8 @@
           Estimated time for delivery:
           <strong class="has-text-success">{{deliveryTime}}</strong>
         </strong>
+=======
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
       </div>
     </div>
   </div>
@@ -127,5 +130,8 @@ export default {
   margin-top: 15px;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
 </style>
