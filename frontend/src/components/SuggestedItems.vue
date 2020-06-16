@@ -61,7 +61,7 @@
                   >
                     <span>
                       <strong>
-                        <big>Add to cart</big>
+                        <big>{{cartAddition}}</big>
                       </strong>
                     </span>
                   </button>
@@ -81,6 +81,7 @@ export default {
   name: "SuggestedItems",
   data: function() {
     return {
+      cartAddition: "Add To Cart",
       suggestedItems: [
         {
           item_key: 1,
@@ -150,7 +151,7 @@ export default {
   },
   methods: {
     addItemToCart(item) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var pushRef = firebase.database().ref("user_cart/" + userId + "/");
       var reference = firebase
         .database()
