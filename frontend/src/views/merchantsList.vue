@@ -108,13 +108,15 @@ export default {
     return {
       merchants: [],
       timeString: "",
-      center: null,
+      center: {
+        lat: null,
+        lng: null
+      },
       customer_markers: [],
       merchant_markers: [],
       FirebaseRef: null,
       geoFireRef: null,
       geoQuery: null
-      timeString: ""
     };
   },
   mounted() {
@@ -151,7 +153,6 @@ export default {
       });
       var that = this;
       this.geoQuery.on("key_entered", (key, location) => {
-        console.log("Entered " + key + " with location " + location);
         const marker = {
           lat: location[0],
           lng: location[1]
@@ -185,6 +186,7 @@ export default {
         " hours";
 
     });
+    console.log(this.merchants.length);
   }
 };
 </script>
