@@ -292,12 +292,10 @@ export default {
     },
 
     placeOrder() {
-<<<<<<< HEAD
       console.log(process.env.VUE_APP_SERVER_URL)
       var userId = firebase.auth().currentUser.uid;
-=======
+
       var userId = this.$getUserId();
->>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item =>
