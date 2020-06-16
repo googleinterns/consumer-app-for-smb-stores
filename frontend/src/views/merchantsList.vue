@@ -18,7 +18,7 @@
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
           />
         </gmap-map>
-<<<<<<< HEAD
+
         <div
           @click="ItemDetails(merchant)"
           v-for="merchant in merchants"
@@ -50,8 +50,7 @@
         <div id="delivery" class="card">
           <p>Click on merchant to get more details and placing the order</p>
         </div>
-=======
->>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
+
       </div>
     </div>
 
@@ -187,11 +186,8 @@ export default {
 
         ":" +
         seconds.toString().padStart(2, "0");
-<<<<<<< HEAD
-        " hours";
-=======
       (" hours");
->>>>>>> 9566e750813517a31c3fe630ebe6f668840b250f
+
 
     });
     console.log(this.merchants.length);
