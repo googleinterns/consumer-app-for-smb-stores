@@ -13,7 +13,7 @@
       </div>
       <div>
         <div class="panel" v-for="order in pastOrders" v-bind:key="order.orderID">
-          <div class="card">
+          <div v-if="order.order.order_status != 'ONGOING'" class="card">
             <div class="card-content">
               <div class="content">
                 <p align="left">
@@ -49,7 +49,7 @@
                       <th align="center">{{order.total}}</th>
                     </tfoot>
                     <tr v-for="(item, index) in order.all_items" v-bind:key="index">
-                      <td>
+                      <td v-if="item.unit_price != 0">
                         {{item.item_name}}
                         <div v-if="item.quantity > 1">
                           <small>
@@ -58,7 +58,7 @@
                           </small>
                         </div>
                       </td>
-                      <td align="center">{{item.quantity * item.unit_price}}</td>
+                      <td v-if="item.unit_price != 0" align="center">{{item.quantity * item.unit_price}}</td>
                     </tr>
                   </table>
                 </div>

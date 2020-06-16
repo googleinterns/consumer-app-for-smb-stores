@@ -22,7 +22,7 @@
           </div>
           <button
             class="button is-success is-rounded is-focussed is-pulled-right"
-            @click="confirm"
+            @click="collectContact = true; confirm()"
           >Confirm Order</button>
         </nav>
       </div>
@@ -62,6 +62,16 @@
         </p>
       </div>
     </div>
+    <div v-if="collectContact">
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" v-model="contactNo" placeholder="Enter Phone No." />
+        </p>
+        <p class="control">
+          <a class="button is-info" v-on:click="placeOrder()">OK</a>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -70,8 +80,12 @@ import { itemexp } from "./merchantsList.vue";
 import { merchantexp } from "./merchantsList.vue";
 import { time } from "./merchantsList.vue";
 import Logout from "@/components/Logout.vue";
+import axios from "axios";
+import api from "../Api";
+import firebase from 'firebase';
 
 export default {
+  props: ["orderId", "merchantId"],
   name: "itemDetails",
   components: {
     Logout
@@ -80,18 +94,75 @@ export default {
     return {
       merchantvalue: [],
       itemvalues: [],
-      deliveryTime: ""
+      deliveryTime: "",
+      collectContact: false,
+      contactNo: ""
     };
   },
   methods: {
     confirm() {
-      this.$router.push("home");
+      axios.post(
+        process.env.VUE_APP_MERCHANT_SERVER +
+          "order/confirm/merchant/" +
+          this.merchantId,
+        {
+          oid: this.orderId,
+          customer_contact_no: this.contactNo
+        }
+      );
+
+      let confirmedItems = []
+
+      this.itemvalues.forEach(item => {
+        confirmedItems.push({
+          "item_name": item.merchantItemName,
+          "quantity": item.quantity,
+          "unit_price": item.unitPrice
+        })
+        this.removeItemFromCart(item.merchantItemName)
+      })
+
+      api.updateOrderStatusToProcessing(
+        this.$getUserId(),
+        this.orderId,
+        this.merchantvalue.merchantName,
+        this.merchantvalue.merchantAddress,
+        "Free Delivery",
+        confirmedItems
+      );
+
+      this.$router.push("/orderHistory");
+    },
+
+    removeItemFromCart(item_name) {
+
+      var userId = this.$getUserId();
+      var itemKeyFound = "";
+      var reference = firebase
+        .database()
+        .ref("user_cart/" + userId + "/")
+        .orderByChild("item_name")
+        .equalTo(item_name);
+      reference.on("value", function(cartItem) {
+        cartItem.forEach(function(data){
+          itemKeyFound = data.key
+        })
+      });
+
+      if (itemKeyFound.length != 0){
+      firebase
+        .database()
+        .ref()
+        .child("user_cart/" + userId + "/" + itemKeyFound)
+        .remove();
+      }
     }
   },
   mounted() {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
     this.deliveryTime = time;
+    console.log(this.merchantvalue)
   }
 };
 </script>

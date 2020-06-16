@@ -106,6 +106,7 @@ public class Merchant {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("merchantId", merchantId);
         result.put("merchantName", merchantName);
         result.put("merchantAddress", merchantAddress);
         result.put("offers", offersAvailed);

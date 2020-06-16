@@ -10,6 +10,7 @@ import { config } from '../googleMap-config.js';
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
+import VModal from 'vue-js-modal'
 
 const options = {
   isEnabled: true,
@@ -37,6 +38,7 @@ firebase.auth().onAuthStateChanged(() => {
     Vue.use(VueMeta, {
       keyname: 'head'
     })
+    Vue.use(VModal)
     Vue.mixin({
       methods: {
         $getUserId() {

@@ -20,12 +20,13 @@
         </gmap-map>
       </div>
     </div>
+    <button v-on:click="notifyMerchants();">Test</button>
 
     <div
       @click="ItemDetails(merchant)"
       v-for="merchant in merchants"
       class="box"
-      v-bind:key="merchant.key"
+      v-bind:key="merchant.merchantId"
     >
       <article class="media">
         <div class="media-left">
@@ -63,12 +64,14 @@
 import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
+import axios from "axios";
 
 export var merchantexp;
 export var itemexp;
 export var time;
 export default {
   name: "merchantList",
+  props: ["orderId", "address", "items", "name"],
   components: {
     Logout
   },
@@ -85,6 +88,8 @@ export default {
     };
   },
   mounted() {
+    console.log("received orderID", this.orderId);
+    console.log(this.$getUserId());
     this.FirebaseRef = firebase.database().ref("MerchantLocation");
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
     this.geolocate();
@@ -93,10 +98,45 @@ export default {
   methods: {
     ItemDetails(merchantdetails) {
       console.log(merchantdetails, "from prev page");
+      console.log(merchantdetails.merchantId);
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
       time = this.timeString;
-      this.$router.push("/orderDetails");
+      this.$router.push({
+        name: "itemDetails",
+        params: {
+          orderId: this.orderId,
+          merchantId: merchantdetails.merchantId
+        }
+      });
+    },
+    notifyMerchants() {
+      var itemsList = []
+      this.items.forEach(item => {
+        itemsList.push({
+           "product_name": item.item_name,
+           "quantity": item.item_quantity,
+           "EAN": ""
+        })
+      });
+      console.log("In notify merchants")
+      var customer_name= ""
+      if (!firebase.auth().currentUser.isAnonymous){
+        customer_name = firebase.auth().currentUser.displayName
+      }else{
+        customer_name = this.name
+      }
+
+      var merchantIDs = ["1NIEhX1qQfPZv7oUZnSZjJdCkzf1", "4snEL5lq06WM2nTxAT3BQ82RNAl1", "VxWQKTpSLLRlsuhQzdb3rapz5zv1", "cG4TthNTwwMSbtCeTRZbc38qyVi2"]
+
+      merchantIDs.forEach(mid=> {
+      axios.post(process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid, {
+        "oid": this.orderId,
+        "items": itemsList,
+        "location": [this.center.lat,this.center.lng],
+        "customer_name": customer_name,
+        "customer_address": this.address,
+      });})
     },
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
@@ -131,7 +171,7 @@ export default {
   created() {
     let dbref = firebase.database();
     var userId = this.$getUserId();
-    var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
+    var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
       this.merchants.push(data);
