@@ -15,11 +15,10 @@
     "bulma": "^0.8.2",
     "core-js": "^3.6.5",
 
+    "edit-distance": "^1.0.2",
     "firebase": "^7.15.1",
     "firebaseui": "^4.5.0",
     "geofire": "^5.0.1",
-
-    "edit-distance": "^1.0.2",
     "js-priority-queue": "^0.1.5",
     "levenshtein-edit-distance": "^2.0.5",
 
@@ -32,8 +31,6 @@
 
     "vue-star-rating": "^1.6.1",
     "vue2-google-maps": "^0.10.7",
-   
-
     "vuefire": "^2.2.2",
     "vuejs-logger": "^1.5.4"
   },

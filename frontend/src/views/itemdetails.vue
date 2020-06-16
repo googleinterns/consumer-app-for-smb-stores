@@ -60,20 +60,6 @@
             class="has-text-info"
           >{{deliveryTime}}</span>
         </p>
-
-        <div class="content has-text-centered">
-          <button
-            id="bot"
-            @click="confirm"
-            class="button is-success is-large"
-          >Confirm Order</button>
-        
-        </div>
-      <div class="box">
-        <strong>
-          Estimated time for delivery:
-          <strong class="has-text-success">{{deliveryTime}}</strong>
-        </strong>
       </div>
     </div>
   </div>
@@ -125,6 +111,5 @@ export default {
 #time {
   margin-top: 15px;
 }
-
 
 </style>
