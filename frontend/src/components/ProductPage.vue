@@ -80,7 +80,8 @@ export default {
         if (!cartItem.exists()) {
           pushRef.push({
             item_name: item.product_name,
-            item_quantity: 1
+            item_quantity: 1,
+            EAN: item.EAN
           });
         }
       });

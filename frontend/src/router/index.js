@@ -38,6 +38,14 @@ const routes = [
     }
   },
   {
+    path: '/ongoingOrders',
+    name: 'OngoingOrders',
+    component: () => import('../views/OngoingOrders.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/selectMerchant',
     name: 'SelectMerchant',
     component: () => import('../views/SelectMerchant.vue'),
@@ -59,16 +67,18 @@ const routes = [
     component: Login
   },
   {
-    path: '/merchantBids',
+    path: '/merchantBids/:orderId&:address&:items&:name',
     name: 'merchantList',
+    props: true,
     component: merchantList,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: '/orderDetails',
+    path: '/orderDetails/:orderId&:merchantId',
     name: 'itemDetails',
+    props: true,
     component: itemDetails,
 
     meta: {
@@ -77,11 +87,9 @@ const routes = [
   },
   {
     path: '/ratings',
-    name : 'Ratings',
-    component : Ratings,
-
-
-
+    name: 'Ratings',
+    component: Ratings,
+    props: true,
     meta: {
       requiresAuth: true
     }
@@ -92,13 +100,10 @@ const routes = [
     name: 'PaginatedProducts',
     props: true,
     component: () => import('../views/PaginatedProducts.vue'),
-
     meta: {
       requiresAuth: true
     }
   },
-
-
 ]
 
 const router = new VueRouter({
