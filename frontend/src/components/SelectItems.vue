@@ -130,7 +130,7 @@
           <span>Empty Cart</span>
         </button>&nbsp;
         <button
-          v-on:click="placeOrder()"
+          v-on:click="askForAddress = true;"
           class="button is-primary is-light"
           type="submit"
           value="Place Order"

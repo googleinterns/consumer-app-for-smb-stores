@@ -172,6 +172,7 @@ export default {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
     this.deliveryTime = time;
+    console.log(this.merchantvalue);
   }
 };
 </script>
