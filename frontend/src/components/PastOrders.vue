@@ -68,7 +68,7 @@
         </div>
       </div>
        <button class="button is-info is-light">
-            <router-link to="/ratings/" + {{order.order.merchant_name}}>Rate Now</router-link>
+            <router-link to="/ratings" >Rate Now</router-link>
           </button>
     </div>
     <div v-else>
@@ -83,10 +83,7 @@
       </div>
       <button class="button is-info is-light">
         <router-link to="/placeOrder">Order Now</router-link>
-      </button> &nbsp;
-      <button class="button is-info is-light">
-            <router-link to="/ratings/" + {{order.order.merchant_name}}>Rate Now</router-link>
-          </button>
+      </button> 
     </div>
   </div>
 </template>

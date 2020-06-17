@@ -293,7 +293,7 @@ export default {
 
     placeOrder() {
       console.log(process.env.VUE_APP_SERVER_URL)
-      var userId = firebase.auth().currentUser.uid;
+      //var userId = firebase.auth().currentUser.uid;
 
       var userId = this.$getUserId();
       var itemsForOrder = [];

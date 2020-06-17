@@ -5,15 +5,15 @@
       <div class="container">
         <gmap-map :center="center" :zoom="16" style="width:100%;  height: 400px;">
           <gmap-marker
-            :key="index"
-            v-for="(marker, index) in customer_markers"
+            :key="customer_index"
+            v-for="(marker, customer_index) in customer_markers"
             :position="marker.position"
             icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
           />
 
           <gmap-marker
-            :key="index"
-            v-for="(marker, index) in merchant_markers"
+            :key="merchant_index"
+            v-for="(marker, merchant_index) in merchant_markers"
             :position="marker.position"
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
           />
@@ -50,7 +50,6 @@
         <div id="delivery" class="card">
           <p>Click on merchant to get more details and placing the order</p>
         </div>
-
       </div>
     </div>
 
@@ -89,7 +88,6 @@
     <div class="box">
       <strong>Click on merchant to get more details and placing the order</strong>
     </div>
-
   </div>
 </template>
 
@@ -111,8 +109,8 @@ export default {
       merchants: [],
       timeString: "",
       center: {
-        lat: null,
-        lng: null
+        lat: 28.535517,
+        lng: 77.391029
       },
       customer_markers: [],
       merchant_markers: [],
@@ -124,6 +122,7 @@ export default {
   mounted() {
     this.FirebaseRef = firebase.database().ref("MerchantLocation");
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
+
     this.geolocate();
   },
 
@@ -178,19 +177,14 @@ export default {
 
       var seconds = dateObj.getSeconds();
 
-
       this.timeString =
         hours.toString().padStart(2, "0") +
         ":" +
         minutes.toString().padStart(2, "0") +
-
         ":" +
         seconds.toString().padStart(2, "0");
       (" hours");
-
-
     });
-    console.log(this.merchants.length);
   }
 };
 </script>
