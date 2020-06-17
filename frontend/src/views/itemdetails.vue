@@ -39,7 +39,7 @@
               <div class="content">
                 <div class="has-text-grey is-size-6.5">
                   <strong class="is-size-5">{{item.merchantItemName}}</strong>
-                  <strong class="has-text-grey is-size-5">(Qty: {{item.quantity}})</strong>
+                  <strong class="has-text-grey is-size-5"> (Qty: {{item.quantity}})</strong>
                 </div>
 
                 <div class="has-text-grey is-size-6.5">
