@@ -11,7 +11,7 @@ public class Merchant {
     private String merchantId;
     private String merchantName;
     private String merchantAddress;
-    private String offersAvailed;
+    private float offersAvailed;
     private double totalPrice;
     private long deliveryTime;
     private List<MerchantItem> itemDetails = new ArrayList<>();
@@ -35,7 +35,7 @@ public class Merchant {
         this.merchantAddress = merchantAddress;
     }
 
-    public void setOffersAvailed(String offersAvailed) {
+    public void setOffersAvailed(float offersAvailed) {
         this.offersAvailed = offersAvailed;
     }
 
@@ -75,7 +75,7 @@ public class Merchant {
         return this.merchantAddress;
     }
 
-    public String getOffers() {
+    public float getOffers() {
         return this.offersAvailed;
     }
 
