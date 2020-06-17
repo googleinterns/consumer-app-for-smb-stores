@@ -1,6 +1,5 @@
 <template>
   <div class="bd-lead">
-    <!-- <div class="columns is-vcentered"> -->
     <div class="columns is-mobile">
       <div class="column">
         <h1 class="title is-6" align="left">Start Shopping Now</h1>
@@ -164,7 +163,8 @@ export default {
           pushRef.push({
             item_name: item.item_name,
             item_quantity: 1,
-            EAN: item.EAN
+            EAN: item.EAN,
+            item_image: item.item_image
           });
         }
       });

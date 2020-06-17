@@ -11,6 +11,7 @@
           <div class="media-content">
             <div class="content">
               <strong class="is-size-5">{{merchantvalue.merchantName}}</strong>
+              <br />
               <div class="is-size-6">{{merchantvalue.merchantAddress}}</div>
               <br />
             </div>
@@ -18,34 +19,37 @@
         </article>
         <nav class="level is-mobile">
           <div class="level-left">
-            <strong class="has-text-danger is-size-6.5">Order Price: ₹ {{merchantvalue.totalPrice}}</strong>
+            <strong class="is-size-6.5">Order Price: ₹ {{merchantvalue.totalPrice}}</strong>
           </div>
           <button
             class="button is-success is-rounded is-focussed is-pulled-right"
-            @click="collectContact = true"
+            @click="confirm()"
           >Confirm Order</button>
         </nav>
       </div>
       <div id="itemslist" v-for="item in itemvalues" v-bind:key="item.key">
         <div v-if="item.isAvailable" class="box">
           <article class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img :src="item.imageURL" alt="Placeholder image" />
+              </figure>
+            </div>
             <div class="media-content">
               <div class="content">
-                <strong class="is-size-5">{{item.merchantItemName}}</strong>
+                <div class="has-text-grey is-size-6.5">
+                  <strong class="is-size-5">{{item.merchantItemName}}</strong>
+                  <strong class="has-text-grey is-size-5">(Qty: {{item.quantity}})</strong>
+                </div>
+
                 <div class="has-text-grey is-size-6.5">
                   Price:
-                  <strong
-                    class="has-text-danger is-size-6.5 is-pulled-right"
-                  >₹ {{item.unitPrice}}</strong>
-                </div>
-                <div class="has-text-grey is-size-6.5">
-                  Qty:
-                  <strong class="has-text-danger is-size-6. is-pulled-right">{{item.quantity}}</strong>
+                  <strong class="is-size-6.5 is-pulled-right">₹ {{item.unitPrice}}</strong>
                 </div>
                 <strong class="has-text-grey is-size-6.5">
                   Total Price:
                   <strong
-                    class="has-text-danger is-size-6.5 is-pulled-right"
+                    class="is-size-6.5 is-pulled-right"
                   >₹ {{item.unitPrice*item.quantity}}</strong>
                 </strong>
               </div>
@@ -96,7 +100,7 @@ export default {
       itemvalues: [],
       deliveryTime: "",
       collectContact: false,
-      contactNo: ""
+      contactNo: 9354682711
     };
   },
   methods: {
@@ -130,12 +134,11 @@ export default {
         "Free Delivery",
         confirmedItems
       );
-
       this.$router.push({
-        name: "Ratings",
-        params: {
-          merchantId: this.merchantId,
-          merchantvalue: this.merchantvalue.merchantName
+        name: "OrderConfirmation",
+        query: {
+          merchantName: this.merchantvalue.merchantName,
+          time: this.deliveryTime
         }
       });
     },
@@ -150,12 +153,13 @@ export default {
         .equalTo(item_name);
       reference.on("value", function(cartItem) {
         cartItem.forEach(function(data) {
-          console.log("item_name");
+          console.log(item_name, data.key);
           itemKeyFound = data.key;
         });
       });
 
       if (itemKeyFound.length != 0) {
+        console.log(item_name);
         firebase
           .database()
           .ref()
@@ -168,7 +172,6 @@ export default {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
     this.deliveryTime = time;
-    console.log(this.merchantvalue);
   }
 };
 </script>

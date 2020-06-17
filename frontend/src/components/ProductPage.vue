@@ -81,7 +81,8 @@ export default {
           pushRef.push({
             item_name: item.product_name,
             item_quantity: 1,
-            EAN: item.EAN
+            EAN: item.EAN,
+            item_image: item.image_url
           });
         }
       });
