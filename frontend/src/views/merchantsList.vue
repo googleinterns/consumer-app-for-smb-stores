@@ -18,39 +18,6 @@
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
           />
         </gmap-map>
-
-        <div
-          @click="ItemDetails(merchant)"
-          v-for="merchant in merchants"
-          class="card"
-          v-bind:key="merchant.key"
-        >
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4 has-text-info is-size-2.5">
-                  {{merchant.merchantName}}
-                  <span class="is-pulled-right">{{merchant.totalPrice}} ₹</span>
-                </p>
-              </div>
-            </div>
-            <div
-              class="has-text-grey-light"
-              v-for="item in merchant.itemDetails"
-              v-bind:key="item.key"
-            >
-              <span v-if="!item.isAvailable">{{item.merchantItemName}} not available</span>
-            </div>
-            <p class="subtitle is-6 is-pulled-left">
-              Delivery in
-              <span class="has-text-info">{{timeString}}</span>
-            </p>
-          </div>
-        </div>
-        <div id="delivery" class="card">
-          <p>Click on merchant to get more details and placing the order</p>
-        </div>
-
       </div>
     </div>
 
@@ -58,7 +25,7 @@
       @click="ItemDetails(merchant)"
       v-for="merchant in merchants"
       class="box"
-      v-bind:key="merchant.key"
+      v-bind:key="merchant.merchantId"
     >
       <article class="media">
         <div class="media-left">
@@ -89,7 +56,6 @@
     <div class="box">
       <strong>Click on merchant to get more details and placing the order</strong>
     </div>
-
   </div>
 </template>
 
@@ -97,12 +63,14 @@
 import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
+import axios from "axios";
 
 export var merchantexp;
 export var itemexp;
 export var time;
 export default {
   name: "merchantList",
+  props: ["orderId", "address", "items", "name"],
   components: {
     Logout
   },
@@ -122,6 +90,8 @@ export default {
     };
   },
   mounted() {
+    console.log("received orderID", this.orderId);
+    console.log(this.$getUserId());
     this.FirebaseRef = firebase.database().ref("MerchantLocation");
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
     this.geolocate();
@@ -133,7 +103,49 @@ export default {
       merchantexp = merchantdetails;
       itemexp = merchantdetails.itemDetails;
       time = this.timeString;
-      this.$router.push("/orderDetails");
+      this.$router.push({
+        name: "itemDetails",
+        params: {
+          orderId: this.orderId,
+          merchantId: merchantdetails.merchantId
+        }
+      });
+    },
+    notifyMerchants() {
+      var itemsList = [];
+      this.items.forEach(item => {
+        itemsList.push({
+          product_name: item.item_name,
+          quantity: item.item_quantity,
+          EAN: item.EAN
+        });
+      });
+      console.log("In notify merchants");
+      var customer_name = "";
+      if (!firebase.auth().currentUser.isAnonymous) {
+        customer_name = firebase.auth().currentUser.displayName;
+      } else {
+        customer_name = this.name;
+      }
+
+      var merchantIDs = [
+        "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
+        "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
+        "cG4TthNTwwMSbtCeTRZbc38qyVi2"
+      ];
+
+      merchantIDs.forEach(mid => {
+        axios.post(
+          process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
+          {
+            oid: this.orderId,
+            items: itemsList,
+            location: [this.center.lat, this.center.lng],
+            customer_name: customer_name,
+            customer_address: this.address
+          }
+        );
+      });
     },
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
@@ -162,12 +174,13 @@ export default {
         };
         that.merchant_markers.push({ position: marker });
       });
+      this.notifyMerchants();
     }
   },
   created() {
     let dbref = firebase.database();
     var userId = this.$getUserId();
-    var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
+    var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
       this.merchants.push(data);
@@ -178,17 +191,13 @@ export default {
 
       var seconds = dateObj.getSeconds();
 
-
       this.timeString =
         hours.toString().padStart(2, "0") +
         ":" +
         minutes.toString().padStart(2, "0") +
-
         ":" +
         seconds.toString().padStart(2, "0");
       (" hours");
-
-
     });
     console.log(this.merchants.length);
   }

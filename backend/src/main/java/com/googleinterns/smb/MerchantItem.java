@@ -6,6 +6,7 @@ public class MerchantItem {
     private int quantity;
     private float unitPrice;
     private boolean isAvailable;
+    private String imageURL;
 
     public MerchantItem() {
 
@@ -29,6 +30,14 @@ public class MerchantItem {
 
     public String getMerchantItemName() {
         return this.merchantItemName;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getImageURL() {
+        return this.imageURL;
     }
 
     public int getQuantity() {
