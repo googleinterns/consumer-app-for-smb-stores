@@ -122,16 +122,35 @@
           <span>Empty Cart</span>
         </button>&nbsp;
         <button
-          v-on:click="placeOrder()"
+          v-on:click="askForAddress = true;"
           class="button is-primary is-light"
           type="submit"
           value="Place Order"
         >
-          <router-link to="/merchantBids">
-            <span>Place Order</span>
-          </router-link>
+          <span>Place Order</span>
         </button>
       </p>
+    </div>
+
+    <div v-if="askForAddress">
+      <div v-if="isAnonymousUser">
+        <div class="field is-grouped">
+          <p class="control is-expanded">
+            <input class="input" type="text" v-model="name" placeholder="Enter Name" />
+          </p>
+          <p class="control">
+            <a class="button is-info">OK</a>
+          </p>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" v-model="address" placeholder="Enter Address" />
+        </p>
+        <p class="control">
+          <a class="button is-info" v-on:click="placeOrder()">OK</a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -157,16 +176,24 @@ export default {
           self.itemsInCart.push({
             item_id: cartItem.key,
             item_name: cartItem.val().item_name,
-            item_quantity: cartItem.val().item_quantity
+            item_quantity: cartItem.val().item_quantity,
+            EAN: cartItem.val().EAN
           });
         });
       });
+
+    this.isAnonymousUser = firebase.auth().currentUser.isAnonymous;
   },
   data: function() {
     return {
       inputValue: "",
       itemsInCart: [],
-      products: []
+      products: [],
+      orderId: "",
+      address: "",
+      askForAddress: false,
+      name: "",
+      isAnonymousUser: false
     };
   },
   methods: {
@@ -214,13 +241,14 @@ export default {
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
-        item_quantity: 1
+        item_quantity: 1,
       });
       var item_id = itemDoc.key;
       this.itemsInCart.push({
         item_id: item_id,
         item_name: item,
-        item_quantity: 1
+        item_quantity: 1,
+        EAN: item.EAN
       });
     },
 
@@ -276,7 +304,6 @@ export default {
     },
 
     removeItem(itemObj) {
-      console.log(itemObj.item_id, "item");
       this.removeItemFromCart(itemObj.item_id, itemObj.item_quantity);
       this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
     },
@@ -291,10 +318,31 @@ export default {
       this.itemsInCart = [];
     },
 
-    placeOrder() {
-      console.log(process.env.VUE_APP_SERVER_URL)
-      //var userId = firebase.auth().currentUser.uid;
+  
+    getEPOCHvalue() {
+      var now = new Date();
+      var secondsSinceEpoch = Math.round(now.getTime() / 1000);
+      return secondsSinceEpoch;
+    },
 
+    getFiveRandomDigits() {
+      var result = "";
+      var characters = "0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < 5; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
+
+    getOrderId() {
+      return this.getEPOCHvalue() + ":" + this.getFiveRandomDigits();
+    },
+
+    placeOrder() {
+      this.orderId = this.getOrderId();
       var userId = this.$getUserId();
       var itemsForOrder = [];
 
@@ -302,25 +350,22 @@ export default {
         itemsForOrder.push({
           item_name: item.item_name,
           quantity: item.item_quantity,
-          unit_price: 30
+          unit_price: ""
         })
-        
       );
 
+      this.$router.push({
+        name: "merchantList",
+        params: {
+          orderId: this.orderId,
+          address: this.address,
+          items: this.itemsInCart,
+          name: this.name
+        }
+      });
+
       api
-        .placeOrder(
-          userId,
-          "Merchant A",
-          "New Street, Delhi",
-          "Free delivery",
-          itemsForOrder
-        )
-        .then(response => {
-          if (response) {
-            this.emptyCart(); //Need to be done as per response
-            this.itemsInCart = []; //Need to update based on items
-          }
-        })
+        .placeOrder(userId, this.orderId, "", "", "", itemsForOrder)
         .catch(error => {
           this.$log.debug(error);
         });

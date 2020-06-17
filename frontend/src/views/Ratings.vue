@@ -10,7 +10,6 @@
           <br />
           <br />
           <h2>Kindly rate us!</h2>
-
           <br />
           <p>
             <i>Timeliness</i>
@@ -69,6 +68,7 @@ import StarRating from "vue-star-rating";
 import Logout from "@/components/Logout.vue";
 export default {
   name: "Ratings",
+  props: ["merchantID", "merchantName"],
   components: {
     StarRating,
     Logout

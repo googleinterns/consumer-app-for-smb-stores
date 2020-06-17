@@ -5,12 +5,9 @@
       <div class="container">
         <gmap-map :center="center" :zoom="16" style="width:100%;  height: 400px;">
           <gmap-marker
-            :key="customer_index"
-            v-for="(marker, customer_index) in customer_markers"
-            :position="marker.position"
+            :position="center"
             icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
           />
-
           <gmap-marker
             :key="merchant_index"
             v-for="(marker, merchant_index) in merchant_markers"
@@ -18,38 +15,6 @@
             icon="http://maps.google.com/mapfiles/ms/icons/orange-dot.png"
           />
         </gmap-map>
-
-        <div
-          @click="ItemDetails(merchant)"
-          v-for="merchant in merchants"
-          class="card"
-          v-bind:key="merchant.key"
-        >
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4 has-text-info is-size-2.5">
-                  {{merchant.merchantName}}
-                  <span class="is-pulled-right">{{merchant.totalPrice}} ₹</span>
-                </p>
-              </div>
-            </div>
-            <div
-              class="has-text-grey-light"
-              v-for="item in merchant.itemDetails"
-              v-bind:key="item.key"
-            >
-              <span v-if="!item.isAvailable">{{item.merchantItemName}} not available</span>
-            </div>
-            <p class="subtitle is-6 is-pulled-left">
-              Delivery in
-              <span class="has-text-info">{{timeString}}</span>
-            </p>
-          </div>
-        </div>
-        <div id="delivery" class="card">
-          <p>Click on merchant to get more details and placing the order</p>
-        </div>
       </div>
     </div>
 
@@ -112,7 +77,6 @@ export default {
         lat: 28.535517,
         lng: 77.391029
       },
-      customer_markers: [],
       merchant_markers: [],
       FirebaseRef: null,
       geoFireRef: null,
@@ -140,11 +104,6 @@ export default {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         };
-        const marker = {
-          lat: this.center.lat,
-          lng: this.center.lng
-        };
-        this.customer_markers.push({ position: marker });
         this.GeoQueryFn();
       });
     },

@@ -29,7 +29,7 @@ public class Order {
     private String offersAvailed;
 
     private enum OrderStatus {
-        PROCESSING, COMPLETED
+        PROCESSING, COMPLETED, ONGOING
     }
 
     @JsonProperty("order_status")
@@ -44,18 +44,17 @@ public class Order {
 
     public Order(String userId) {
         this.userId = userId;
-        this.orderId = generateOrderId();
-        this.orderStatus = OrderStatus.PROCESSING;
+        this.orderStatus = OrderStatus.ONGOING;
     }
 
-    public Order(String userId, String merchantName, String merchantAddress, String offers) {
+    public Order(String userId, String orderId, String merchantName, String merchantAddress, String offers) {
         this.userId = userId;
-        this.orderId = generateOrderId();
+        this.orderId = orderId;
         this.dateOfOrder = getDate();
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
         this.offersAvailed = offers;
-        this.orderStatus = OrderStatus.PROCESSING;
+        this.orderStatus = OrderStatus.ONGOING;
     }
 
     @PropertyName("user_id")
@@ -128,26 +127,6 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    private String generateEPOCTime() {
-        long epochTime = Instant.now().getEpochSecond();
-        return String.valueOf(epochTime);
-    }
-
-    private String generateFiveRandomDigits() {
-        int[] randomDigits = new int[5];
-        for (int i = 0; i < 5; i++) {
-            randomDigits[i] = rand.nextInt(10);
-        }
-        StringBuilder sb = new StringBuilder(5);
-        for (int i = 0; i < 5; i++) sb.append(randomDigits[i]);
-        return sb.toString();
-    }
-
-    private String generateOrderId() {
-        String epochTime = generateEPOCTime();
-        String randomDigits = generateFiveRandomDigits();
-        return epochTime + ":" + randomDigits;
-    }
 
     private Date getDate() {
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");
