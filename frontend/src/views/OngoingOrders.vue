@@ -62,6 +62,7 @@
 <script>
 import Logout from "@/components/Logout.vue";
 import api from "../Api";
+import firebase from "firebase";
 export default {
   name: "OngoingOrders",
   components: {
@@ -80,13 +81,21 @@ export default {
       var userId = this.$getUserId();
       api.fetchOngoingOrders(userId).then(response => {
         this.ongoingOrders = response.data;
-        console.log(this.ongoingOrders, "these are ongoing orders");
       });
     },
 
     getOngoingOrderDetails(orderId) {
-      console.log("pushing id", orderId);
-      this.$router.push({ name: "merchantList", params: { orderId: orderId } });
+      var name = "Vibhu";
+      var address = "K-502, Amrapali Zodiac, Sector 120, Noida";
+
+      if (!firebase.auth().currentUser.isAnonymous) {
+        name = firebase.auth().currentUser.displayName;
+      }
+
+      this.$router.push({
+        name: "merchantList",
+        params: { orderId: orderId, address: address, cust_name: name }
+      });
     }
   }
 };
