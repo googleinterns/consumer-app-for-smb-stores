@@ -68,7 +68,7 @@ import StarRating from "vue-star-rating";
 import Logout from "@/components/Logout.vue";
 export default {
   name: "Ratings",
-  props: ["merchantID", "merchantName"],
+  props: ["merchantName"],
   components: {
     StarRating,
     Logout
@@ -81,7 +81,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$router.push("home");
+      this.$router.go(-1);
     }
   }
 };

@@ -4,7 +4,7 @@
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
           <input
-            v-on:keyup.enter="addProduct(inputValue)"
+            v-on:keyup.enter="addProduct(inputValue, '', 'https://semantic-ui.com/images/wireframe/image.png')"
             @keyup="findSuggestedProducts(inputValue)"
             v-model="inputValue"
             class="input is-capitalized is-family-primary"
@@ -16,7 +16,10 @@
           </span>
         </p>
         <p class="control">
-          <button v-on:click="addItem(inputValue)" class="button is-primary">Add</button>
+          <button
+            v-on:click="addItem(inputValue, '', 'https://semantic-ui.com/images/wireframe/image.png')"
+            class="button is-primary"
+          >Add</button>
         </p>
       </div>
       <div class="is-shadowless" v-if="products.length>0">
@@ -27,7 +30,7 @@
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
                     <tr
-                      @click="addProduct(item.ItemName)"
+                      @click="addProduct(item.ItemName, item.EAN, item.ItemImage)"
                       v-bind:key="index"
                       v-for="(item, index) in products"
                     >
@@ -63,6 +66,11 @@
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
                     <tr v-bind:key="item.item_id" v-for="(item) in itemsInCart">
+                      <td width="40px" class="field">
+                        <figure class="image is-32x32">
+                          <img :src="item.item_image" />
+                        </figure>
+                      </td>
                       <td>{{item.item_name}}</td>
                       <td align="right">
                         <div class="field has-addons has-addons-right">
@@ -122,7 +130,7 @@
           <span>Empty Cart</span>
         </button>&nbsp;
         <button
-          v-on:click="askForAddress = true;"
+          v-on:click="placeOrder()"
           class="button is-primary is-light"
           type="submit"
           value="Place Order"
@@ -136,7 +144,7 @@
       <div v-if="isAnonymousUser">
         <div class="field is-grouped">
           <p class="control is-expanded">
-            <input class="input" type="text" v-model="name" placeholder="Enter Name" />
+            <input class="input" type="text" v-model="cust_name" placeholder="Enter Name" />
           </p>
           <p class="control">
             <a class="button is-info">OK</a>
@@ -166,6 +174,7 @@ export default {
   name: "SelectItems",
   created() {
     var userId = this.$getUserId();
+    console.log(userId);
     let self = this;
     firebase
       .database()
@@ -177,12 +186,15 @@ export default {
             item_id: cartItem.key,
             item_name: cartItem.val().item_name,
             item_quantity: cartItem.val().item_quantity,
-            EAN: cartItem.val().EAN
+            EAN: cartItem.val().EAN,
+            item_image: cartItem.val().item_image
           });
         });
       });
 
-    this.isAnonymousUser = firebase.auth().currentUser.isAnonymous;
+    this.isAnonymousUser =
+      firebase.auth().currentUser == null ||
+      firebase.auth().currentUser.isAnonymous;
   },
   data: function() {
     return {
@@ -190,16 +202,16 @@ export default {
       itemsInCart: [],
       products: [],
       orderId: "",
-      address: "",
+      address: "K-502, Amrapali Zodiac, Sector 120, Noida",
       askForAddress: false,
-      name: "",
+      cust_name: "",
       isAnonymousUser: false
     };
   },
   methods: {
-    addProduct(item) {
+    addProduct(item, EAN, itemImage) {
       this.products = [];
-      this.addItem(item);
+      this.addItem(item, EAN, itemImage);
     },
 
     findSuggestedProducts(productName) {
@@ -236,19 +248,22 @@ export default {
           }
         });
     },
-    addToCart(item) {
+    addToCart(item, EAN, itemImage) {
       var userId = this.$getUserId();
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
         item_quantity: 1,
+        EAN: EAN,
+        item_image: itemImage
       });
       var item_id = itemDoc.key;
       this.itemsInCart.push({
         item_id: item_id,
         item_name: item,
         item_quantity: 1,
-        EAN: item.EAN
+        EAN: EAN,
+        item_image: itemImage
       });
     },
 
@@ -271,7 +286,7 @@ export default {
         .remove();
     },
 
-    addItem(item) {
+    addItem(item, EAN, itemImage) {
       this.products = [];
       if (item.length != 0) {
         var result = this.itemsInCart.find(obj => {
@@ -283,7 +298,7 @@ export default {
           this.updateQuantityInCart(result.item_id, result.item_quantity);
         } else {
           item = item.replace(/^./, item[0].toUpperCase());
-          this.addToCart(item);
+          this.addToCart(item, EAN, itemImage);
           this.inputValue = "";
         }
       }
@@ -354,13 +369,34 @@ export default {
         })
       );
 
+      console.log(
+        {
+          orderId: this.orderId,
+          address: this.address,
+          items: this.itemsInCart,
+          cust_name: this.cust_name
+        },
+        "parameters pushed"
+      );
+
+      // /* eslint-disable no-debugger */
+      // debugger;
+      // /* eslint-enable no-debugger */
+
+      if (this.isAnonymousUser) {
+        this.cust_name = "Vibhu";
+      }
+
+      if (this.cust_name == "") {
+        this.cust_name = firebase.auth().currentUser.displayName;
+      }
+
       this.$router.push({
         name: "merchantList",
         params: {
           orderId: this.orderId,
           address: this.address,
-          items: this.itemsInCart,
-          name: this.name
+          cust_name: this.cust_name
         }
       });
 
