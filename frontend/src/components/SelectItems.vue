@@ -4,7 +4,7 @@
       <div class="field is-grouped">
         <p class="control is-expanded has-icons-left">
           <input
-            v-on:keyup.enter="addProduct(inputValue)"
+            v-on:keyup.enter="addProduct(inputValue, '', 'https://semantic-ui.com/images/wireframe/image.png')"
             @keyup="findSuggestedProducts(inputValue)"
             v-model="inputValue"
             class="input is-capitalized is-family-primary"
@@ -16,7 +16,10 @@
           </span>
         </p>
         <p class="control">
-          <button v-on:click="addItem(inputValue)" class="button is-primary">Add</button>
+          <button
+            v-on:click="addItem(inputValue, '', 'https://semantic-ui.com/images/wireframe/image.png')"
+            class="button is-primary"
+          >Add</button>
         </p>
       </div>
       <div class="is-shadowless" v-if="products.length>0">
@@ -27,7 +30,7 @@
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
                     <tr
-                      @click="addProduct(item.ItemName)"
+                      @click="addProduct(item.ItemName, item.EAN, item.ItemImage)"
                       v-bind:key="index"
                       v-for="(item, index) in products"
                     >
@@ -63,6 +66,11 @@
                 <table class="table is-fullwidth" style="table-layout:fixed;word-wrap:break-word;">
                   <tbody>
                     <tr v-bind:key="item.item_id" v-for="(item) in itemsInCart">
+                      <td width="40px" class="field">
+                        <figure class="image is-32x32">
+                          <img :src="item.item_image" />
+                        </figure>
+                      </td>
                       <td>{{item.item_name}}</td>
                       <td align="right">
                         <div class="field has-addons has-addons-right">
@@ -117,7 +125,7 @@
           v-on:click="emptyCart()"
           class="button is-danger is-light"
           type="submit"
-          value="Place Order"
+          value="Empty Cart"
         >
           <span>Empty Cart</span>
         </button>&nbsp;
@@ -127,11 +135,30 @@
           type="submit"
           value="Place Order"
         >
-          <router-link to="/merchantBids">
-            <span>Place Order</span>
-          </router-link>
+          <span>Place Order</span>
         </button>
       </p>
+    </div>
+
+    <div v-if="askForAddress">
+      <div v-if="isAnonymousUser">
+        <div class="field is-grouped">
+          <p class="control is-expanded">
+            <input class="input" type="text" v-model="cust_name" placeholder="Enter Name" />
+          </p>
+          <p class="control">
+            <a class="button is-info">OK</a>
+          </p>
+        </div>
+      </div>
+      <div class="field is-grouped">
+        <p class="control is-expanded">
+          <input class="input" type="text" v-model="address" placeholder="Enter Address" />
+        </p>
+        <p class="control">
+          <a class="button is-info" v-on:click="placeOrder()">OK</a>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -145,8 +172,9 @@ var levenshtein = require("levenshtein-edit-distance");
 
 export default {
   name: "SelectItems",
-  mounted() {
-    var userId = firebase.auth().currentUser.uid;
+  created() {
+    var userId = this.$getUserId();
+    console.log(userId);
     let self = this;
     firebase
       .database()
@@ -157,22 +185,33 @@ export default {
           self.itemsInCart.push({
             item_id: cartItem.key,
             item_name: cartItem.val().item_name,
-            item_quantity: cartItem.val().item_quantity
+            item_quantity: cartItem.val().item_quantity,
+            EAN: cartItem.val().EAN,
+            item_image: cartItem.val().item_image
           });
         });
       });
+
+    this.isAnonymousUser =
+      firebase.auth().currentUser == null ||
+      firebase.auth().currentUser.isAnonymous;
   },
   data: function() {
     return {
       inputValue: "",
       itemsInCart: [],
-      products: []
+      products: [],
+      orderId: "",
+      address: "K-502, Amrapali Zodiac, Sector 120, Noida",
+      askForAddress: false,
+      cust_name: "",
+      isAnonymousUser: false
     };
   },
   methods: {
-    addProduct(item) {
+    addProduct(item, EAN, itemImage) {
       this.products = [];
-      this.addItem(item);
+      this.addItem(item, EAN, itemImage);
     },
 
     findSuggestedProducts(productName) {
@@ -186,7 +225,10 @@ export default {
         comparator: function(item1, item2) {
           var distance1 = levenshtein(productName, item1.ItemName);
           var distance2 = levenshtein(productName, item2.ItemName);
-          return distance1 / item1.ItemName.length - distance2 / item2.ItemName.length;
+          return (
+            distance1 / item1.ItemName.length -
+            distance2 / item2.ItemName.length
+          );
         }
       });
 
@@ -206,23 +248,27 @@ export default {
           }
         });
     },
-    addToCart(item) {
-      var userId = firebase.auth().currentUser.uid;
+    addToCart(item, EAN, itemImage) {
+      var userId = this.$getUserId();
       var reference = firebase.database().ref("user_cart/" + userId + "/");
       var itemDoc = reference.push({
         item_name: item,
-        item_quantity: 1
+        item_quantity: 1,
+        EAN: EAN,
+        item_image: itemImage
       });
       var item_id = itemDoc.key;
       this.itemsInCart.push({
         item_id: item_id,
         item_name: item,
-        item_quantity: 1
+        item_quantity: 1,
+        EAN: EAN,
+        item_image: itemImage
       });
     },
 
     updateQuantityInCart(item_id, value) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var update = {};
       update["user_cart/" + userId + "/" + item_id + "/item_quantity"] = value;
       firebase
@@ -232,7 +278,7 @@ export default {
     },
 
     removeItemFromCart(item_id) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -240,7 +286,7 @@ export default {
         .remove();
     },
 
-    addItem(item) {
+    addItem(item, EAN, itemImage) {
       this.products = [];
       if (item.length != 0) {
         var result = this.itemsInCart.find(obj => {
@@ -252,7 +298,7 @@ export default {
           this.updateQuantityInCart(result.item_id, result.item_quantity);
         } else {
           item = item.replace(/^./, item[0].toUpperCase());
-          this.addToCart(item);
+          this.addToCart(item, EAN, itemImage);
           this.inputValue = "";
         }
       }
@@ -273,13 +319,12 @@ export default {
     },
 
     removeItem(itemObj) {
-      console.log(itemObj.item_id, "item");
       this.removeItemFromCart(itemObj.item_id, itemObj.item_quantity);
       this.itemsInCart.splice(this.itemsInCart.indexOf(itemObj), 1);
     },
 
     emptyCart() {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       firebase
         .database()
         .ref()
@@ -288,32 +333,74 @@ export default {
       this.itemsInCart = [];
     },
 
+    getEPOCHvalue() {
+      var now = new Date();
+      var secondsSinceEpoch = Math.round(now.getTime() / 1000);
+      return secondsSinceEpoch;
+    },
+
+    getFiveRandomDigits() {
+      var result = "";
+      var characters = "0123456789";
+      var charactersLength = characters.length;
+      for (var i = 0; i < 5; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    },
+
+    getOrderId() {
+      return this.getEPOCHvalue() + ":" + this.getFiveRandomDigits();
+    },
+
     placeOrder() {
-      var userId = firebase.auth().currentUser.uid;
+      this.orderId = this.getOrderId();
+      var userId = this.$getUserId();
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item =>
         itemsForOrder.push({
           item_name: item.item_name,
           quantity: item.item_quantity,
-          unit_price: 30
+          unit_price: ""
         })
       );
 
+      console.log(
+        {
+          orderId: this.orderId,
+          address: this.address,
+          items: this.itemsInCart,
+          cust_name: this.cust_name
+        },
+        "parameters pushed"
+      );
+
+      // /* eslint-disable no-debugger */
+      // debugger;
+      // /* eslint-enable no-debugger */
+
+      if (this.isAnonymousUser) {
+        this.cust_name = "Vibhu";
+      }
+
+      if (this.cust_name == "") {
+        this.cust_name = firebase.auth().currentUser.displayName;
+      }
+
+      this.$router.push({
+        name: "merchantList",
+        params: {
+          orderId: this.orderId,
+          address: this.address,
+          cust_name: this.cust_name
+        }
+      });
+
       api
-        .placeOrder(
-          userId,
-          "Merchant A",
-          "New Street, Delhi",
-          "Free delivery",
-          itemsForOrder
-        )
-        .then(response => {
-          if (response) {
-            this.emptyCart(); //Need to be done as per response
-            this.itemsInCart = []; //Need to update based on items
-          }
-        })
+        .placeOrder(userId, this.orderId, "", "", "", itemsForOrder)
         .catch(error => {
           this.$log.debug(error);
         });

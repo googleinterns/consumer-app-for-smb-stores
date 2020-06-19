@@ -1,6 +1,5 @@
 <template>
   <div class="bd-lead">
-    <!-- <div class="columns is-vcentered"> -->
     <div class="columns is-mobile">
       <div class="column">
         <h1 class="title is-6" align="left">Start Shopping Now</h1>
@@ -61,7 +60,7 @@
                   >
                     <span>
                       <strong>
-                        <big>Add to cart</big>
+                        <big>{{cartAddition}}</big>
                       </strong>
                     </span>
                   </button>
@@ -81,76 +80,78 @@ export default {
   name: "SuggestedItems",
   data: function() {
     return {
+      cartAddition: "Add To Cart",
       suggestedItems: [
         {
           item_key: 1,
           item_image: require("../assets/surfExcel.jpg"),
           item_name: "Surf Excel 1 kg",
           item_mrp: 180,
-          item_lowest_price: 160
+          item_lowest_price: 160,
+          EAN: 8901030648922
         },
         {
           item_key: 2,
           item_image: require("../assets/biscuit.jpeg"),
           item_name: "Britannia Good Day 100 gm",
           item_mrp: 20,
-          item_lowest_price: 17
+          item_lowest_price: 17,
+          EAN: 8901030547171
         },
         {
           item_key: 3,
           item_image: require("../assets/realJuice.jpg"),
           item_name: "Real Apple Juice 1L",
           item_mrp: 130,
-          item_lowest_price: 100
-        },
-        {
-          item_key: 4,
-          item_image: require("../assets/rin.jpg"),
-          item_name: "Rin 250 gm",
-          item_mrp: 60,
-          item_lowest_price: 56
+          item_lowest_price: 100,
+          EAN: 3289196260321
         },
         {
           item_key: 5,
           item_image: require("../assets/lifebuoy.jpeg"),
           item_name: "Lifebuoy 190 ml",
           item_mrp: 85,
-          item_lowest_price: 70
+          item_lowest_price: 70,
+          EAN: 8961014026702
         },
         {
           item_key: 6,
           item_image: require("../assets/head&shoulder.jpg"),
           item_name: "Head & Shoulder 650 ml",
           item_mrp: 550,
-          item_lowest_price: 500
+          item_lowest_price: 500,
+          EAN: "037000061991"
         },
         {
           item_key: 7,
           item_image: require("../assets/dettol.jpg"),
           item_name: "Dettol 250 ml",
           item_mrp: 100,
-          item_lowest_price: 95
+          item_lowest_price: 95,
+          EAN: 5011417559192
         },
         {
           item_key: 8,
           item_image: require("../assets/haldiramChips.jpeg"),
           item_name: "Haldiram Chips",
           item_mrp: 20,
-          item_lowest_price: 18
+          item_lowest_price: 18,
+          EAN: 8904004400090
         },
         {
           item_key: 9,
           item_image: require("../assets/fortune-sunflower-oil.jpg"),
           item_name: "Fortune Sunflower Oil 1L",
           item_mrp: 120,
-          item_lowest_price: 105
+          item_lowest_price: 105,
+          EAN: 8904004400090
         }
       ]
     };
   },
   methods: {
     addItemToCart(item) {
-      var userId = firebase.auth().currentUser.uid;
+      var userId = this.$getUserId();
       var pushRef = firebase.database().ref("user_cart/" + userId + "/");
       var reference = firebase
         .database()
@@ -161,7 +162,9 @@ export default {
         if (!cartItem.exists()) {
           pushRef.push({
             item_name: item.item_name,
-            item_quantity: 1
+            item_quantity: 1,
+            EAN: item.EAN,
+            item_image: item.item_image
           });
         }
       });

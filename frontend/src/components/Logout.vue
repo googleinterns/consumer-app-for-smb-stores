@@ -20,6 +20,16 @@
       <div id="navMenu" class="navbar-menu">
         <div class="navbar-end">
           <a class="navbar-item">
+            <router-link to="/ongoingOrders">
+              <a class="is-fullwidth">Ongoing Orders</a>
+            </router-link>
+          </a>
+          <a class="navbar-item">
+            <router-link to="/selectMerchant">
+              <a class="is-fullwidth">Find Products</a>
+            </router-link>
+          </a>
+          <a class="navbar-item">
             <router-link to="/placeOrder">
               <a class="is-fullwidth">My Cart</a>
             </router-link>

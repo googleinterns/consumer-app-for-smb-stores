@@ -2,9 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import firebase from 'firebase'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
+import Ratings from '../views/Ratings.vue'
+
 
 
 Vue.use(VueRouter)
@@ -13,11 +14,11 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/home',
@@ -36,6 +37,22 @@ const routes = [
     }
   },
   {
+    path: '/ongoingOrders',
+    name: 'OngoingOrders',
+    component: () => import('../views/OngoingOrders.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/selectMerchant',
+    name: 'SelectMerchant',
+    component: () => import('../views/SelectMerchant.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/placeOrder',
     name: 'PlaceOrder',
     component: () => import('../views/PlaceOrder.vue'),
@@ -49,22 +66,64 @@ const routes = [
     component: Login
   },
   {
+<<<<<<< HEAD
     path: '/merchantBids',
     name : 'merchantList',
     component : merchantList,
+=======
+    path: '/merchantBids/:orderId&:address&:cust_name',
+    name: 'merchantList',
+    props: true,
+    component: merchantList,
+>>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     meta: {
       requiresAuth: true
     }
   },
   {
+<<<<<<< HEAD
     path: '/orderDetails',
     name : 'itemDetails',
     component : itemDetails,
+=======
+    path: '/orderConfirmation',
+    name: 'OrderConfirmation',
+    props: true,
+    component: () => import('../views/OrderConfirmationPage.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/orderDetails/:orderId&:merchantId',
+    name: 'itemDetails',
+    props: true,
+    component: itemDetails,
+
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/ratings/:merchantName',
+    name: 'Ratings',
+    component: Ratings,
+    props: true,
+>>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     meta: {
       requiresAuth: true
     }
   },
 
+  {
+    path: '/merchantWiseProducts/:merchant',
+    name: 'PaginatedProducts',
+    props: true,
+    component: () => import('../views/PaginatedProducts.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = new VueRouter({
@@ -72,12 +131,12 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const currentuser = firebase.auth().currentUser;
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  if (requiresAuth && !currentuser) next('login');
-  else if (!requiresAuth && currentuser) next('home');
-  else next();
-});
+// router.beforeEach((to, from, next) => {
+//   const currentuser = firebase.auth().currentUser;
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//   if (requiresAuth && !currentuser) next('home');
+//   else if (!requiresAuth && currentuser) next('home');
+//   else next();
+// });
 
 export default router

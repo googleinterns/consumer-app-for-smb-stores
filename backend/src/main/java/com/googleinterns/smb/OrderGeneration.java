@@ -9,6 +9,9 @@ public class OrderGeneration {
     @JsonProperty("user_id")
     private String userId;
 
+    @JsonProperty("order_id")
+    private String orderId;
+
     @JsonProperty("servicing_merchant_name")
     private String servicingMerchantName;
 
@@ -26,6 +29,15 @@ public class OrderGeneration {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public String getServicingMerchantName() {
