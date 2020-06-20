@@ -27,9 +27,7 @@ firebase.analytics();
 let app = '';
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {
-    console.log("Trying log in", firebase.auth().currentUser)
-    if (firebase.auth().currentUser == null){
-      console.log("LOGGG")
+    if (firebase.auth().currentUser == null) {
       firebase.auth().signInAnonymously()
     }
     app =
@@ -38,11 +36,11 @@ firebase.auth().onAuthStateChanged(() => {
           return moment(String(value)).format('DD-MMM-YYYY')
         }
       })
-      Vue.filter('formatStatus', function(value){
-        if (value){
-          return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
-        }
-      })
+    Vue.filter('formatStatus', function (value) {
+      if (value) {
+        return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+      }
+    })
     Vue.use(VueLogger, options);
     Vue.use(VueMeta, {
       keyname: 'head'
@@ -55,7 +53,7 @@ firebase.auth().onAuthStateChanged(() => {
       },
       methods: {
         $getUserId() {
-          if (firebase.auth().currentUser == null){
+          if (firebase.auth().currentUser == null) {
             firebase.auth().signInAnonymously()
           }
           return firebase.auth().currentUser.uid

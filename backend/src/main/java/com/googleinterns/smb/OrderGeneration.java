@@ -15,6 +15,9 @@ public class OrderGeneration {
     @JsonProperty("servicing_merchant_name")
     private String servicingMerchantName;
 
+    @JsonProperty("servicing_merchant_id")
+    private String merchantId;
+
     @JsonProperty("servicing_merchant_address")
     private String servicingMerchantAddress;
 
@@ -31,7 +34,6 @@ public class OrderGeneration {
         this.userId = userId;
     }
 
-
     public String getOrderId() {
         return orderId;
     }
@@ -46,6 +48,14 @@ public class OrderGeneration {
 
     public void setServicingMerchantName(String merchantName) {
         this.servicingMerchantName = merchantName;
+    }
+
+    public String getServicingMerchantId() {
+        return merchantId;
+    }
+
+    public void setServicingMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 
     public String getServicingMerchantAddress() {

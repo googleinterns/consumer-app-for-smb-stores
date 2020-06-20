@@ -94,7 +94,7 @@ const routes = [
     }
   },
   {
-    path: '/ratings/:merchantName',
+    path: '/ratings/:merchantName&:merchantID&:orderID',
     name: 'Ratings',
     component: Ratings,
     props: true,

@@ -1,10 +1,9 @@
 <template>
-  
-    <span>
-      <strong>
-        <big>{{buttonText}}</big>
-      </strong>
-    </span>
+  <span>
+    <strong>
+      <big>{{buttonText}}</big>
+    </strong>
+  </span>
 </template>
 
 <script>

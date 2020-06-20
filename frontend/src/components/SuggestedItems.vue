@@ -5,9 +5,7 @@
         <h1 class="title is-6" align="left">Start Shopping Now</h1>
       </div>
       <div class="column" align="right">
-        <button class="button is-info is-light">
-          <router-link to="/placeOrder">Order Now</router-link>
-        </button>
+        <button v-on:click="placeOrder()" class="button is-info">Order Now</button>
       </div>
     </div>
 
@@ -55,7 +53,7 @@
                 <div>
                   <button
                     class="button is-link is-small is-fullwidth"
-                    style="background-color: #0ca1e5;"
+                    style="background-color: #3298dc;"
                     v-on:click="addItemToCart(card)"
                   >
                     <span>
@@ -88,7 +86,7 @@ export default {
           item_name: "Surf Excel 1 kg",
           item_mrp: 180,
           item_lowest_price: 160,
-          EAN: 8901030648922
+          EAN: "8901030648922"
         },
         {
           item_key: 2,
@@ -96,7 +94,7 @@ export default {
           item_name: "Britannia Good Day 100 gm",
           item_mrp: 20,
           item_lowest_price: 17,
-          EAN: 8901030547171
+          EAN: "8901030547171"
         },
         {
           item_key: 3,
@@ -104,7 +102,7 @@ export default {
           item_name: "Real Apple Juice 1L",
           item_mrp: 130,
           item_lowest_price: 100,
-          EAN: 3289196260321
+          EAN: "3289196260321"
         },
         {
           item_key: 5,
@@ -128,7 +126,7 @@ export default {
           item_name: "Dettol 250 ml",
           item_mrp: 100,
           item_lowest_price: 95,
-          EAN: 5011417559192
+          EAN: "5011417559192"
         },
         {
           item_key: 8,
@@ -136,7 +134,7 @@ export default {
           item_name: "Haldiram Chips",
           item_mrp: 20,
           item_lowest_price: 18,
-          EAN: 8904004400090
+          EAN: "8904004400090"
         },
         {
           item_key: 9,
@@ -144,7 +142,7 @@ export default {
           item_name: "Fortune Sunflower Oil 1L",
           item_mrp: 120,
           item_lowest_price: 105,
-          EAN: 8904004400090
+          EAN: "8904004400090"
         }
       ]
     };
@@ -163,11 +161,15 @@ export default {
           pushRef.push({
             item_name: item.item_name,
             item_quantity: 1,
-            EAN: item.EAN,
+            // EAN: item.EAN,
             item_image: item.item_image
           });
         }
       });
+    },
+
+    placeOrder() {
+      this.$router.push("/placeOrder");
     }
   }
 };

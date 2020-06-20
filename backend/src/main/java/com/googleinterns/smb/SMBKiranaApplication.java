@@ -9,7 +9,7 @@ import java.io.IOException;
 public class SMBKiranaApplication {
 
     public static void main(String[] args) throws IOException {
-        FirebaseHandler handler = new FirebaseHandler();
+        new FirebaseHandler();
         SpringApplication.run(SMBKiranaApplication.class, args);
     }
 }
