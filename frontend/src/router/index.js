@@ -104,6 +104,16 @@ const routes = [
   },
 
   {
+    path: '/:merchantName',
+    name: 'MerchantProducts',
+    props: true,
+    component: () => import('../views/MerchantProducts.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+
+  {
     path: '/merchantWiseProducts/:merchant',
     name: 'PaginatedProducts',
     props: true,

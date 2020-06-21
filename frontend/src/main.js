@@ -91,5 +91,3 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();
-
-

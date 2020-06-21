@@ -56,8 +56,6 @@ export default {
             this.count += 1;
           });
         });
-
-      console.log(this.merchantsList);
     },
     moveToPaginatedProducts(merchant) {
       this.$router.push({
