@@ -47,11 +47,11 @@ public class Order {
         this.dateOfOrder = getDate();
     }
 
-    public Order(String userId, String orderId, String merchant_id, String merchantName, String merchantAddress,
+    public Order(String userId, String orderId, String merchantId, String merchantName, String merchantAddress,
             String offers) {
         this.userId = userId;
         this.orderId = orderId;
-        this.merchantId = merchant_id;
+        this.merchantId = merchantId;
         this.dateOfOrder = getDate();
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
