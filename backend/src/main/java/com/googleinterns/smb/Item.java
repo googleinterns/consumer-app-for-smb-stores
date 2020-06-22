@@ -10,15 +10,18 @@ public class Item {
     private int quantity;
     @JsonProperty("unit_price")
     private float unitPrice;
+    @JsonProperty("EAN")
+    private String EAN;
 
     public Item() {
 
     }
 
-    public Item(String itemName, int quantity, float price) {
+    public Item(String itemName, int quantity, float price, String EAN) {
         this.itemName = itemName;
         this.quantity = quantity;
         this.unitPrice = price;
+        this.EAN = EAN;
     }
 
     @PropertyName("item_name")
@@ -38,6 +41,16 @@ public class Item {
     @PropertyName("item_name")
     public String getItemName() {
         return itemName;
+    }
+
+    @PropertyName("EAN")
+    public void setEAN(String EAN) {
+        this.EAN = EAN;
+    }
+
+    @PropertyName("EAN")
+    public String getEAN() {
+        return EAN;
     }
 
     public int getQuantity() {
