@@ -5,13 +5,10 @@ import com.google.cloud.firestore.annotation.PropertyName;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class Order {
 
@@ -21,6 +18,8 @@ public class Order {
     private String orderId;
     @JsonProperty("date_of_order")
     private Date dateOfOrder;
+    @JsonProperty("merchant_id")
+    private String merchantId;
     @JsonProperty("merchant_name")
     private String merchantName;
     @JsonProperty("merchant_address")
@@ -35,21 +34,24 @@ public class Order {
     @JsonProperty("order_status")
     private OrderStatus orderStatus;
 
-    private static final Random rand = new Random();
     private static final Logger LOGGER = Logger.getLogger(Order.class.getName());
 
     public Order() {
 
     }
 
-    public Order(String userId) {
-        this.userId = userId;
-        this.orderStatus = OrderStatus.ONGOING;
-    }
-
-    public Order(String userId, String orderId, String merchantName, String merchantAddress, String offers) {
+    public Order(String userId, String orderId) {
         this.userId = userId;
         this.orderId = orderId;
+        this.orderStatus = OrderStatus.ONGOING;
+        this.dateOfOrder = getDate();
+    }
+
+    public Order(String userId, String orderId, String merchantId, String merchantName, String merchantAddress,
+            String offers) {
+        this.userId = userId;
+        this.orderId = orderId;
+        this.merchantId = merchantId;
         this.dateOfOrder = getDate();
         this.merchantName = merchantName;
         this.merchantAddress = merchantAddress;
@@ -65,6 +67,16 @@ public class Order {
     @PropertyName("user_id")
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    @PropertyName("merchant_id")
+    public String getMerchantId() {
+        return merchantId;
+    }
+
+    @PropertyName("merchant_id")
+    public void setMerchantId(String merchantId) {
+        this.merchantId = merchantId;
     }
 
     @PropertyName("order_id")
@@ -126,7 +138,6 @@ public class Order {
     public void setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
-
 
     private Date getDate() {
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy HH:mm:ss.SSS zzz");

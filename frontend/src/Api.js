@@ -23,24 +23,27 @@ export default {
     }]
   }),
 
-  updateOrderStatusToProcessing: (user_id, order_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
+  updateOrderStatusToProcessing: (user_id, order_id, servicing_merchant_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
     instance.post(process.env.VUE_APP_SERVER_URL + '/updateOrderDetails', {
       user_id: user_id,
       order_id: order_id,
       servicing_merchant_name: servicing_merchant_name,
       servicing_merchant_address: servicing_merchant_address,
       offers: offers,
-      item_details: item_details
-    })
-  ,
+      item_details: item_details,
+      servicing_merchant_id: servicing_merchant_id
+    }),
 
-  placeOrder: (user_id, order_id, servicing_merchant_name, servicing_merchant_address, offers, item_details) =>
+  placeOrder: (user_id, order_id, item_details) =>
     instance.post(process.env.VUE_APP_SERVER_URL + '/placeOrder', {
       user_id: user_id,
       order_id: order_id,
-      servicing_merchant_name: servicing_merchant_name,
-      servicing_merchant_address: servicing_merchant_address,
-      offers: offers,
       item_details: item_details
     }),
+
+  fetchItemsForAnOrder: (orderId) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemDetailsForOrderID?orderId=' + orderId, {
+    transformResponse: [function (data) {
+      return data ? JSON.parse(data) : data;
+    }]
+  }),
 }

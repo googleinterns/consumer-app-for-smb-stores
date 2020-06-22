@@ -3,7 +3,7 @@
     <Logout />
     <div class="bd-lead">
       <div class="container">
-        <gmap-map :center="center" :zoom="16" style="width:100%;  height: 400px;">
+        <gmap-map :center="center" :zoom="15" style="width:100%;  height: 400px;">
           <gmap-marker
             :position="center"
             icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
@@ -74,6 +74,10 @@ import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
 
+import axios from "axios";
+import api from "../Api";
+
+
 export var merchantexp;
 export var itemexp;
 export var time;
@@ -129,50 +133,54 @@ export default {
 
     getCartItems() {
       var userId = this.$getUserId();
-      firebase
-        .database()
-        .ref("user_cart/" + userId)
-        .once("value")
-        .then(function(cart) {
-          cart.forEach(function(cartItem) {
-            this.itemsInCart.push({
-              item_id: cartItem.key,
-              item_name: cartItem.val().item_name,
-              item_quantity: cartItem.val().item_quantity,
-              EAN: cartItem.val().EAN
-            });
-          });
-        });
-    },
+      let self = this;
+      var merchantIDs = [
+        "VxWQKTpSLLRlsuhQzdb3rapz5zv1"
+        // "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
+        // "cG4TthNTwwMSbtCeTRZbc38qyVi2",
+        // "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
+      ];
 
-    notifyMerchants() {
-      console.log(this.center.lat, this.center.lng);
-      console.log("In notify merchants");
       var customer_name = "";
       if (!firebase.auth().currentUser.isAnonymous) {
         customer_name = firebase.auth().currentUser.displayName;
       } else {
-        customer_name = this.cust_name;
+        customer_name = self.cust_name;
       }
 
-      var merchantIDs = [
-        "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
-        "cG4TthNTwwMSbtCeTRZbc38qyVi2"
-      ];
-
-      merchantIDs.forEach(mid => {
-        axios.post(
-          process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
-          {
-            oid: this.orderId,
-            items: this.itemsInCart,
-            location: [this.center.lat, this.center.lng],
-            customer_name: customer_name,
-            customer_address: this.address,
-            user_id: this.$getUserId()
+      api.fetchItemsForAnOrder(self.orderId).then(response => {
+        response.data.forEach(item => {
+          if (item.EAN != null) {
+            self.itemsInCart.push({
+              product_name: item.item_name,
+              quantity: item.quantity,
+              EAN: item.EAN
+            });
+          } else {
+            self.itemsInCart.push({
+              product_name: item.item_name,
+              quantity: item.quantity
+            });
           }
-        );
+        });
+        merchantIDs.forEach(mid => {
+          axios.post(
+            process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
+            {
+              oid: self.orderId,
+              items: self.itemsInCart,
+              location: [self.center.lat, self.center.lng],
+              customer_name: customer_name,
+              customer_address: self.address,
+              user_id: userId
+            }
+          );
+        });
       });
+    },
+
+    notifyMerchants() {
+      this.getCartItems();
     },
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
@@ -210,6 +218,7 @@ export default {
       this.merchants.push(data);
 
       var time = data.deliveryTime;
+      time = time / 60;
       if (time / 60 == 0) {
         this.timeString = (time % 60) + "mins";
       } else {

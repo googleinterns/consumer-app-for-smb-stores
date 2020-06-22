@@ -22,7 +22,7 @@
             <strong class="is-size-6.5">Order Price: ₹ {{merchantvalue.totalPrice}}</strong>
           </div>
           <button
-            class="button is-success is-rounded is-focussed is-pulled-right"
+            class="button is-success is-focussed is-pulled-right"
             @click="confirm()"
           >Confirm Order</button>
         </nav>
@@ -39,7 +39,7 @@
               <div class="content">
                 <div class="has-text-grey is-size-6.5">
                   <strong class="is-size-5">{{item.merchantItemName}}</strong>
-                  <strong class="has-text-grey is-size-5"> (Qty: {{item.quantity}})</strong>
+                  <strong class="has-text-grey is-size-5"> x {{item.quantity}}</strong>
                 </div>
 
                 <div class="has-text-grey is-size-6.5">
@@ -59,10 +59,8 @@
       </div>
       <div class="card" id="bottom">
         <p id="time">
-          Estimated time for delivery to your location is
-          <span
-            class="has-text-info"
-          >{{deliveryTime}}</span>
+          Estimated delivery time:
+          <strong>{{deliveryTime}}</strong>
         </p>
       </div>
     </div>
@@ -86,7 +84,6 @@ import { time } from "./merchantsList.vue";
 import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
-import firebase from "firebase";
 
 export default {
   props: ["orderId", "merchantId"],
@@ -123,14 +120,14 @@ export default {
           quantity: item.quantity,
           unit_price: item.unitPrice
         });
-        this.removeItemFromCart(item.merchantItemName);
       });
 
       api.updateOrderStatusToProcessing(
         this.$getUserId(),
         this.orderId,
+        this.merchantvalue.merchantId,
         this.merchantvalue.merchantName,
-        this.merchantvalue.merchantAddress,
+        "Nehru Market, FNG Road, Sector 115, Noida",
         "Free Delivery",
         confirmedItems
       );
@@ -141,38 +138,13 @@ export default {
           time: this.deliveryTime
         }
       });
-    },
-
-    removeItemFromCart(item_name) {
-      var userId = this.$getUserId();
-      var itemKeyFound = "";
-      var reference = firebase
-        .database()
-        .ref("user_cart/" + userId + "/")
-        .orderByChild("item_name")
-        .equalTo(item_name);
-      reference.on("value", function(cartItem) {
-        cartItem.forEach(function(data) {
-          console.log(item_name, data.key);
-          itemKeyFound = data.key;
-        });
-      });
-
-      if (itemKeyFound.length != 0) {
-        console.log(item_name);
-        firebase
-          .database()
-          .ref()
-          .child("user_cart/" + userId + "/" + itemKeyFound)
-          .remove();
-      }
     }
   },
   mounted() {
     this.merchantvalue = merchantexp;
     this.itemvalues = itemexp;
     this.deliveryTime = time;
-    console.log(this.merchantvalue);
+    console.log(this.merchantvalue, "This is merchantvalue");
   }
 };
 </script>

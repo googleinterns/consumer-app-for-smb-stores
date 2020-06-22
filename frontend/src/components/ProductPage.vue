@@ -29,20 +29,33 @@
                             <strong>{{item.product_name}}</strong>
                           </p>
                         </span>
-                        <p align="left">
-                          MRP:
-                          <strike>₹ {{item.MRP}}</strike>
-                        </p>
-                        <small>
-                          <p align="left" style="color: #df7518">Get At: ₹ {{item.discounted_price}}</p>
-                        </small>
+                        <div
+                          v-if="(item.MRP != item.discounted_price) && (item.discounted_price != null)"
+                        >
+                          <p align="left">
+                            MRP:
+                            <strike>₹ {{item.MRP}}</strike>
+                          </p>
+                          <small>
+                            <p
+                              align="left"
+                              style="color: #df7518"
+                            >Get At: ₹ {{item.discounted_price}}</p>
+                          </small>
+                        </div>
+                        <div v-else>
+                          <p align="left">MRP: ₹ {{item.MRP}}</p>
+                          <small>
+                            <br />
+                          </small>
+                        </div>
                       </small>
                     </div>
                   </div>
                   <div>
                     <button
                       class="button is-link is-small is-fullwidth"
-                      style="background-color: #0ca1e5;"
+                      style="background-color: #3298dc;"
                       v-on:click="addItemToCart(item)"
                     >
                       <span>
