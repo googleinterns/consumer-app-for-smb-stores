@@ -19,30 +19,6 @@
       </div>
     </div>
 
-<<<<<<< HEAD
-    <div
-      @click="ItemDetails(merchant)"
-      v-for="merchant in merchants"
-      class="box"
-      v-bind:key="merchant.key"
-    >
-      <article class="media">
-        <div class="media-left">
-          <i class="fa fa-user-circle is-size-3" aria-hidden="true"></i>
-        </div>
-        <div class="media-content">
-          <strong class="is-size-5">{{merchant.merchantName}}</strong>
-          <span class="is-size-6">,{{merchant.merchantAddress}}</span>
-          <div></div>
-          <div
-            class="content has-text-danger is-size-6"
-            v-for="item in merchant.itemDetails"
-            v-bind:key="item.key"
-          >
-            <p>
-              <small v-if="!item.isAvailable">{{item.merchantItemName}} not available</small>
-            </p>
-=======
     <div v-if="merchants.length == 0">
       <div class="card">
         <div class="card-content">
@@ -87,7 +63,6 @@
         <nav class="level is-mobile">
           <div class="level-left">
             <strong class="is-size-6" style="color: #162ac9">Total Price: ₹ {{merchant.totalPrice}}</strong>
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
           </div>
           <strong class="is-pulled-right" style="color: #162ac9">Delivery in {{timeString}}</strong>
         </nav>
@@ -102,9 +77,6 @@ import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
 import axios from "axios";
 
-export var merchantexp;
-export var itemexp;
-export var time;
 export default {
   name: "merchantList",
   props: ["orderId", "address", "cust_name"],
@@ -123,13 +95,9 @@ export default {
       merchant_markers: [],
       FirebaseRef: null,
       geoFireRef: null,
-<<<<<<< HEAD
-      geoQuery: null
-=======
       geoQuery: null,
       prevRoute: null,
       itemsInCart: []
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     };
   },
 
@@ -149,9 +117,6 @@ export default {
 
   methods: {
     ItemDetails(merchantdetails) {
-      merchantexp = merchantdetails;
-      itemexp = merchantdetails.itemDetails;
-      time = this.timeString;
       this.$router.push({
         name: "itemDetails",
         params: {
@@ -191,7 +156,8 @@ export default {
 
       var merchantIDs = [
         "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
-        "cG4TthNTwwMSbtCeTRZbc38qyVi2"
+        "cG4TthNTwwMSbtCeTRZbc38qyVi2",
+        "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
       ];
 
       merchantIDs.forEach(mid => {
@@ -243,26 +209,20 @@ export default {
       var data = snapshot.val();
       this.merchants.push(data);
 
-<<<<<<< HEAD
-      var dateObj = new Date(data.deliveryTime * 1000);
-      var hours = dateObj.getUTCHours();
-      var minutes = dateObj.getUTCMinutes();
-
-      this.timeString =
-        hours.toString().padStart(2, "0") +
-        ":" +
-        minutes.toString().padStart(2, "0") +
-        " hours";
-=======
       var time = data.deliveryTime;
-      if (time / 60 == 0) {
-        this.timeString = (time % 60) + "mins";
+      time = parseInt(time / 60);
+      if (parseInt(time / 60) == 0) {
+        if (time % 60 == 1) this.timeString += parseInt(time % 60) + " min";
+        else this.timeString = parseInt(time % 60) + " mins";
       } else {
-        if (time / 60 < 2) this.timeString = parseInt(time / 60) + " hour ";
+        if (parseInt(time / 60) < 2)
+          this.timeString = parseInt(time / 60) + " hour ";
         else this.timeString = parseInt(time / 60) + " hours ";
-        if (time % 60 != 0) this.timeString += (time % 60) + " mins";
+        if (time % 60 != 0) {
+          if (time % 60 == 1) this.timeString += parseInt(time % 60) + " min";
+          else this.timeString += parseInt(time % 60) + " mins";
+        }
       }
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     });
   }
 };

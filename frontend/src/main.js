@@ -11,6 +11,8 @@ import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
 
+
+
 const options = {
   isEnabled: true,
   logLevel: 'debug',
@@ -93,5 +95,13 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();
+
+const prod = process.env.NODE_ENV === 'production'
+const shouldSW = 'serviceWorker' in navigator && prod
+if (shouldSW) {
+  navigator.serviceWorker.register('../service-worker.js').then(() => {
+    console.log("Service Worker Registered!")
+  })
+}
 
 

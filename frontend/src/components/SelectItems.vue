@@ -164,7 +164,6 @@
 </template>
 
 <script>
-import api from "../Api";
 import firebase from "firebase";
 import PriorityQueue from "js-priority-queue";
 
@@ -202,7 +201,7 @@ export default {
       itemsInCart: [],
       products: [],
       orderId: "",
-      address: "K-502, Amrapali Zodiac, Sector 120, Noida",
+     // address: "K-502, Amrapali Zodiac, Sector 120, Noida",
       askForAddress: false,
       cust_name: "",
       isAnonymousUser: false
@@ -357,7 +356,6 @@ export default {
 
     placeOrder() {
       this.orderId = this.getOrderId();
-      var userId = this.$getUserId();
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item =>
@@ -382,28 +380,36 @@ export default {
       // debugger;
       // /* eslint-enable no-debugger */
 
-      if (this.isAnonymousUser) {
-        this.cust_name = "Vibhu";
-      }
-
-      if (this.cust_name == "") {
+      if (!this.isAnonymousUser) {
         this.cust_name = firebase.auth().currentUser.displayName;
       }
 
-      this.$router.push({
-        name: "merchantList",
+      // if (this.cust_name == "") {
+      //   this.cust_name = firebase.auth().currentUser.displayName;
+      // }
+       this.$router.push({
+        name: "UserInfo",
         params: {
           orderId: this.orderId,
-          address: this.address,
-          cust_name: this.cust_name
+         // address: this.address,
+          cust_name: this.cust_name,
         }
       });
 
-      api
-        .placeOrder(userId, this.orderId, "", "", "", itemsForOrder)
-        .catch(error => {
-          this.$log.debug(error);
-        });
+      // this.$router.push({
+      //   name: "merchantList",
+      //   params: {
+      //     orderId: this.orderId,
+      //     address: this.address,
+      //     cust_name: this.cust_name
+      //   }
+      // });
+
+      // api
+      //   .placeOrder(userId, this.orderId, "", "", "", itemsForOrder)
+      //   .catch(error => {
+      //     this.$log.debug(error);
+      //   });
     }
   }
 };

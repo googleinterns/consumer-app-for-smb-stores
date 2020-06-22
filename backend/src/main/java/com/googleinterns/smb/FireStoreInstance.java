@@ -127,4 +127,9 @@ public class FireStoreInstance {
         }
 
     }
+
+
+	public void updateUserDetails(User user) {
+        ApiFuture<DocumentReference> addedDocRef = db.collection("Users").add(user);
+	}
 }

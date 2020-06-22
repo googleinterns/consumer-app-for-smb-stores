@@ -43,4 +43,16 @@ export default {
       offers: offers,
       item_details: item_details
     }),
+    fetchItemsForAnOrder: (orderId) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemDetailsForOrderID?orderId=' + orderId, {
+      transformResponse: [function (data) {
+        return data ? JSON.parse(data) : data;
+      }]
+    }),
+    
+    updateUserDetails : (user_id, user_address, user_contactNo) =>
+    instance.post(process.env.VUE_APP_SERVER_URL+'/userDetails',{
+      user_id : user_id,
+      user_address: user_address,
+      user_contactNo : user_contactNo
+    })
 }

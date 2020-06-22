@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <section id="installBanner" class="banner">
-      <button id="installBtn" class="button is-rounded is-success is-small">Install app</button>
-    </section>
     <div id="app">
       <router-view />
     </div>
@@ -11,27 +8,7 @@
 
 
 <script>
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt", event => {
-  event.preventDefault();
-  deferredPrompt = event;
-
-  document.querySelector("#installBtn").addEventListener("click", event => {
-    console.log(event);
-    deferredPrompt.prompt();
-
-    deferredPrompt.userChoice.then(choiceResult => {
-      if (choiceResult.outcome === "accepted") {
-        console.log("User accepted the A2HS prompt");
-      } else {
-        console.log("User dismissed the A2HS prompt");
-      }
-      deferredPrompt = null;
-    });
-  });
-  document.querySelector("#installBanner").style.display = "flex";
-});
+import "./registerServiceWorker";
 export default {
   metaInfo: {
     title: "Bharat Ka Naya Kirana",
@@ -39,18 +16,43 @@ export default {
       { name: "viewport" },
       { content: "width=device-width, initial-scale=1.0" }
     ]
+  },
+  created() {
+    // const prod = process.env.NODE_ENV === "production";
+    // const shouldSW = "serviceWorker" in navigator && prod;
+    // if (shouldSW) {
+    //   let deferredPrompt;
+
+    //   window.addEventListener("beforeinstallprompt", e => {
+    //     // Prevent the mini-infobar from appearing on mobile
+    //     e.preventDefault();
+    //     console.log(e);
+    //     // Stash the event so it can be triggered later.
+    //     deferredPrompt = e;
+    //     // Update UI notify the user they can install the PWA
+    //     showInstallPromotion();
+    //     buttonInstall.addEventListener("click", e => {
+    //       // Hide the app provided install promotion
+    //       hideMyInstallPromotion();
+    //       // Show the install prompt
+    //       deferredPrompt.prompt();
+    //       // Wait for the user to respond to the prompt
+    //       deferredPrompt.userChoice.then(choiceResult => {
+    //         if (choiceResult.outcome === "accepted") {
+    //           console.log("User accepted the install prompt");
+    //         } else {
+    //           console.log("User dismissed the install prompt");
+    //         }
+    //       });
+    //     });
+    //   });
+    // }
   }
 };
 </script>
 
 <style>
 @import "../node_modules/bulma/css/bulma.css";
-.banner {
-  align-content: center;
-  display: none;
-  justify-content: center;
-  width: 100%;
-}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

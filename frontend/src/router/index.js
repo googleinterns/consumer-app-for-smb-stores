@@ -5,11 +5,9 @@ import Login from '../views/Login.vue'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
 import Ratings from '../views/Ratings.vue'
-
-
+import UserInfo from "../views/UserInfo.vue"
 
 Vue.use(VueRouter)
-
 
 const routes = [
   {
@@ -66,26 +64,24 @@ const routes = [
     component: Login
   },
   {
-<<<<<<< HEAD
-    path: '/merchantBids',
-    name : 'merchantList',
-    component : merchantList,
-=======
     path: '/merchantBids/:orderId&:address&:cust_name',
     name: 'merchantList',
     props: true,
     component: merchantList,
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     meta: {
       requiresAuth: true
     }
   },
   {
-<<<<<<< HEAD
-    path: '/orderDetails',
-    name : 'itemDetails',
-    component : itemDetails,
-=======
+    path: '/placeOrder/:orderId&:cust_name',
+    name: 'UserInfo',
+    props: true,
+    component: UserInfo,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/orderConfirmation',
     name: 'OrderConfirmation',
     props: true,
@@ -109,7 +105,6 @@ const routes = [
     name: 'Ratings',
     component: Ratings,
     props: true,
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
     meta: {
       requiresAuth: true
     }
@@ -130,13 +125,5 @@ const router = new VueRouter({
   mode: 'history',
   routes
 })
-
-// router.beforeEach((to, from, next) => {
-//   const currentuser = firebase.auth().currentUser;
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   if (requiresAuth && !currentuser) next('home');
-//   else if (!requiresAuth && currentuser) next('home');
-//   else next();
-// });
 
 export default router

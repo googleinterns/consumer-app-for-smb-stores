@@ -39,7 +39,7 @@
               <div class="content">
                 <div class="has-text-grey is-size-6.5">
                   <strong class="is-size-5">{{item.merchantItemName}}</strong>
-                  <strong class="has-text-grey is-size-5"> (Qty: {{item.quantity}})</strong>
+                  <strong class="has-text-grey is-size-5">(Qty: {{item.quantity}})</strong>
                 </div>
 
                 <div class="has-text-grey is-size-6.5">
@@ -57,13 +57,6 @@
           </article>
         </div>
       </div>
-<<<<<<< HEAD
-      <div class="box">
-        <strong>
-          Estimated time for delivery:
-          <strong class="has-text-success">{{deliveryTime}}</strong>
-        </strong>
-=======
       <div class="card" id="bottom">
         <p id="time">
           Estimated time for delivery to your location is
@@ -81,16 +74,12 @@
         <p class="control">
           <a class="button is-info" v-on:click="confirm()">OK</a>
         </p>
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { itemexp } from "./merchantsList.vue";
-import { merchantexp } from "./merchantsList.vue";
-import { time } from "./merchantsList.vue";
 import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
@@ -176,16 +165,38 @@ export default {
       }
     }
   },
-  mounted() {
-    this.merchantvalue = merchantexp;
-    this.itemvalues = itemexp;
-    this.deliveryTime = time;
-    console.log(this.merchantvalue);
+  created() {
+    let dbref = firebase.database();
+    var userId = this.$getUserId();
+    var mdb = dbref.ref(
+      "users/" + userId + "/" + this.orderId + "/merchants/" + this.merchantId
+    );
+
+    mdb.on("value", snapshot => {
+      var data = snapshot.val();
+      console.log(data);
+      this.merchantvalue = data;
+      var time = data.deliveryTime;
+      time = parseInt(time / 60);
+      if (parseInt(time / 60) === 0) {
+        if (parseInt(time % 60) === 1)
+          this.deliveryTime += parseInt(time % 60) + " min";
+        else this.deliveryTime += parseInt(time % 60) + " mins";
+      } else {
+        if (parseInt(time / 60) < 2)
+          this.deliveryTime += parseInt(time / 60) + " hour ";
+        else this.deliveryTime += parseInt(time / 60) + " hours ";
+        if (parseInt(time % 60) !== 0) {
+          if (time % 60 === 1)
+            this.deliveryTime += parseInt(time % 60) + " min";
+          else this.deliveryTime += parseInt(time % 60) + " mins";
+        }
+      }
+      this.itemvalues = data.itemDetails;
+    });
   }
 };
 </script>
-<<<<<<< HEAD
-=======
 
 <style  scoped>
 .container {
@@ -203,4 +214,3 @@ export default {
   margin-top: 15px;
 }
 </style>
->>>>>>> a339b6230848a9208c752cf92fac08ec8bf6dd43
