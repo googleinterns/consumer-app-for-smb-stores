@@ -62,7 +62,7 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.replace("/home");
+            this.$router.replace("/home").catch(() => {})
         });
     }
   }

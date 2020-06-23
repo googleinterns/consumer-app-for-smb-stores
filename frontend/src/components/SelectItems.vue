@@ -348,6 +348,8 @@ export default {
         .catch(error => {
           this.$log.debug(error);
         });
+
+      console.log(itemsForOrder);
     }
   }
 };

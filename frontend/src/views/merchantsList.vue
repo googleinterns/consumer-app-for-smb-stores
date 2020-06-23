@@ -46,14 +46,29 @@
           </div>
           <div class="media-content">
             <strong class="is-size-5">{{merchant.merchantName}}</strong>
+            <tab /> <StarRating
+              :inline="true"
+              inactive-color="#FFFFFF"
+              active-color="#008CBA"
+              v-bind:border-width="2"
+              :padding="1"
+              :glow="2"
+              :star-size="20"
+              border-color="	#008CBA"
+              glow-color="#008CBA"
+              :rounded-corners="true"
+              :read-only="true"
+              :rating="merchant.rating"
+              :show-rating="false"
+            ></StarRating>
             <br />
             <span class="is-size-6">{{merchant.merchantAddress}}</span>
-            <div></div>
             <div
               class="content has-text-danger is-size-6"
               v-for="item in merchant.itemDetails"
               v-bind:key="item.key"
             >
+              <div></div>
               <p>
                 <small v-if="!item.isAvailable">{{item.merchantItemName}} not available</small>
               </p>
@@ -77,12 +92,14 @@ import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
 import axios from "axios";
 import api from "../Api";
+import StarRating from "vue-star-rating";
 
 export default {
   name: "merchantList",
   props: ["orderId", "address", "cust_name"],
   components: {
-    Logout
+    Logout,
+    StarRating
   },
   data() {
     return {
@@ -114,7 +131,6 @@ export default {
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
     this.geolocate();
   },
-
   methods: {
     ItemDetails(merchantdetails) {
       this.$router.push({
@@ -155,14 +171,6 @@ export default {
             });
           }
         });
-        console.log({
-          oid: self.orderId,
-              items: self.itemsInCart,
-              location: [self.center.lat, self.center.lng],
-              customer_name: customer_name,
-              customer_address: self.address,
-              user_id: userId
-        })
         merchantIDs.forEach(mid => {
           axios.post(
             process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
@@ -215,6 +223,7 @@ export default {
     var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
+      console.log(data);
      
 
       var time = data.deliveryTime;
@@ -232,6 +241,7 @@ export default {
         }
       }
        this.merchants.push(data);
+
     });
   }
 };

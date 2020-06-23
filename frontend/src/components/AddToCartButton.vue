@@ -1,14 +1,19 @@
 <template>
-  <span>
+  <span v-on:click="clicked = true">
     <strong>
-      <big>{{buttonText}}</big>
+      <big v-if="!clicked">Add to cart</big>
+      <big v-else>Added</big>
     </strong>
   </span>
 </template>
 
 <script>
 export default {
-  name: AddToCartButton,
-  props: ["buttonText"]
+  name: "AddToCartButton",
+  data: function(){
+    return{
+      clicked: false
+    }
+  }
 };
 </script>

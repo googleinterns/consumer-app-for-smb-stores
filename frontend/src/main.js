@@ -12,7 +12,6 @@ import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
 
 
-
 const options = {
   isEnabled: true,
   logLevel: 'debug',
@@ -26,12 +25,10 @@ const options = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+
 let app = '';
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {
-    if (firebase.auth().currentUser == null) {
-      firebase.auth().signInAnonymously()
-    }
     app =
       Vue.filter('formatDate', function (value) {
         if (value) {
@@ -57,7 +54,6 @@ firebase.auth().onAuthStateChanged(() => {
         $getUserId() {
           let self = this;
           if (localStorage.isAnon){
-            console.log("What happens")
             return localStorage.anonId
           }
           if (firebase.auth().currentUser == null) {
@@ -102,13 +98,3 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();
-
-const prod = process.env.NODE_ENV === 'production'
-const shouldSW = 'serviceWorker' in navigator && prod
-if (shouldSW) {
-  navigator.serviceWorker.register('../service-worker.js').then(() => {
-    console.log("Service Worker Registered!")
-  })
-}
-
-
