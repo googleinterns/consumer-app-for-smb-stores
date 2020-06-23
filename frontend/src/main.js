@@ -29,9 +29,6 @@ firebase.analytics();
 let app = '';
 firebase.auth().onAuthStateChanged(() => {
   if (!app) {
-    if (firebase.auth().currentUser == null) {
-      firebase.auth().signInAnonymously()
-    }
     app =
       Vue.filter('formatDate', function (value) {
         if (value) {

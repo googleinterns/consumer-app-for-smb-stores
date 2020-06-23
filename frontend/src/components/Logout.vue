@@ -60,7 +60,7 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          this.$router.replace("login");
+            this.$router.replace("/home").catch(() => {})
         });
     }
   }

@@ -36,7 +36,8 @@ export default {
             name: "PaginatedProducts",
             params: { merchant: merchant }
           });
-        } else {
+        } 
+        else {
           console.log("Invalid URL");
         }
         this.loading = false;
