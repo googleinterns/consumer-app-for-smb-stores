@@ -8,7 +8,9 @@
         <button v-on:click="placeOrder()" class="button is-info">Order Now</button>
       </div>
     </div>
-
+    <div class="panel is-shadowless">
+      <FeaturedStores />
+    </div>
     <div>
       <div class="columns is-multiline is-variable is-mobile">
         <div
@@ -56,11 +58,7 @@
                     style="background-color: #3298dc;"
                     v-on:click="addItemToCart(card)"
                   >
-                    <span>
-                      <strong>
-                        <big>{{cartAddition}}</big>
-                      </strong>
-                    </span>
+                  <AddToCartButton />
                   </button>
                 </div>
               </div>
@@ -74,11 +72,16 @@
 
 <script>
 import firebase from "firebase";
+import FeaturedStores from "./FeaturedStores.vue";
+import AddToCartButton from "./AddToCartButton.vue";
 export default {
   name: "SuggestedItems",
+  components: {
+    FeaturedStores,
+    AddToCartButton
+  },
   data: function() {
     return {
-      cartAddition: "Add To Cart",
       suggestedItems: [
         {
           item_key: 1,

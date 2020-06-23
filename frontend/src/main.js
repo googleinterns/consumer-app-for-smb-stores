@@ -53,10 +53,15 @@ firebase.auth().onAuthStateChanged(() => {
       },
       methods: {
         $getUserId() {
+          let self = this;
           if (firebase.auth().currentUser == null) {
-            firebase.auth().signInAnonymously()
+            firebase.auth().signInAnonymously().then(() => {
+              self.userId = firebase.auth().currentUser.uid;
+            })
+          }else{
+            self.userId = firebase.auth().currentUser.uid;
           }
-          return firebase.auth().currentUser.uid
+          return this.userId
         },
         getRandomID() {
           var result = "";

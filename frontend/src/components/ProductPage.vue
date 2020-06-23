@@ -58,11 +58,7 @@
                       style="background-color: #3298dc;"
                       v-on:click="addItemToCart(item)"
                     >
-                      <span>
-                        <strong>
-                          <big>Add to cart</big>
-                        </strong>
-                      </span>
+                    <AddToCartButton />
                     </button>
                   </div>
                 </div>
@@ -77,9 +73,14 @@
 
 <script>
 import firebase from "firebase";
+import AddToCartButton from "./AddToCartButton.vue";
+
 export default {
   name: "ProductPage",
   props: ["itemsavailable"],
+  components: {
+    AddToCartButton
+  },
   methods: {
     addItemToCart(item) {
       var userId = this.$getUserId();

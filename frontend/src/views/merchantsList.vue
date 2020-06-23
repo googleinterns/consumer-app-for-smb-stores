@@ -137,7 +137,7 @@ export default {
       var userId = this.$getUserId();
       let self = this;
       var merchantIDs = [
-        "VxWQKTpSLLRlsuhQzdb3rapz5zv1"
+        "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
         // "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
         // "cG4TthNTwwMSbtCeTRZbc38qyVi2",
         // "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
