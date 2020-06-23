@@ -159,6 +159,14 @@ export default {
             });
           }
         });
+        console.log({
+          oid: self.orderId,
+              items: self.itemsInCart,
+              location: [self.center.lat, self.center.lng],
+              customer_name: customer_name,
+              customer_address: self.address,
+              user_id: userId
+        })
         merchantIDs.forEach(mid => {
           axios.post(
             process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
