@@ -33,7 +33,8 @@
 
 <script>
 import Logout from "@/components/Logout.vue";
-import axios from "axios";
+// import axios from "axios";
+import api from "../Api";
 export default {
   name: "SelectMerchant",
   components: {
@@ -46,16 +47,19 @@ export default {
 
   methods: {
     getMerchants() {
-      axios
-        .get(process.env.VUE_APP_MERCHANT_SERVER + "/merchants/all")
-        .then(response => {
-          this.merchantsList = response.data.merchants;
-          this.merchantsList.forEach(merchant => {
-            (merchant.name = this.namesList[this.count]),
-              (merchant.address = this.addressList[this.count]);
-            this.count += 1;
-          });
-        });
+      api.getAllMerchants().then((response) => {
+        this.merchantsList = response.data.merchants;
+      })
+      // axios
+      //   .get(process.env.VUE_APP_MERCHANT_SERVER + "/merchants/all")
+      //   .then(response => {
+      //     this.merchantsList = response.data.merchants;
+      //     this.merchantsList.forEach(merchant => {
+      //       (merchant.name = this.namesList[this.count]),
+      //         (merchant.address = this.addressList[this.count]);
+      //       this.count += 1;
+      //     });
+      //   });
     },
     moveToPaginatedProducts(merchant) {
       this.$router.push({
