@@ -106,7 +106,6 @@ export default {
   },
   data() {
     return {
-      rating2: 4,
       merchants: [],
       timeString: "",
       center: {

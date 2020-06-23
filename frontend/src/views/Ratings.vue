@@ -1,13 +1,11 @@
 <template>
   <div>
-    <notifications group="foo"  position="center" />
     <Logout />
     <div class="bd-lead">
       <div class="container">
         <div>
           <!-- {{merchantName}}, {{orderID}}, {{merchantID}} -->
           <textarea class="textarea" placeholder="Please enter your feedback"></textarea>
-
           <br />
           <center>
             <div>
@@ -67,12 +65,7 @@
         <div>
           <br />
           <p>
-            <button
-              v-on:click="showNotification()"
-              class="button is-info"
-              type="submit"
-              value="Ask Me Later"
-            >
+            <button v-on:click="home()" class="button is-info" type="submit" value="Ask Me Later">
               <span>Ask Me Later</span>
             </button>&nbsp;
             <button class="button is-info" v-on:click="submit()" type="submit" value="Submit">
@@ -106,13 +99,17 @@ export default {
       this.storeRatings();
       this.$router.push("/home");
     },
+    home() {
+      this.$router.push("/home");
+    },
     storeRatings() {
       var that = this;
       var customerID = this.$getUserId();
       var dbref = firebase.database();
       dbref
         .ref(
-          "MerchantRatings/" +this.merchantID +
+          "MerchantRatings/" +
+            this.merchantID +
             "/" +
             customerID +
             "/" +
@@ -144,21 +141,13 @@ export default {
         .ref("MerchantRatings/" + that.merchantID + "/Number_of_Orders/count")
         .once("value")
         .then(function(snapshot) {
-          var count =snapshot.val();
+          var count = snapshot.val();
           dbref
             .ref("MerchantRatings/" + that.merchantID + "/Number_of_Orders")
             .set({
-              count: count+1
+              count: count + 1
             });
         });
-    },
-    showNotification() {
-      this.$notify({
-        group: "foo",
-        position: "center",
-        title: "Important message",
-        text: "Hello user! This is a notification!"
-      });
     }
   }
 };
