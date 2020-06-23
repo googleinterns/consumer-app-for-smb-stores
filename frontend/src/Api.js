@@ -11,6 +11,12 @@ export default {
     }
   },
 
+  getAllMerchants: () => instance.get(process.env.VUE_APP_MERCHANT_SERVER + "/merchants/all", {
+    transformResponse: [function(data) {
+      return data ? JSON.parse(data) : data;
+    }]
+  }),
+
   fetchPastOrders: (user_id) => instance.get(process.env.VUE_APP_SERVER_URL + '/getOrderDetails?user=' + user_id, {
     transformResponse: [function (data) {
       return data ? JSON.parse(data) : data;
