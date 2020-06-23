@@ -5,7 +5,7 @@ import Login from '../views/Login.vue'
 import itemDetails from '../views/itemdetails.vue'
 import merchantList from '../views/merchantsList.vue'
 import Ratings from '../views/Ratings.vue'
-
+import firebase from 'firebase'
 
 
 Vue.use(VueRouter)
@@ -104,7 +104,7 @@ const routes = [
   },
 
   {
-    path: '/:merchantName',
+    path: '/myStore/:merchantName',
     name: 'MerchantProducts',
     props: true,
     component: () => import('../views/MerchantProducts.vue'),
@@ -129,12 +129,16 @@ const router = new VueRouter({
   routes
 })
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
+  if (firebase.auth().currentUser == null) {
+    firebase.auth().signInAnonymously()
+  }
+  next()
 //   const currentuser = firebase.auth().currentUser;
 //   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 //   if (requiresAuth && !currentuser) next('home');
 //   else if (!requiresAuth && currentuser) next('home');
 //   else next();
-// });
+});
 
 export default router
