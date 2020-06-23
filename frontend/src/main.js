@@ -56,11 +56,15 @@ firebase.auth().onAuthStateChanged(() => {
       methods: {
         $getUserId() {
           let self = this;
+          if (localStorage.isAnon){
+            console.log("What happens")
+            return localStorage.anonId
+          }
           if (firebase.auth().currentUser == null) {
             firebase.auth().signInAnonymously().then(() => {
               self.userId = firebase.auth().currentUser.uid;
             })
-          }else{
+          } else {
             self.userId = firebase.auth().currentUser.uid;
           }
           return this.userId

@@ -36,7 +36,7 @@
                       {{order.order.date_of_order | formatDate}}
                     </p>
                     <p align="left">
-                      <b>Status:</b>
+                      <b>Status: </b>
                       <span
                         :style="{color: order.order.order_status == 'COMPLETED' ? 'green':'pass'}"
                       >{{order.order.order_status | formatStatus}}</span>

@@ -7,6 +7,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
+
 @RestController
 public class MerchantsController {
 

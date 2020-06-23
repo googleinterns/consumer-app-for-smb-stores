@@ -60,7 +60,7 @@
       <div class="card" id="bottom">
         <p id="time">
           Estimated delivery time:
-          <strong>{{deliveryTime}}</strong>
+          <strong>{{merchantvalue.deliveryTime}}</strong>
         </p>
       </div>
     </div>
@@ -82,6 +82,7 @@ import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
 import firebase from "firebase";
+import {db} from "../main.js";
 
 export default {
   props: ["orderId", "merchantId"],
@@ -93,9 +94,8 @@ export default {
     return {
       merchantvalue: [],
       itemvalues: [],
-      deliveryTime: "",
       collectContact: false,
-      contactNo: 9354682711
+      contactNo: ""
     };
   },
   methods: {
@@ -133,13 +133,14 @@ export default {
         name: "OrderConfirmation",
         query: {
           merchantName: this.merchantvalue.merchantName,
-          time: this.deliveryTime
+          time: this.merchantvalue.deliveryTime
         }
       });
     }
   },
   created() {
     let dbref = firebase.database();
+    var self=this;
     var userId = this.$getUserId();
     var mdb = dbref.ref(
       "users/" + userId + "/" + this.orderId + "/merchants/" + this.merchantId
@@ -153,20 +154,34 @@ export default {
       time = parseInt(time / 60);
       if (parseInt(time / 60) === 0) {
         if (parseInt(time % 60) === 1)
-          this.deliveryTime += parseInt(time % 60) + " min";
-        else this.deliveryTime += parseInt(time % 60) + " mins";
+          this.merchantvalue.deliveryTime = parseInt(time % 60) + " min";
+        else this.merchantvalue.deliveryTime = parseInt(time % 60) + " mins";
       } else {
         if (parseInt(time / 60) < 2)
-          this.deliveryTime += parseInt(time / 60) + " hour ";
-        else this.deliveryTime += parseInt(time / 60) + " hours ";
+          this.merchantvalue.deliveryTime = parseInt(time / 60) + " hour ";
+        else this.merchantvalue.deliveryTime = parseInt(time / 60) + " hours ";
         if (parseInt(time % 60) !== 0) {
           if (time % 60 === 1)
-            this.deliveryTime += parseInt(time % 60) + " min";
-          else this.deliveryTime += parseInt(time % 60) + " mins";
+            this.merchantvalue.deliveryTime += parseInt(time % 60) + " min";
+          else this.merchantvalue.deliveryTime += parseInt(time % 60) + " mins";
         }
       }
       this.itemvalues = data.itemDetails;
     });
+
+    db.collection("Users")
+      .where('user_id', '==', userId)
+      .get()
+      .then(snap => {
+         snap.forEach(doc => {
+           self.contactNo=doc.data().user_contactNo;
+    });
+  })
+  .catch(err => {
+    console.log('Error getting documents', err);
+  });
+    
+
   }
 };
 </script>

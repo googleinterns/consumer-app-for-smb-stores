@@ -64,7 +64,7 @@
           <div class="level-left">
             <strong class="is-size-6" style="color: #162ac9">Total Price: ₹ {{merchant.totalPrice}}</strong>
           </div>
-          <strong class="is-pulled-right" style="color: #162ac9">Delivery in {{timeString}}</strong>
+          <strong class="is-pulled-right" style="color: #162ac9">Delivery in {{merchant.deliveryTime}}</strong>
         </nav>
       </div>
     </div>
@@ -87,7 +87,6 @@ export default {
   data() {
     return {
       merchants: [],
-      timeString: "",
       center: {
         lat: 28.535517,
         lng: 77.391029
@@ -138,11 +137,8 @@ export default {
       ];
 
       var customer_name = "";
-      if (!firebase.auth().currentUser.isAnonymous) {
-        customer_name = firebase.auth().currentUser.displayName;
-      } else {
+     
         customer_name = self.cust_name;
-      }
 
       api.fetchItemsForAnOrder(self.orderId).then(response => {
         response.data.forEach(item => {
@@ -159,6 +155,14 @@ export default {
             });
           }
         });
+        console.log({
+          oid: self.orderId,
+              items: self.itemsInCart,
+              location: [self.center.lat, self.center.lng],
+              customer_name: customer_name,
+              customer_address: self.address,
+              user_id: userId
+        })
         merchantIDs.forEach(mid => {
           axios.post(
             process.env.VUE_APP_MERCHANT_SERVER + "/order/merchant/" + mid,
@@ -211,22 +215,23 @@ export default {
     var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
-      this.merchants.push(data);
+     
 
       var time = data.deliveryTime;
       time = parseInt(time / 60);
       if (parseInt(time / 60) == 0) {
-        if (time % 60 == 1) this.timeString += parseInt(time % 60) + " min";
-        else this.timeString = parseInt(time % 60) + " mins";
+        if (time % 60 == 1) data.deliveryTime = parseInt(time % 60) + " min";
+        else data.deliveryTime = parseInt(time % 60) + " mins";
       } else {
         if (parseInt(time / 60) < 2)
-          this.timeString = parseInt(time / 60) + " hour ";
-        else this.timeString = parseInt(time / 60) + " hours ";
+          data.deliveryTime = parseInt(time / 60) + " hour ";
+        else data.deliveryTime = parseInt(time / 60) + " hours ";
         if (time % 60 != 0) {
-          if (time % 60 == 1) this.timeString += parseInt(time % 60) + " min";
-          else this.timeString += parseInt(time % 60) + " mins";
+          if (time % 60 == 1) data.deliveryTime += parseInt(time % 60) + " min";
+          else data.deliveryTime += parseInt(time % 60) + " mins";
         }
       }
+       this.merchants.push(data);
     });
   }
 };
