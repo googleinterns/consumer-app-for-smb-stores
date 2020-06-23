@@ -11,6 +11,7 @@ import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
 
+
 const options = {
   isEnabled: true,
   logLevel: 'debug',
@@ -23,6 +24,7 @@ const options = {
 
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
+
 
 let app = '';
 firebase.auth().onAuthStateChanged(() => {

@@ -17,6 +17,7 @@ public class Merchant {
     private List<MerchantItem> itemDetails = new ArrayList<>();
     private String userId;
     private String orderId;
+    private float rating;
     private Map<String, Double> geoLocation = new HashMap<>();
 
     public Merchant() {
@@ -63,6 +64,10 @@ public class Merchant {
         this.geoLocation = geoLocation;
     }
 
+    public void setRating(float rating) {
+        this.rating=rating;
+    }
+
     public String getMerchantId() {
         return this.merchantId;
     }
@@ -102,6 +107,9 @@ public class Merchant {
     public Map<String, Double> getGeoLocation() {
         return this.geoLocation;
     }
+    public float getRating(){
+        return this.rating;
+    }
 
     @Exclude
     public Map<String, Object> toMap() {
@@ -114,7 +122,7 @@ public class Merchant {
         result.put("deliveryTime", deliveryTime);
         result.put("itemDetails", itemDetails);
         result.put("geoLocation", geoLocation);
-
+        result.put("rating", rating);
         return result;
     }
 
