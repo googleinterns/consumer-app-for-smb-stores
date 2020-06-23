@@ -3,16 +3,18 @@
     <Logout />
     <div class="bd-lead">
       <div class="container">
-        <div class="field is-horizontal">
-          <div class="field-label is-normal">
-            <label class="label is-family-primary is-size-3 has-text-info">Confirm your details</label>
+        <div>
+          <div>
+            <h1 class="is-family-primary title is-size-3 has-text-info">Confirm your details</h1>
+          </div>
+        </div>
+        <div class="field">
+          <div class="field is-family-primary is-normal">
+            <label class="label is-pulled-left is-family-primary">Customer Name</label>
           </div>
           <div class="field-body">
-            <div class="field-label is-normal">
-              <label class="label is-pulled-left is-family-primary">Customer Name</label>
-            </div>
-            <div class="field">
-              <p class="control is-expanded has-icons-left">
+            <div class="field is-expanded is-normal">
+              <p class="control has-icons-left">
                 <input
                   v-model="userName"
                   class="input is-capitalized is-family-primary"
@@ -27,38 +29,35 @@
           </div>
         </div>
 
-        <div class="field is-horizontal">
-          <div class="field-label"></div>
-
+        <div class="field">
+          <div class="field-label is-normal">
+            <label class="label is-pulled-left">Contact Number</label>
+          </div>
           <div class="field-body">
-            <div class="field is-expanded">
-              <div class="field has-addons">
-                <p class="control">
-                  <a class="button is-static">+91</a>
-                </p>
-                <p class="control is-expanded">
-                  <input
-                    v-model="contactNo"
-                    class="input is-capitalized is-family-primary"
-                    type="tel"
-                    placeholder="Your phone number"
-                  />
-                </p>
-              </div>
+            <div class="field is-expanded is-normal">
+              <p class="control field is-grouped is-expanded">
+                <span class="button control is-static">+91</span>
+                <input
+                  v-model="contactNo"
+                  class="input is-capitalized is-family-primary"
+                  type="tel"
+                  placeholder="Your phone number"
+                />
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="field is-horizontal">
+        <div class="field">
           <div class="field-label is-normal">
-            <label class="label is-pulled-left">Delivery address</label>
+            <label class="label is-pulled-left">Delivery Address</label>
           </div>
           <div class="field-body">
-            <div class="field">
+            <div class="field is-expanded">
               <div class="control">
                 <textarea
                   v-model="address"
-                  class="input is-capitalized is-family-primary"
+                  class="input is-expanded is-capitalized is-family-primary"
                   type="text"
                   placeholder="Your delivery Address"
                 />
@@ -106,7 +105,7 @@ export default {
       isAnonymous: false,
       itemsInCart: [],
       itemsForOrder: [],
-      data:[]
+      data: []
     };
   },
   mounted() {
@@ -128,7 +127,6 @@ export default {
             item_image: cartItem.val().item_image
           });
         });
-       
       });
 
     if (firebase.auth().currentUser.isAnonymous) {
@@ -136,11 +134,11 @@ export default {
       if (!ui) {
         ui = new firebaseui.auth.AuthUI(firebase.auth());
       }
-     // var anonymousUser = firebase.auth().currentUser;
+      // var anonymousUser = firebase.auth().currentUser;
       var uiConfig = {
         signInSuccessUrl: "/userDetails/" + this.orderId,
-        signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-       // autoUpgradeAnonymousUsers: true,
+        signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID]
+        // autoUpgradeAnonymousUsers: true,
         // callbacks: {
         //   // signInFailure callback must be provided to handle merge conflicts which
         //   // occur when an existing credential is linked to an anonymous user.
@@ -163,13 +161,16 @@ export default {
         //       self.data=snapshot.val();
         //     });
         //     console.log(firebase.auth().currentUser.uid)
-            
+
         //     // Finish sign-in after data is copied.
         //     return firebase.auth().signInWithCredential(cred);
         //   }
         // }
       };
-       firebase.database().ref("user_cart/"+firebase.auth().currentUser.uid).set(this.data);
+      firebase
+        .database()
+        .ref("user_cart/" + firebase.auth().currentUser.uid)
+        .set(this.data);
 
       ui.start("#firebaseui-auth-container", uiConfig);
     }
