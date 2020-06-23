@@ -1,11 +1,15 @@
 <template>
   <div>
+    <notifications group="foo"  position="center" />
     <Logout />
     <div class="bd-lead">
       <div class="container">
         <div>
           <!-- {{merchantName}}, {{orderID}}, {{merchantID}} -->
-          <textarea class="textarea" placeholder="Please enter your feedback"></textarea>
+          <textarea
+            class="textarea"
+            placeholder="Please enter your feedback"
+          ></textarea>
 
           <br />
           <center>
@@ -66,7 +70,12 @@
         <div>
           <br />
           <p>
-            <button v-on:click="submit()" class="button is-info" type="submit" value="Ask Me Later">
+            <button
+              v-on:click="showNotification()"
+              class="button is-info"
+              type="submit"
+              value="Ask Me Later"
+            >
               <span>Ask Me Later</span>
             </button>&nbsp;
             <button class="button is-info" v-on:click="submit()" type="submit" value="Submit">
@@ -81,6 +90,7 @@
 <script>
 import StarRating from "vue-star-rating";
 import Logout from "@/components/Logout.vue";
+import firebase from "firebase";
 export default {
   name: "Ratings",
   props: ["merchantName", "merchantID", "orderID"],
@@ -96,7 +106,62 @@ export default {
   },
   methods: {
     submit() {
+      this.storeRatings();
       this.$router.push("/home");
+    },
+    storeRatings() {
+      var that = this;
+      var customerID = this.$getUserId();
+      var dbref = firebase.database();
+      dbref
+        .ref(
+          "MerchantRatings/" +this.merchantID +
+            "/" +
+            customerID +
+            "/" +
+            this.orderID
+        )
+        .set({
+          QualityRating: this.qualityRating,
+          TimelinessRating: this.timelinessRating
+        });
+      dbref
+        .ref("MerchantRatings/" + this.merchantID + "/TotalRatings/Timeliness")
+        .once("value")
+        .then(function(snapshot) {
+          var tr = snapshot.val() + that.timelinessRating;
+          dbref
+            .ref("MerchantRatings/" + that.merchantID + "/TotalRatings/Quality")
+            .once("value")
+            .then(function(snapshot) {
+              var qr = snapshot.val() + that.qualityRating;
+              dbref
+                .ref("MerchantRatings/" + that.merchantID + "/TotalRatings")
+                .set({
+                  Quality: qr,
+                  Timeliness: tr
+                });
+            });
+        });
+      dbref
+        .ref("MerchantRatings/" + that.merchantID + "/Number_of_Orders/count")
+        .once("value")
+        .then(function(snapshot) {
+          var count =snapshot.val();
+          dbref
+            .ref("MerchantRatings/" + that.merchantID + "/Number_of_Orders")
+            .set({
+              count: count+1
+            });
+        });
+    },
+    showNotification() {
+      this.$notify({
+        group: "foo",
+        position: "center",
+        title: "Important message",
+        text: "Hello user! This is a notification!"
+      });
     }
   }
 };
