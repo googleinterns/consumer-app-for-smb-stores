@@ -6,7 +6,7 @@ import router from './router'
 import VueMeta from 'vue-meta';
 import moment from 'moment';
 import * as VueGoogleMaps from "vue2-google-maps";
-import { config } from './googleMap-config.js';
+import { config } from '../googleMap-config.js';
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
@@ -56,11 +56,15 @@ firebase.auth().onAuthStateChanged(() => {
       methods: {
         $getUserId() {
           let self = this;
+          if (localStorage.isAnon){
+            console.log("What happens")
+            return localStorage.anonId
+          }
           if (firebase.auth().currentUser == null) {
             firebase.auth().signInAnonymously().then(() => {
               self.userId = firebase.auth().currentUser.uid;
             })
-          }else{
+          } else {
             self.userId = firebase.auth().currentUser.uid;
           }
           return this.userId

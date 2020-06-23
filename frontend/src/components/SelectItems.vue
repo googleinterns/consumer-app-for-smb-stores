@@ -130,7 +130,7 @@
 <script>
 import firebase from "firebase";
 import PriorityQueue from "js-priority-queue";
-//import api from "../Api";
+import api from "../Api";
 
 var levenshtein = require("levenshtein-edit-distance");
 
@@ -311,39 +311,43 @@ export default {
 
     placeOrder() {
       this.orderId = this.getOrderId();
-      //var itemsForOrder = [];
+      var itemsForOrder = [];
 
-      // this.itemsInCart.forEach(item => {
-      //   if (item.EAN === undefined) {
-      //     itemsForOrder.push({
-      //       item_name: item.item_name,
-      //       quantity: item.item_quantity
-      //     });
-      //   } else {
-      //     itemsForOrder.push({
-      //       item_name: item.item_name,
-      //       quantity: item.item_quantity,
-      //       EAN: item.EAN
-      //     });
-      //   }
-      // });
-     // var userId = this.$getUserId();
-      // api
-      //   .placeOrder(userId, this.orderId, itemsForOrder)
-      //   .then(response => {
-      //     if (response.status == 200) {
-      //       this.emptyCart();
+      this.itemsInCart.forEach(item => {
+        if (item.EAN === undefined) {
+          itemsForOrder.push({
+            item_name: item.item_name,
+            quantity: item.item_quantity
+          });
+        } else {
+          itemsForOrder.push({
+            item_name: item.item_name,
+            quantity: item.item_quantity,
+            EAN: item.EAN
+          });
+        }
+      });
+     var userId = this.$getUserId();
+     if (firebase.auth().currentUser.isAnonymous){
+       localStorage.setItem('anonId', this.$getUserId())
+       localStorage.setItem('isAnon', true);
+     }
+      api
+        .placeOrder(userId, this.orderId, itemsForOrder)
+        .then(response => {
+          if (response.status == 200) {
+            this.emptyCart();
             this.$router.push({
               name: "UserInfo",
               params: {
                 orderId: this.orderId
               }
             });
-      //     }
-      //   })
-      //   .catch(error => {
-      //     this.$log.debug(error);
-      //   });
+          }
+        })
+        .catch(error => {
+          this.$log.debug(error);
+        });
     }
   }
 };
