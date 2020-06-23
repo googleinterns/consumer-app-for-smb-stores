@@ -73,7 +73,7 @@ const routes = [
     }
   },
   {
-    path: '/placeOrder/:orderId&:cust_name',
+    path: '/userDetails/:orderId',
     name: 'UserInfo',
     props: true,
     component: UserInfo,
@@ -101,10 +101,20 @@ const routes = [
     }
   },
   {
-    path: '/ratings/:merchantName',
+    path: '/ratings/:merchantName&:merchantID&:orderID',
     name: 'Ratings',
     component: Ratings,
     props: true,
+    meta: {
+      requiresAuth: true
+    }
+  },
+
+  {
+    path: '/:merchantName',
+    name: 'MerchantProducts',
+    props: true,
+    component: () => import('../views/MerchantProducts.vue'),
     meta: {
       requiresAuth: true
     }

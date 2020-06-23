@@ -18,7 +18,7 @@
         <p class="control">
           <button
             v-on:click="addItem(inputValue, '', 'https://semantic-ui.com/images/wireframe/image.png')"
-            class="button is-primary"
+            class="button is-info"
           >Add</button>
         </p>
       </div>
@@ -41,9 +41,7 @@
                         <div class="is-family-primary">
                           {{item.ItemName}}
                           <div>
-                            <strong
-                              class="is-size-7-mobile is-size-6 has-text-danger"
-                            >MRP: ₹{{item.price}}</strong>
+                            <strong class="is-size-7-mobile is-size-6">MRP: ₹{{item.price}}</strong>
                           </div>
                         </div>
                       </td>
@@ -77,7 +75,7 @@
                           <span
                             v-on:click="decrementQuantity(item)"
                             class="icon is-medium is-left"
-                            style="color: #17a1b9c7"
+                            style="color: #3298dc"
                           >
                             <i class="fa fa-minus-circle" aria-hidden="true"></i>
                           </span>
@@ -95,7 +93,7 @@
                           <span
                             v-on:click="incrementQuantity(item)"
                             class="icon is-medium is-left"
-                            style="color: #17a1b9c7"
+                            style="color: #3298dc"
                           >
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
                           </span>
@@ -121,44 +119,10 @@
     </div>
     <div v-if="itemsInCart.length  > 0" class="column has-text-centered">
       <p>
-        <button
-          v-on:click="emptyCart()"
-          class="button is-danger is-light"
-          type="submit"
-          value="Empty Cart"
-        >
-          <span>Empty Cart</span>
-        </button>&nbsp;
-        <button
-          v-on:click="placeOrder()"
-          class="button is-primary is-light"
-          type="submit"
-          value="Place Order"
-        >
+        <button v-on:click="placeOrder()" class="button is-info" type="submit" value="Place Order">
           <span>Place Order</span>
         </button>
       </p>
-    </div>
-
-    <div v-if="askForAddress">
-      <div v-if="isAnonymousUser">
-        <div class="field is-grouped">
-          <p class="control is-expanded">
-            <input class="input" type="text" v-model="cust_name" placeholder="Enter Name" />
-          </p>
-          <p class="control">
-            <a class="button is-info">OK</a>
-          </p>
-        </div>
-      </div>
-      <div class="field is-grouped">
-        <p class="control is-expanded">
-          <input class="input" type="text" v-model="address" placeholder="Enter Address" />
-        </p>
-        <p class="control">
-          <a class="button is-info" v-on:click="placeOrder()">OK</a>
-        </p>
-      </div>
     </div>
   </div>
 </template>
@@ -166,6 +130,7 @@
 <script>
 import firebase from "firebase";
 import PriorityQueue from "js-priority-queue";
+//import api from "../Api";
 
 var levenshtein = require("levenshtein-edit-distance");
 
@@ -190,10 +155,6 @@ export default {
           });
         });
       });
-
-    this.isAnonymousUser =
-      firebase.auth().currentUser == null ||
-      firebase.auth().currentUser.isAnonymous;
   },
   data: function() {
     return {
@@ -201,10 +162,6 @@ export default {
       itemsInCart: [],
       products: [],
       orderId: "",
-     // address: "K-502, Amrapali Zodiac, Sector 120, Noida",
-      askForAddress: false,
-      cust_name: "",
-      isAnonymousUser: false
     };
   },
   methods: {
@@ -253,7 +210,6 @@ export default {
       var itemDoc = reference.push({
         item_name: item,
         item_quantity: 1,
-        EAN: EAN,
         item_image: itemImage
       });
       var item_id = itemDoc.key;
@@ -261,7 +217,6 @@ export default {
         item_id: item_id,
         item_name: item,
         item_quantity: 1,
-        EAN: EAN,
         item_image: itemImage
       });
     },
@@ -356,57 +311,36 @@ export default {
 
     placeOrder() {
       this.orderId = this.getOrderId();
-      var itemsForOrder = [];
+      //var itemsForOrder = [];
 
-      this.itemsInCart.forEach(item =>
-        itemsForOrder.push({
-          item_name: item.item_name,
-          quantity: item.item_quantity,
-          unit_price: ""
-        })
-      );
-
-      console.log(
-        {
-          orderId: this.orderId,
-          address: this.address,
-          items: this.itemsInCart,
-          cust_name: this.cust_name
-        },
-        "parameters pushed"
-      );
-
-      // /* eslint-disable no-debugger */
-      // debugger;
-      // /* eslint-enable no-debugger */
-
-      if (!this.isAnonymousUser) {
-        this.cust_name = firebase.auth().currentUser.displayName;
-      }
-
-      // if (this.cust_name == "") {
-      //   this.cust_name = firebase.auth().currentUser.displayName;
-      // }
-       this.$router.push({
-        name: "UserInfo",
-        params: {
-          orderId: this.orderId,
-         // address: this.address,
-          cust_name: this.cust_name,
-        }
-      });
-
-      // this.$router.push({
-      //   name: "merchantList",
-      //   params: {
-      //     orderId: this.orderId,
-      //     address: this.address,
-      //     cust_name: this.cust_name
+      // this.itemsInCart.forEach(item => {
+      //   if (item.EAN === undefined) {
+      //     itemsForOrder.push({
+      //       item_name: item.item_name,
+      //       quantity: item.item_quantity
+      //     });
+      //   } else {
+      //     itemsForOrder.push({
+      //       item_name: item.item_name,
+      //       quantity: item.item_quantity,
+      //       EAN: item.EAN
+      //     });
       //   }
       // });
-
+     // var userId = this.$getUserId();
       // api
-      //   .placeOrder(userId, this.orderId, "", "", "", itemsForOrder)
+      //   .placeOrder(userId, this.orderId, itemsForOrder)
+      //   .then(response => {
+      //     if (response.status == 200) {
+      //       this.emptyCart();
+            this.$router.push({
+              name: "UserInfo",
+              params: {
+                orderId: this.orderId
+              }
+            });
+      //     }
+      //   })
       //   .catch(error => {
       //     this.$log.debug(error);
       //   });

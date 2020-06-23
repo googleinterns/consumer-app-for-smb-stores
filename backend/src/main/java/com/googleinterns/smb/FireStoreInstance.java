@@ -5,7 +5,6 @@ import com.google.cloud.firestore.*;
 
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.Document;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +21,10 @@ public class FireStoreInstance {
         this.db = FirestoreOptions.getDefaultInstance().getService();
     }
 
-
     public List<OrderDocuments> retrieveOrderDetails(String userId) throws InterruptedException, ExecutionException {
 
-        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("user_id", userId).orderBy("order_id", Query.Direction.DESCENDING).get();
+        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("user_id", userId)
+                .orderBy("order_id", Query.Direction.DESCENDING).get();
         QuerySnapshot querySnapshot = future.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
@@ -50,7 +49,6 @@ public class FireStoreInstance {
 
     }
 
-
     public void addOrderDoc(OrderDocuments orderDoc) throws InterruptedException, ExecutionException {
         ApiFuture<DocumentReference> addedDocRef = db.collection(ORDER_PATH).add(orderDoc.getOrder());
 
@@ -63,7 +61,8 @@ public class FireStoreInstance {
     }
 
     public List<OrderDocuments> getOngoingOrders(String userId) throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("user_id", userId).whereEqualTo("order_status", "ONGOING").orderBy("order_id", Query.Direction.DESCENDING).get();
+        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("user_id", userId)
+                .whereEqualTo("order_status", "ONGOING").orderBy("order_id", Query.Direction.DESCENDING).get();
         QuerySnapshot querySnapshot = future.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
@@ -88,7 +87,8 @@ public class FireStoreInstance {
     }
 
     public void updateOrderDoc(OrderDocuments orderDoc) throws ExecutionException, InterruptedException {
-        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("order_id", orderDoc.getOrder().getOrderId()).get();
+        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH)
+                .whereEqualTo("order_id", orderDoc.getOrder().getOrderId()).get();
         QuerySnapshot querySnapshot = future.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
@@ -98,6 +98,7 @@ public class FireStoreInstance {
             String orderDocID = document.getId();
             DocumentReference docRef = db.collection(ORDER_PATH).document(orderDocID);
             updates.put("order_status", "PROCESSING");
+            updates.put("merchant_id", orderDoc.getOrder().getMerchantId());
             updates.put("merchant_name", orderDoc.getOrder().getMerchantName());
             updates.put("merchant_address", orderDoc.getOrder().getMerchantAddress());
             updates.put("offers_availed", orderDoc.getOrder().getOffersAvailed());
@@ -105,16 +106,16 @@ public class FireStoreInstance {
             docRef.update(updates);
 
             for (Item item : orderDoc.getItemDetails()) {
-                ApiFuture<QuerySnapshot> itemFuture = db.collection(ORDER_PATH).document(orderDocID).
-                        collection("items").whereEqualTo("item_name", item.getItemName()).get();
+                ApiFuture<QuerySnapshot> itemFuture = db.collection(ORDER_PATH).document(orderDocID).collection("items")
+                        .whereEqualTo("item_name", item.getItemName()).get();
 
                 QuerySnapshot itemQuerySnapshot = itemFuture.get();
                 List<QueryDocumentSnapshot> itemDocuments = itemQuerySnapshot.getDocuments();
 
                 for (QueryDocumentSnapshot queryDocumentSnapshot : itemDocuments) {
                     String itemDocID = queryDocumentSnapshot.getId();
-                    DocumentReference documentReference = db.collection(ORDER_PATH).document(orderDocID).
-                            collection("items").document(itemDocID);
+                    DocumentReference documentReference = db.collection(ORDER_PATH).document(orderDocID)
+                            .collection("items").document(itemDocID);
 
                     HashMap<String, Object> itemUpdates = new HashMap<>();
                     itemUpdates.put("quantity", item.getQuantity());
@@ -128,8 +129,61 @@ public class FireStoreInstance {
 
     }
 
+    public void updateUserDetails(User user) throws InterruptedException, ExecutionException {
+        ApiFuture<QuerySnapshot> future = db.collection("Users").whereEqualTo("user_id", user.getUserId()).get();
+        QuerySnapshot querySnapshot = future.get();
+        
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+        if (documents.size()==0) {
+            db.collection("Users").add(user);
+           
+            return;
+        }
 
-	public void updateUserDetails(User user) {
-        ApiFuture<DocumentReference> addedDocRef = db.collection("Users").add(user);
-	}
+        for (QueryDocumentSnapshot document : documents) {
+
+            HashMap<String, Object> updates = new HashMap<>();
+            String docID = document.getId();
+            DocumentReference docRef = db.collection("Users").document(docID);
+            updates.put("user_id", user.getUserId());
+            updates.put("user_contactNo", user.getUserContactNo());
+            updates.put("user_address", user.getUserAddress());
+            updates.put("user_name", user.getUserName());
+            docRef.update(updates);
+        }
+    }
+
+    public List<Item> getItemsForOrder(String orderId) throws InterruptedException, ExecutionException {
+        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("order_id", orderId).get();
+        QuerySnapshot querySnapshot = future.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+
+        List<Item> itemsInOrder = new ArrayList<>();
+
+        for (QueryDocumentSnapshot document : documents) {
+            String docId = document.getId();
+            ApiFuture<QuerySnapshot> itemFuture = db.collection(ORDER_PATH).document(docId).collection("items").get();
+            List<QueryDocumentSnapshot> itemDocs = itemFuture.get().getDocuments();
+
+            for (QueryDocumentSnapshot doc : itemDocs) {
+                Item item = doc.toObject(Item.class);
+                itemsInOrder.add(item);
+            }
+        }
+
+        return itemsInOrder;
+
+    }
+
+    public User getUserDetails(String userId) throws InterruptedException, ExecutionException {
+        ApiFuture<QuerySnapshot> future = db.collection("Users").whereEqualTo("user_id", userId).get();
+        QuerySnapshot querySnapshot = future.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+            User newuser = document.toObject(User.class);
+            return newuser;
+        }
+
+        return null;
+    }
 }

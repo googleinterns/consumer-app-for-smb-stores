@@ -15,8 +15,13 @@ public class UserController {
 
     @PostMapping(value = "/userDetails")
     public void placeOrder(@RequestBody User userDetails) throws ExecutionException, InterruptedException {
-        User user = new User(userDetails.getUserId(), userDetails.getUserAddress(), userDetails.getUserContactNo());
+        User user = new User(userDetails.getUserId(), userDetails.getUserAddress(), userDetails.getUserContactNo(),userDetails.getUserName());
 
         fireStoreInstance.updateUserDetails(user);
+    }
+
+    @GetMapping(value = "/getUserDetails")
+    public User getUserDetails(@RequestParam String userId) throws ExecutionException, InterruptedException {
+        return fireStoreInstance.getUserDetails(userId);
     }
 }

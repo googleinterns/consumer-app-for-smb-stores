@@ -16,19 +16,25 @@
     </div>
     <div class="column has-text-centered">
       <p>
-        <button class="button" type="submit" value="Order History">
-          <router-link to="/orderHistory">
-            <span>
-              <i class="fa fa-book" aria-hidden="true"></i> Order History
-            </span>
-          </router-link>
+        <button
+          class="button is-info"
+          v-on:click="goToOrderHistory()"
+          type="submit"
+          value="Order History"
+        >
+          <span>
+            <i class="fa fa-book" aria-hidden="true"></i> Order History
+          </span>
         </button>&nbsp;
-        <button class="button" type="submit" value="Place Order">
-          <router-link to="/home">
-            <span>
-              <i class="fa fa-home" aria-hidden="true"></i> Home
-            </span>
-          </router-link>
+        <button
+          class="button is-info"
+          v-on:click="goToHome()"
+          type="submit"
+          value="Place Order"
+        >
+          <span>
+            <i class="fa fa-home" aria-hidden="true"></i> Home
+          </span>
         </button>
       </p>
     </div>
@@ -51,6 +57,14 @@ export default {
   mounted() {
     (this.merchantName = this.$route.query.merchantName),
       (this.time = this.$route.query.time);
+  },
+  methods: {
+    goToOrderHistory() {
+      this.$router.push("/orderHistory");
+    },
+    goToHome() {
+      this.$router.push("/home");
+    }
   }
 };
 </script>

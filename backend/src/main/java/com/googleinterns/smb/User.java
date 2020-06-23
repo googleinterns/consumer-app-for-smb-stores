@@ -12,6 +12,8 @@ public class User {
     private String userAddress;
     @JsonProperty("user_contactNo")
     private String userContactNo;
+    @JsonProperty("user_name")
+    private String userName;
 
 
     public User() {
@@ -22,10 +24,21 @@ public class User {
         this.userId = userId;
     }
 
-    public User(String userId, String userAddress, String userContactNo) {
+    public User(String userId, String userAddress, String userContactNo,String userName) {
         this.userId = userId;
         this.userAddress=userAddress;
         this.userContactNo=userContactNo;
+        this.userName=userName;
+    }
+
+    @PropertyName("user_name")
+    public String getUserName() {
+        return userName;
+    }
+
+    @PropertyName("user_name")
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @PropertyName("user_id")
