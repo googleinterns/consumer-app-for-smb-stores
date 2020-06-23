@@ -41,14 +41,8 @@
                       </span>
                       <p align="left">
                         MRP:
-                        <strike>₹ {{card.item_mrp}}</strike>
+                        ₹ {{card.item_mrp}}
                       </p>
-                      <small>
-                        <p
-                          align="left"
-                          style="color: #df7518"
-                        >Least Price: ₹ {{card.item_lowest_price}}</p>
-                      </small>
                     </small>
                   </div>
                 </div>
