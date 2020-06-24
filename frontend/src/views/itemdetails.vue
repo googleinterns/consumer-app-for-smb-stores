@@ -39,7 +39,7 @@
               <div class="content">
                 <div class="has-text-grey is-size-6.5">
                   <strong class="is-size-5">{{item.merchantItemName}}</strong>
-                  <strong class="has-text-grey is-size-5"> x {{item.quantity}}</strong>
+                  <strong class="has-text-grey is-size-5">x {{item.quantity}}</strong>
                 </div>
 
                 <div class="has-text-grey is-size-6.5">
@@ -82,7 +82,7 @@ import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
 import firebase from "firebase";
-import {db} from "../main.js";
+import { db } from "../main.js";
 
 export default {
   props: ["orderId", "merchantId"],
@@ -102,19 +102,37 @@ export default {
     notification() {
       firebase
         .database()
-        .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDispatched")
+        .ref(
+          "newNotifications/" +
+            this.$getUserId() +
+            "/" +
+            this.orderId +
+            "/packageDispatched"
+        )
         .set({
           trigger: 0
-         }),
+        }),
         firebase
           .database()
-          .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDelivered")
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDelivered"
+          )
           .set({
-          trigger: 0
-         }),
+            trigger: 0
+          }),
         firebase
           .database()
-          .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDispatched")
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDispatched"
+          )
           .on("child_changed", function(snapshot) {
             console.log(snapshot);
             if (Notification.permission == "granted") {
@@ -138,7 +156,13 @@ export default {
           }),
         firebase
           .database()
-          .ref("newNotifications/" + this.$getUserId() +"/"+this.orderId+ "/packageDelivered")
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDelivered"
+          )
           .on("child_changed", function(snapshot) {
             console.log(snapshot);
 
@@ -201,7 +225,7 @@ export default {
   },
   created() {
     let dbref = firebase.database();
-    var self=this;
+    var self = this;
     var userId = this.$getUserId();
     var mdb = dbref.ref(
       "users/" + userId + "/" + this.orderId + "/merchants/" + this.merchantId
@@ -231,18 +255,16 @@ export default {
     });
 
     db.collection("Users")
-      .where('user_id', '==', userId)
+      .where("user_id", "==", userId)
       .get()
       .then(snap => {
-         snap.forEach(doc => {
-           self.contactNo=doc.data().user_contactNo;
-    });
-  })
-  .catch(err => {
-    console.log('Error getting documents', err);
-  });
-    
-
+        snap.forEach(doc => {
+          self.contactNo = doc.data().user_contactNo;
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
   }
 };
 </script>

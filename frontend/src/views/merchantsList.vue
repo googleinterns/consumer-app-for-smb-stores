@@ -46,6 +46,22 @@
           </div>
           <div class="media-content">
             <strong class="is-size-5">{{merchant.merchantName}}</strong>
+            <tab />
+            <StarRating
+              :inline="true"
+              inactive-color="#FFFFFF"
+              active-color="#008CBA"
+              v-bind:border-width="2"
+              :padding="1"
+              :glow="2"
+              :star-size="20"
+              border-color="	#008CBA"
+              glow-color="#008CBA"
+              :rounded-corners="true"
+              :read-only="true"
+              :rating="merchant.rating"
+              :show-rating="false"
+            ></StarRating>
             <br />
             <StarRating
               :inline="true"
