@@ -70,8 +70,8 @@
             <div class="field is-expanded">
               <div class="control">
                 <textarea
+                class="textarea is-expanded is-capitalized is-family-primary" rows="4"
                   v-model="address"
-                  class="input is-expanded is-capitalized is-family-primary"
                   type="text"
                   placeholder="Your delivery Address"
                 />
@@ -86,7 +86,7 @@
           <div class="field-body">
             <div class="field is-centre">
               <div class="control">
-                <button @click="submit" class="button is-success is-fullwidth">Confirm and continue</button>
+                <button @click="submit" class="button is-info is-fullwidth">Confirm and continue</button>
               </div>
             </div>
           </div>

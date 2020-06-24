@@ -99,6 +99,98 @@ export default {
     };
   },
   methods: {
+    notification() {
+      // const messaging = firebase.messaging();
+      // messaging.usePublicVapidKey(
+      //    "BLV4FVm9jWAeO7zYhfJLrvcWgbXr1ewHnQCLxmfg0DZDdvXvZ2mAjFyGW5A6Y9WWyz2sSBqseMBj_zQHrolEmv0",
+      // );
+      firebase
+        .database()
+        .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDispatched")
+        .set({
+          trigger: 0
+         }),
+        firebase
+          .database()
+          .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDelivered")
+          .set({
+          trigger: 0
+         }),
+        firebase
+          .database()
+          .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDispatched")
+          .on("child_changed", function(snapshot) {
+            console.log(snapshot);
+            if (Notification.permission == "granted") {
+              navigator.serviceWorker.getRegistration().then(function(reg) {
+                var options = {
+                  icon:
+                    "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+                  vibrate: [100, 50, 100],
+                  data: {
+                    dateOfArrival: Date.now(),
+                    primaryKey: 1
+                  }
+                  // actions: [
+                  //   {
+                  //     action: "explore",
+                  //     title: "Explore this new world",
+                  //     icon: "images/checkmark.png"
+                  //   },
+                  //   {
+                  //     action: "close",
+                  //     title: "Close notification",
+                  //     icon: "images/xmark.png"
+                  //   }
+                  // ]
+                };
+                reg.showNotification(
+                  "Your order has been dispatched!",
+                  options
+                );
+              });
+            }
+          }),
+        firebase
+          .database()
+          .ref("newNotifications/" + this.$getUserId() +"/"+this.orderId+ "/packageDelivered")
+          .on("child_changed", function(snapshot) {
+            console.log(snapshot);
+
+            if (Notification.permission == "granted") {
+              navigator.serviceWorker.getRegistration().then(function(reg) {
+                var options = {
+                  icon:
+                    "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+                  vibrate: [100, 50, 100],
+                  data: {
+                    dateOfArrival: Date.now(),
+                    primaryKey: 1
+                  }
+                  // actions: [
+                  //   {
+                  //     action: "explore",
+                  //     title: "Explore this new world",
+                  //     icon: "images/checkmark.png"
+                  //   },
+                  //   {
+                  //     action: "close",
+                  //     title: "Close notification",
+                  //     icon: "images/xmark.png"
+                  //   }
+                  // ]
+                };
+                reg.showNotification("Your order has been delivered!", options);
+              });
+            }
+
+            //   if (Notification.permission == "granted") {
+            //   navigator.serviceWorker.getRegistration().then(function(reg) {
+            //     reg.showNotification("Your order has been delivered!");
+            //   });
+            // }
+          });
+    },
     confirm() {
       axios.post(
         process.env.VUE_APP_MERCHANT_SERVER +
@@ -125,8 +217,8 @@ export default {
         this.orderId,
         this.merchantvalue.merchantId,
         this.merchantvalue.merchantName,
-        "Nehru Market, FNG Road, Sector 115, Noida",
-        "Free Delivery",
+        this.merchantvalue.merchantAddress,
+        "free delivery",
         confirmedItems
       );
       this.$router.push({
@@ -136,6 +228,7 @@ export default {
           time: this.merchantvalue.deliveryTime
         }
       });
+      this.notification();
     }
   },
   created() {

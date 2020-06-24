@@ -330,7 +330,7 @@ export default {
      var userId = this.$getUserId();
      if (firebase.auth().currentUser.isAnonymous){
        localStorage.setItem('anonId', this.$getUserId())
-       localStorage.setItem('isAnon', true);
+       localStorage.setItem('isAnon', false);
      }
       api
         .placeOrder(userId, this.orderId, itemsForOrder)

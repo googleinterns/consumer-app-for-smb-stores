@@ -50,8 +50,18 @@ firebase.auth().onAuthStateChanged(() => {
           userId: null
         }
       },
-      methods: {
+     methods: {
         $getUserId() {
+         // return "l6oUXxB50ScyWQ7NK1imvPpsQX82";
+         // return "l6oUXxB50ScyWQ7NK1imvPpsQX82"
+         if(firebase.auth().currentUser!=null)
+         {
+           return firebase.auth().currentUser.uid;
+
+
+
+
+         }
           let self = this;
           if (localStorage.isAnon){
             return localStorage.anonId
@@ -79,6 +89,8 @@ firebase.auth().onAuthStateChanged(() => {
       }
 
     })
+  
+  
 
     new Vue({
       router,
@@ -95,6 +107,11 @@ Vue.use(VueGoogleMaps, {
     key: config.apiKey,
   }
 });
+Notification.requestPermission(function(status) {
+  console.log('Notification permission status:', status);
+});
+
+
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();

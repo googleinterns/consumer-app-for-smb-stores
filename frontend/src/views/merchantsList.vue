@@ -46,7 +46,8 @@
           </div>
           <div class="media-content">
             <strong class="is-size-5">{{merchant.merchantName}}</strong>
-            <tab /> <StarRating
+            <br />
+            <StarRating
               :inline="true"
               inactive-color="#FFFFFF"
               active-color="#008CBA"
@@ -79,7 +80,10 @@
           <div class="level-left">
             <strong class="is-size-6" style="color: #162ac9">Total Price: ₹ {{merchant.totalPrice}}</strong>
           </div>
-          <strong class="is-pulled-right" style="color: #162ac9">Delivery in {{merchant.deliveryTime}}</strong>
+          <strong
+            class="is-pulled-right"
+            style="color: #162ac9"
+          >Delivery in {{merchant.deliveryTime}}</strong>
         </nav>
       </div>
     </div>
@@ -129,6 +133,7 @@ export default {
     console.log(this.$getUserId());
     this.FirebaseRef = firebase.database().ref("MerchantLocation");
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
+   // this.notification();
     this.geolocate();
   },
   methods: {
@@ -148,13 +153,13 @@ export default {
       var merchantIDs = [
         "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
         // "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
-        // "cG4TthNTwwMSbtCeTRZbc38qyVi2",
-         "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
+         "cG4TthNTwwMSbtCeTRZbc38qyVi2",
+        "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
       ];
 
       var customer_name = "";
-     
-        customer_name = self.cust_name;
+
+      customer_name = self.cust_name;
 
       api.fetchItemsForAnOrder(self.orderId).then(response => {
         response.data.forEach(item => {
@@ -190,6 +195,219 @@ export default {
     notifyMerchants() {
       this.getCartItems();
     },
+    // notification() {
+    //   // const messaging = firebase.messaging();
+    //   // messaging.usePublicVapidKey(
+    //   //    "BLV4FVm9jWAeO7zYhfJLrvcWgbXr1ewHnQCLxmfg0DZDdvXvZ2mAjFyGW5A6Y9WWyz2sSBqseMBj_zQHrolEmv0",
+    //   // );
+    //   firebase
+    //     .database()
+    //     .ref("newNotifications/" + this.$getUserId() + "/packageDispatched")
+    //     // .set({
+    //     //   trigger: 0
+    //     //  }),
+    //     // firebase
+    //     //   .database()
+    //     //   .ref("newNotifications/" + this.$getUserId() + "/packageDelivered")
+    //     //   .on("child_added",snapshot=>{
+    //     //     console.log(snapshot.val());
+    //     //   })
+    //     firebase
+    //       .database()
+    //       .ref("newNotifications/" + this.$getUserId() + "/packageDispatched")
+    //       .on("child_changed", function(snapshot) {
+    //         console.log(snapshot);
+    //         if (Notification.permission == "granted") {
+    //           navigator.serviceWorker.getRegistration().then(function(reg) {
+    //             var options = {
+    //               icon:
+    //                 "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+    //               vibrate: [100, 50, 100],
+    //               data: {
+    //                 dateOfArrival: Date.now(),
+    //                 primaryKey: 1
+    //               }
+    //               // actions: [
+    //               //   {
+    //               //     action: "explore",
+    //               //     title: "Explore this new world",
+    //               //     icon: "images/checkmark.png"
+    //               //   },
+    //               //   {
+    //               //     action: "close",
+    //               //     title: "Close notification",
+    //               //     icon: "images/xmark.png"
+    //               //   }
+    //               // ]
+    //             };
+    //             reg.showNotification(
+    //               "Your order has been dispatched!",
+    //               options
+    //             );
+    //           });
+    //         }
+    //       }),
+    //     firebase
+    //       .database()
+    //       .ref("newNotifications/" + this.$getUserId() + "/packageDelivered")
+    //       .on("child_changed", function(snapshot) {
+    //         console.log(snapshot);
+
+    //         if (Notification.permission == "granted") {
+    //           navigator.serviceWorker.getRegistration().then(function(reg) {
+    //             var options = {
+    //               icon:
+    //                 "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+    //               vibrate: [100, 50, 100],
+    //               data: {
+    //                 dateOfArrival: Date.now(),
+    //                 primaryKey: 1
+    //               }
+    //               // actions: [
+    //               //   {
+    //               //     action: "explore",
+    //               //     title: "Explore this new world",
+    //               //     icon: "images/checkmark.png"
+    //               //   },
+    //               //   {
+    //               //     action: "close",
+    //               //     title: "Close notification",
+    //               //     icon: "images/xmark.png"
+    //               //   }
+    //               // ]
+    //             };
+    //             reg.showNotification("Your order has been delivered!", options);
+    //           });
+    //         }
+
+    //         //   if (Notification.permission == "granted") {
+    //         //   navigator.serviceWorker.getRegistration().then(function(reg) {
+    //         //     reg.showNotification("Your order has been delivered!");
+    //         //   });
+    //         // }
+    //       });
+    // },
+
+    // notification() {
+    //   const messaging = firebase.messaging();
+    //   messaging.usePublicVapidKey(
+    //      "BLV4FVm9jWAeO7zYhfJLrvcWgbXr1ewHnQCLxmfg0DZDdvXvZ2mAjFyGW5A6Y9WWyz2sSBqseMBj_zQHrolEmv0"
+    //   );
+    //   messaging
+    //     .requestPermission()
+    //     .then(() => {
+    //       console.log("Notification permission granted.");
+    //       messaging.getToken().then(token => {
+    //         console.log(token);
+    //         firebase
+    //           .database()
+    //           .ref("Notifications/" + this.$getUserId() + "/dispatchedToken")
+    //           .set({
+    //             value: token,
+    //             packageDispatchedTrigger: 0,
+    //           });
+    //           firebase
+    //           .database()
+    //           .ref("Notifications/" + this.$getUserId() + "/deliveredToken")
+    //           .set({
+    //             value: token,
+    //             packageDeliveredTrigger: 0,
+    //           });
+    //       });
+    //     })
+    //     .catch(err => {
+    //       console.log("Unable to get permission to notify.", err);
+    //     });
+    //   console.log("mine "+this.$getUserId())
+    //   var that=this
+    //   firebase
+    //     .database()
+    //     .ref("Notifications/" + this.$getUserId() + "/dispatchedToken")
+    //     .on("child_changed", function(snapshot) {
+    //       var trigger = snapshot.val();
+    //       console.log(trigger);
+    //       var to;
+    //       firebase
+    //         .database()
+    //         .ref("Notifications/" + that.$getUserId() + "/dispatchedToken/value")
+    //         .once("value")
+    //         .then(function(snapshot) {
+    //           to = snapshot.val();
+
+    //           var notification = {
+    //             title: "SMB Kirana Consumer",
+    //             body: "Order has been dispatched!",
+    //             icon: "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png", //DO Something
+    //             click_action: "http://localhost:8081" //DO Something
+    //           };
+
+    //           fetch("https://fcm.googleapis.com/fcm/send", {
+    //             method: "POST",
+    //             headers: {
+    //               "Authorization":"key=AAAALWfjInI:APA91bHzhzEPoJ6393OxUL8FqnW_9razZGHNaLhJcCWwzwB1p2ZtsZYtHTQM35BYxi07Px80k47dP82ufR4UDcypkkMntNvGJ8jyucgWaw3qCj5Bip-KYgOncmPFbm-MrnKKAwcCtOYC",
+    //               "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({
+    //               notification: notification,
+    //               to: to
+    //             })
+    //           })
+    //             .then(function(response) {
+    //               console.log(response);
+    //             })
+    //             .catch(function(error) {
+    //               console.error(error);
+    //             });
+    //         });
+    //     });
+
+    //       firebase
+    //     .database()
+    //     .ref("Notifications/" + this.$getUserId() + "/deliveredToken")
+    //     .on("child_changed", function(snapshot) {
+    //       var trigger = snapshot.val();
+    //       console.log(trigger);
+    //       var to;
+    //       firebase
+    //         .database()
+    //         .ref("Notifications/" + that.$getUserId() + "/deliveredToken/value")
+    //         .once("value")
+    //         .then(function(snapshot) {
+    //           to = snapshot.val();
+
+    //           var notification = {
+    //             title: "SMB Kirana Consumer",
+    //             body: "Order has been delivered!",
+    //             icon: "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png", //DO Something
+    //             click_action: "http://localhost:8081" //DO Something
+    //           };
+
+    //           fetch("https://fcm.googleapis.com/fcm/send", {
+    //             method: "POST",
+    //             headers: {
+    //               "Authorization":
+    //                 "key=AAAALWfjInI:APA91bHzhzEPoJ6393OxUL8FqnW_9razZGHNaLhJcCWwzwB1p2ZtsZYtHTQM35BYxi07Px80k47dP82ufR4UDcypkkMntNvGJ8jyucgWaw3qCj5Bip-KYgOncmPFbm-MrnKKAwcCtOYC",
+    //               "Content-Type": "application/json"
+    //             },
+    //             body: JSON.stringify({
+    //               notification: notification,
+    //               to: to
+    //             })
+    //           })
+    //             .then(function(response) {
+    //               console.log(response);
+    //             })
+    //             .catch(function(error) {
+    //               console.error(error);
+    //             });
+    //         });
+    //     });
+
+    //   messaging.onMessage(payload => {
+    //     console.log("Message received. ", payload);
+    //   });
+    // },
+
     geolocate: function() {
       navigator.geolocation.getCurrentPosition(position => {
         this.center = {
@@ -212,11 +430,12 @@ export default {
         };
         that.merchant_markers.push({ position: marker });
       });
-      if (this.prevRoute.path == "/userDetails/"+this.orderId) {
+      if (this.prevRoute.path == "/userDetails/" + this.orderId) {
         this.notifyMerchants();
       }
     }
   },
+
   created() {
     let dbref = firebase.database();
     var userId = this.$getUserId();
@@ -224,7 +443,6 @@ export default {
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
       console.log(data);
-     
 
       var time = data.deliveryTime;
       time = parseInt(time / 60);
@@ -240,8 +458,24 @@ export default {
           else data.deliveryTime += parseInt(time % 60) + " mins";
         }
       }
-       this.merchants.push(data);
+      // var that=this;
 
+      var rdb = dbref.ref("MerchantRatings/" + data.merchantId);
+      rdb.once("value").then(snapshot => {
+        // var orderref=dbref.ref("MerchantRatings/"+data.merchantId+"/Number_of_Orders");
+
+        var d = snapshot.val();
+        var Quality = d.TotalRatings.Quality;
+        var Timeliness = d.TotalRatings.Timeliness;
+        var ordersNum = d.Number_of_Orders.count;
+        var timeAvg = parseFloat(Quality) / parseFloat(ordersNum);
+        var qualityAvg = parseFloat(Timeliness) / parseFloat(ordersNum);
+        var finalRating = (timeAvg + qualityAvg) / 2;
+        console.log(data);
+        data.rating = finalRating;
+      });
+      console.log(data);
+      this.merchants.push(data);
     });
   }
 };
