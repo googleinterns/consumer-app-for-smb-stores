@@ -161,7 +161,7 @@ export default {
       inputValue: "",
       itemsInCart: [],
       products: [],
-      orderId: "",
+      orderId: ""
     };
   },
   methods: {
@@ -327,11 +327,11 @@ export default {
           });
         }
       });
-     var userId = this.$getUserId();
-     if (firebase.auth().currentUser.isAnonymous){
-       localStorage.setItem('anonId', this.$getUserId())
-       localStorage.setItem('isAnon', false);
-     }
+      var userId = this.$getUserId();
+      if (firebase.auth().currentUser.isAnonymous) {
+        localStorage.setItem("anonId", this.$getUserId());
+        localStorage.setItem("isAnon", false);
+      }
       api
         .placeOrder(userId, this.orderId, itemsForOrder)
         .then(response => {

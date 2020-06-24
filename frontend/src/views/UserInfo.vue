@@ -48,20 +48,6 @@
           </div>
         </div>
 
-        <!-- <div class="field">
-  <label class="label">Label</label>
-  <p class="control">
-    <div class="field has-addons">
-      <p class="control">
-        <input type="text"/>
-      </p>
-      <p class="control">
-        <a class="button">fghjk</a>
-      </p>
-    </div>
-  </p>
-        </div>-->
-
         <div class="field">
           <div class="field-label is-normal">
             <label class="label is-pulled-left">Delivery Address</label>
@@ -70,7 +56,8 @@
             <div class="field is-expanded">
               <div class="control">
                 <textarea
-                class="textarea is-expanded is-capitalized is-family-primary" rows="4"
+                  class="textarea is-expanded is-capitalized is-family-primary"
+                  rows="4"
                   v-model="address"
                   type="text"
                   placeholder="Your delivery Address"
@@ -80,9 +67,7 @@
           </div>
         </div>
         <div class="field is-horizontal">
-          <div class="field-label">
-            <!-- Left empty for spacing -->
-          </div>
+          <div class="field-label"></div>
           <div class="field-body">
             <div class="field is-centre">
               <div class="control">
@@ -91,8 +76,8 @@
             </div>
           </div>
         </div>
-         <p v-if="isAnonymous" style="font-size: 1em; padding-top: 15px;">Already have an account?</p>
-          <section id="firebaseui-auth-container"></section>
+        <p v-if="isAnonymous" style="font-size: 1em; padding-top: 15px;">Already have an account?</p>
+        <section id="firebaseui-auth-container"></section>
       </div>
     </div>
   </div>

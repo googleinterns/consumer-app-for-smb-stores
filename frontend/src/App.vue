@@ -22,7 +22,6 @@ export default {
     const shouldSW = "serviceWorker" in navigator && prod;
     if (shouldSW) {
       let deferredPrompt;
-
       window.addEventListener("beforeinstallprompt", e => {
         // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();

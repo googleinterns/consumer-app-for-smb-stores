@@ -1,6 +1,5 @@
 package com.googleinterns.smb;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,8 @@ public class UserController {
 
     @PostMapping(value = "/userDetails")
     public void placeOrder(@RequestBody User userDetails) throws ExecutionException, InterruptedException {
-        User user = new User(userDetails.getUserId(), userDetails.getUserAddress(), userDetails.getUserContactNo(),userDetails.getUserName());
+        User user = new User(userDetails.getUserId(), userDetails.getUserAddress(), userDetails.getUserContactNo(),
+                userDetails.getUserName());
 
         fireStoreInstance.updateUserDetails(user);
     }

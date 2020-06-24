@@ -3,7 +3,6 @@ package com.googleinterns.smb;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.cloud.firestore.annotation.PropertyName;
 
-
 public class User {
 
     @JsonProperty("user_id")
@@ -15,7 +14,6 @@ public class User {
     @JsonProperty("user_name")
     private String userName;
 
-
     public User() {
 
     }
@@ -24,11 +22,11 @@ public class User {
         this.userId = userId;
     }
 
-    public User(String userId, String userAddress, String userContactNo,String userName) {
+    public User(String userId, String userAddress, String userContactNo, String userName) {
         this.userId = userId;
-        this.userAddress=userAddress;
-        this.userContactNo=userContactNo;
-        this.userName=userName;
+        this.userAddress = userAddress;
+        this.userContactNo = userContactNo;
+        this.userName = userName;
     }
 
     @PropertyName("user_name")
@@ -58,7 +56,7 @@ public class User {
 
     @PropertyName("user_address")
     public void setUserAddress(String userAddress) {
-        this.userAddress=userAddress;
+        this.userAddress = userAddress;
     }
 
     @PropertyName("user_contactNo")
@@ -68,7 +66,7 @@ public class User {
 
     @PropertyName("user_contactNo")
     public void setUserContactNo(String contactNo) {
-        this.userContactNo=contactNo;
+        this.userContactNo = contactNo;
     }
 
 }

@@ -65,7 +65,7 @@ public class Merchant {
     }
 
     public void setRating(float rating) {
-        this.rating=rating;
+        this.rating = rating;
     }
 
     public String getMerchantId() {
@@ -107,7 +107,8 @@ public class Merchant {
     public Map<String, Double> getGeoLocation() {
         return this.geoLocation;
     }
-    public float getRating(){
+
+    public float getRating() {
         return this.rating;
     }
 

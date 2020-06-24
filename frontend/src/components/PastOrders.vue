@@ -36,7 +36,7 @@
                       {{order.order.date_of_order | formatDate}}
                     </p>
                     <p align="left">
-                      <b>Status: </b>
+                      <b>Status:</b>
                       <span
                         :style="{color: order.order.order_status == 'COMPLETED' ? 'green':'pass'}"
                       >{{order.order.order_status | formatStatus}}</span>
@@ -123,12 +123,10 @@ export default {
           }
           this.$set(this.pastOrders[i], "total", sum);
         }
-           console.log("vibhu is mad");
         this.loading = false;
       })
       .catch(e => {
         this.$log.debug(e);
-        console.log("dfghjk");
         this.errors = e;
       });
   },

@@ -62,8 +62,7 @@
 <script>
 import Logout from "@/components/Logout.vue";
 import api from "../Api";
-//import firebase from "firebase";
-import {db} from "../main.js";
+import { db } from "../main.js";
 export default {
   name: "OngoingOrders",
   components: {
@@ -87,29 +86,21 @@ export default {
 
     getOngoingOrderDetails(orderId) {
       var userId = this.$getUserId();
-        var name = "";
+      var name = "";
       var address = "";
 
-       db.collection("Users")
-      .where('user_id', '==', userId)
-      .get()
-      .then(snap => {
-         snap.forEach(doc => {
-          name=doc.data().user_name;
-          address=doc.data().user_address;
-    });
-  })
-  .catch(err => {
-    console.log('Error getting documents', err);
-  });
-
-
-
-    
-
-      // if (!firebase.auth().currentUser.isAnonymous) {
-      //   name = firebase.auth().currentUser.displayName;
-      // }
+      db.collection("Users")
+        .where("user_id", "==", userId)
+        .get()
+        .then(snap => {
+          snap.forEach(doc => {
+            name = doc.data().user_name;
+            address = doc.data().user_address;
+          });
+        })
+        .catch(err => {
+          console.log("Error getting documents", err);
+        });
 
       this.$router.push({
         name: "merchantList",

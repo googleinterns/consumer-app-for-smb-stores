@@ -4,7 +4,6 @@
     <div class="bd-lead">
       <div class="container">
         <div>
-          <!-- {{merchantName}}, {{orderID}}, {{merchantID}} -->
           <textarea class="textarea" placeholder="Please enter your feedback"></textarea>
           <br />
           <center>

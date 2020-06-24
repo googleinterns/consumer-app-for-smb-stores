@@ -143,11 +143,6 @@ router.beforeEach((to, from, next) => {
     firebase.auth().signInAnonymously()
   }
   next()
-//   const currentuser = firebase.auth().currentUser;
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   if (requiresAuth && !currentuser) next('home');
-//   else if (!requiresAuth && currentuser) next('home');
-//   else next();
 });
 
 export default router

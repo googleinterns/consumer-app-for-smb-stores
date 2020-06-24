@@ -100,10 +100,6 @@ export default {
   },
   methods: {
     notification() {
-      // const messaging = firebase.messaging();
-      // messaging.usePublicVapidKey(
-      //    "BLV4FVm9jWAeO7zYhfJLrvcWgbXr1ewHnQCLxmfg0DZDdvXvZ2mAjFyGW5A6Y9WWyz2sSBqseMBj_zQHrolEmv0",
-      // );
       firebase
         .database()
         .ref("newNotifications/" + this.$getUserId()+"/"+this.orderId + "/packageDispatched")
@@ -124,6 +120,7 @@ export default {
             if (Notification.permission == "granted") {
               navigator.serviceWorker.getRegistration().then(function(reg) {
                 var options = {
+                  body: "Will be delivered soon.",
                   icon:
                     "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
                   vibrate: [100, 50, 100],
@@ -131,18 +128,6 @@ export default {
                     dateOfArrival: Date.now(),
                     primaryKey: 1
                   }
-                  // actions: [
-                  //   {
-                  //     action: "explore",
-                  //     title: "Explore this new world",
-                  //     icon: "images/checkmark.png"
-                  //   },
-                  //   {
-                  //     action: "close",
-                  //     title: "Close notification",
-                  //     icon: "images/xmark.png"
-                  //   }
-                  // ]
                 };
                 reg.showNotification(
                   "Your order has been dispatched!",
@@ -160,6 +145,7 @@ export default {
             if (Notification.permission == "granted") {
               navigator.serviceWorker.getRegistration().then(function(reg) {
                 var options = {
+                  body: "Kindly rate us now.",
                   icon:
                     "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
                   vibrate: [100, 50, 100],
@@ -167,28 +153,10 @@ export default {
                     dateOfArrival: Date.now(),
                     primaryKey: 1
                   }
-                  // actions: [
-                  //   {
-                  //     action: "explore",
-                  //     title: "Explore this new world",
-                  //     icon: "images/checkmark.png"
-                  //   },
-                  //   {
-                  //     action: "close",
-                  //     title: "Close notification",
-                  //     icon: "images/xmark.png"
-                  //   }
-                  // ]
                 };
                 reg.showNotification("Your order has been delivered!", options);
               });
             }
-
-            //   if (Notification.permission == "granted") {
-            //   navigator.serviceWorker.getRegistration().then(function(reg) {
-            //     reg.showNotification("Your order has been delivered!");
-            //   });
-            // }
           });
     },
     confirm() {
@@ -278,20 +246,3 @@ export default {
   }
 };
 </script>
-
-<style  scoped>
-/* .container {
-  margin-top: 50px;
-}
-#bottom {
-  flex-flow: column;
-  display: flex;
-}
-#bot {
-  margin-top: 10px;
-  margin-bottom: 50px;
-} */
-/* #time {
-  margin-top: 15px;
-} */
-</style>

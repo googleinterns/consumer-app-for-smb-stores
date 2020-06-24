@@ -132,11 +132,11 @@ public class FireStoreInstance {
     public void updateUserDetails(User user) throws InterruptedException, ExecutionException {
         ApiFuture<QuerySnapshot> future = db.collection("Users").whereEqualTo("user_id", user.getUserId()).get();
         QuerySnapshot querySnapshot = future.get();
-        
+
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
-        if (documents.size()==0) {
+        if (documents.size() == 0) {
             db.collection("Users").add(user);
-           
+
             return;
         }
 

@@ -46,6 +46,7 @@ export default {
       order_id: order_id,
       item_details: item_details
     }),
+    
     fetchItemsForAnOrder: (orderId) => instance.get(process.env.VUE_APP_SERVER_URL + '/getItemDetailsForOrderID?orderId=' + orderId, {
       transformResponse: [function (data) {
         return data ? JSON.parse(data) : data;
@@ -59,6 +60,7 @@ export default {
       user_contactNo : user_contactNo,
       user_name : user_name
     }),
+
     fetchUserDetails: (userId) => instance.get(process.env.VUE_APP_SERVER_URL + '/getUserDetails?userId=' + userId, {
       transformResponse: [function (data) {
         return data ? JSON.parse(data) : data;
