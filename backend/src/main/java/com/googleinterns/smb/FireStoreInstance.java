@@ -153,6 +153,20 @@ public class FireStoreInstance {
         }
     }
 
+    public void updateOrderStatus(String orderId) throws InterruptedException, ExecutionException {
+        ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("order_id", orderId).get();
+        QuerySnapshot querySnapshot = future.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+        for (QueryDocumentSnapshot document : documents) {
+            HashMap<String, Object> updates = new HashMap<>();
+            String docID = document.getId();
+            DocumentReference docRef = db.collection(ORDER_PATH).document(docID);
+            updates.put("order_status", "COMPLETED");
+            docRef.update(updates);
+        }
+
+    }
+
     public List<Item> getItemsForOrder(String orderId) throws InterruptedException, ExecutionException {
         ApiFuture<QuerySnapshot> future = db.collection(ORDER_PATH).whereEqualTo("order_id", orderId).get();
         QuerySnapshot querySnapshot = future.get();
