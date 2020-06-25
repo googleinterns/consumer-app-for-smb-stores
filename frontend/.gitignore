@@ -3,7 +3,7 @@ node_modules
 /dist
 firebase-config.js
 googleMap-config.js
-notificationKeys-config.js
+service_account_pk.json
 .firebase
 
 # local env files
