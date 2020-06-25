@@ -144,6 +144,9 @@ export default {
       ]
     };
   },
+   mounted(){
+     this.notification()
+   },
   methods: {
     addItemToCart(item) {
       var userId = this.$getUserId();
@@ -164,6 +167,27 @@ export default {
         }
       });
     },
+    notification() {
+      const messaging = firebase.messaging();
+      messaging.usePublicVapidKey(
+         "BLV4FVm9jWAeO7zYhfJLrvcWgbXr1ewHnQCLxmfg0DZDdvXvZ2mAjFyGW5A6Y9WWyz2sSBqseMBj_zQHrolEmv0",
+      ); 
+      Notification.requestPermission();
+      firebase.database().ref("newNotifications/" + this.$getUserId()+"/packageDispatched").set({
+        trigger: 0
+      }),
+      firebase.database().ref("newNotifications/" + this.$getUserId()+"/packageDelivered").set({
+        trigger: 0
+      }),
+      firebase.database().ref("newNotifications/" + this.$getUserId()+"/packageDispatched").on("child_changed", function(snapshot) {
+        console.log(snapshot);
+        new Notification("Your order has been Dispatched")
+      }),
+      firebase.database().ref("newNotifications/" + this.$getUserId()+"/packageDelivered").on("child_changed", function(snapshot) {
+        console.log(snapshot)
+        new Notification("Your order has been Delivered")
+      })
+      },
 
     placeOrder() {
       this.$router.push("/placeOrder");

@@ -39,7 +39,7 @@
               <div class="content">
                 <div class="has-text-grey is-size-6.5">
                   <strong class="is-size-5">{{item.merchantItemName}}</strong>
-                  <strong class="has-text-grey is-size-5"> x {{item.quantity}}</strong>
+                  <strong class="has-text-grey is-size-5">x {{item.quantity}}</strong>
                 </div>
 
                 <div class="has-text-grey is-size-6.5">
@@ -60,7 +60,7 @@
       <div class="card" id="bottom">
         <p id="time">
           Estimated delivery time:
-          <strong>{{deliveryTime}}</strong>
+          <strong>{{merchantvalue.deliveryTime}}</strong>
         </p>
       </div>
     </div>
@@ -78,13 +78,11 @@
 </template>
 
 <script>
-import { itemexp } from "./merchantsList.vue";
-import { merchantexp } from "./merchantsList.vue";
-import { time } from "./merchantsList.vue";
 import Logout from "@/components/Logout.vue";
 import axios from "axios";
 import api from "../Api";
-
+import firebase from "firebase";
+import { db } from "../main.js";
 export default {
   props: ["orderId", "merchantId"],
   name: "itemDetails",
@@ -95,12 +93,92 @@ export default {
     return {
       merchantvalue: [],
       itemvalues: [],
-      deliveryTime: "",
       collectContact: false,
-      contactNo: 9354682711
+      contactNo: ""
     };
   },
   methods: {
+    notification() {
+      firebase
+        .database()
+        .ref(
+          "newNotifications/" +
+            this.$getUserId() +
+            "/" +
+            this.orderId +
+            "/packageDispatched"
+        )
+        .set({
+          trigger: 0
+        }),
+        firebase
+          .database()
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDelivered"
+          )
+          .set({
+            trigger: 0
+          }),
+        firebase
+          .database()
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDispatched"
+          )
+          .on("child_changed", function(snapshot) {
+            console.log(snapshot);
+            if (Notification.permission == "granted") {
+              navigator.serviceWorker.getRegistration().then(function(reg) {
+                var options = {
+                  icon:
+                    "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+                  vibrate: [100, 50, 100],
+                  data: {
+                    dateOfArrival: Date.now(),
+                    primaryKey: 1
+                  }
+                };
+                reg.showNotification(
+                  "Your order has been dispatched!",
+                  options
+                );
+              });
+            }
+          }),
+        firebase
+          .database()
+          .ref(
+            "newNotifications/" +
+              this.$getUserId() +
+              "/" +
+              this.orderId +
+              "/packageDelivered"
+          )
+          .on("child_changed", function(snapshot) {
+            console.log(snapshot);
+            if (Notification.permission == "granted") {
+              navigator.serviceWorker.getRegistration().then(function(reg) {
+                var options = {
+                  icon:
+                    "https://kirana-g.web.app/img/google-logo-png.0fa3fe04.png",
+                  vibrate: [100, 50, 100],
+                  data: {
+                    dateOfArrival: Date.now(),
+                    primaryKey: 1
+                  }
+                };
+                reg.showNotification("Your order has been delivered!", options);
+              });
+            }
+          });
+    },
     confirm() {
       axios.post(
         process.env.VUE_APP_MERCHANT_SERVER +
@@ -111,9 +189,7 @@ export default {
           customer_contact_no: this.contactNo
         }
       );
-
       let confirmedItems = [];
-
       this.itemvalues.forEach(item => {
         confirmedItems.push({
           item_name: item.merchantItemName,
@@ -121,36 +197,71 @@ export default {
           unit_price: item.unitPrice
         });
       });
-
       api.updateOrderStatusToProcessing(
         this.$getUserId(),
         this.orderId,
         this.merchantvalue.merchantId,
         this.merchantvalue.merchantName,
-        "Nehru Market, FNG Road, Sector 115, Noida",
-        "Free Delivery",
+        this.merchantvalue.merchantAddress,
+        "free delivery",
         confirmedItems
       );
       this.$router.push({
         name: "OrderConfirmation",
         query: {
           merchantName: this.merchantvalue.merchantName,
-          time: this.deliveryTime
+          time: this.merchantvalue.deliveryTime
         }
       });
+      this.notification();
     }
   },
-  mounted() {
-    this.merchantvalue = merchantexp;
-    this.itemvalues = itemexp;
-    this.deliveryTime = time;
-    console.log(this.merchantvalue, "This is merchantvalue");
+  created() {
+    let dbref = firebase.database();
+    var self = this;
+    var userId = this.$getUserId();
+    var mdb = dbref.ref(
+      "users/" + userId + "/" + this.orderId + "/merchants/" + this.merchantId
+    );
+    mdb.on("value", snapshot => {
+      var data = snapshot.val();
+      console.log(data);
+      this.merchantvalue = data;
+      var time = data.deliveryTime;
+      time = parseInt(time / 60);
+      if (parseInt(time / 60) === 0) {
+        if (parseInt(time % 60) === 1)
+          this.merchantvalue.deliveryTime = parseInt(time % 60) + " min";
+        else this.merchantvalue.deliveryTime = parseInt(time % 60) + " mins";
+      } else {
+        if (parseInt(time / 60) < 2)
+          this.merchantvalue.deliveryTime = parseInt(time / 60) + " hour ";
+        else this.merchantvalue.deliveryTime = parseInt(time / 60) + " hours ";
+        if (parseInt(time % 60) !== 0) {
+          if (time % 60 === 1)
+            this.merchantvalue.deliveryTime += parseInt(time % 60) + " min";
+          else this.merchantvalue.deliveryTime += parseInt(time % 60) + " mins";
+        }
+      }
+      this.itemvalues = data.itemDetails;
+    });
+    db.collection("Users")
+      .where("user_id", "==", userId)
+      .get()
+      .then(snap => {
+        snap.forEach(doc => {
+          self.contactNo = doc.data().user_contactNo;
+        });
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
   }
 };
 </script>
 
 <style  scoped>
-.container {
+/* .container {
   margin-top: 50px;
 }
 #bottom {
@@ -160,8 +271,8 @@ export default {
 #bot {
   margin-top: 10px;
   margin-bottom: 50px;
-}
-#time {
+} */
+/* #time {
   margin-top: 15px;
-}
+} */
 </style>

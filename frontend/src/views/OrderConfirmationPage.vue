@@ -64,7 +64,7 @@ export default {
     },
     goToHome() {
       this.$router.push("/home");
-    }
+    },
   }
 };
 </script>
