@@ -124,34 +124,13 @@
         </button>
       </p>
     </div>
-
-    <div v-if="askForAddress">
-      <div v-if="isAnonymousUser">
-        <div class="field is-grouped">
-          <p class="control is-expanded">
-            <input class="input" type="text" v-model="cust_name" placeholder="Enter Name" />
-          </p>
-          <p class="control">
-            <a class="button is-info">OK</a>
-          </p>
-        </div>
-      </div>
-      <div class="field is-grouped">
-        <p class="control is-expanded">
-          <input class="input" type="text" v-model="address" placeholder="Enter Address" />
-        </p>
-        <p class="control">
-          <a class="button is-info" v-on:click="placeOrder()">OK</a>
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import api from "../Api";
 import firebase from "firebase";
 import PriorityQueue from "js-priority-queue";
+import api from "../Api";
 
 var levenshtein = require("levenshtein-edit-distance");
 
@@ -176,21 +155,13 @@ export default {
           });
         });
       });
-
-    this.isAnonymousUser =
-      firebase.auth().currentUser == null ||
-      firebase.auth().currentUser.isAnonymous;
   },
   data: function() {
     return {
       inputValue: "",
       itemsInCart: [],
       products: [],
-      orderId: "",
-      address: "K-502, Amrapali Zodiac, Sector 120, Noida",
-      askForAddress: false,
-      cust_name: "",
-      isAnonymousUser: false
+      orderId: ""
     };
   },
   methods: {
@@ -340,7 +311,6 @@ export default {
 
     placeOrder() {
       this.orderId = this.getOrderId();
-      var userId = this.$getUserId();
       var itemsForOrder = [];
 
       this.itemsInCart.forEach(item => {
@@ -357,26 +327,20 @@ export default {
           });
         }
       });
-
-      if (this.isAnonymousUser) {
-        this.cust_name = "Vibhu";
+      var userId = this.$getUserId();
+      if (firebase.auth().currentUser.isAnonymous) {
+        localStorage.setItem("anonId", this.$getUserId());
+        localStorage.setItem("isAnon", false);
       }
-
-      if (this.cust_name == "") {
-        this.cust_name = firebase.auth().currentUser.displayName;
-      }
-
       api
         .placeOrder(userId, this.orderId, itemsForOrder)
         .then(response => {
           if (response.status == 200) {
             this.emptyCart();
             this.$router.push({
-              name: "merchantList",
+              name: "UserInfo",
               params: {
-                orderId: this.orderId,
-                address: this.address,
-                cust_name: this.cust_name
+                orderId: this.orderId
               }
             });
           }

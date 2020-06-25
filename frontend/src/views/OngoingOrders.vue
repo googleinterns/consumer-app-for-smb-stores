@@ -62,7 +62,7 @@
 <script>
 import Logout from "@/components/Logout.vue";
 import api from "../Api";
-import firebase from "firebase";
+import { db } from "../main.js";
 export default {
   name: "OngoingOrders",
   components: {
@@ -85,12 +85,22 @@ export default {
     },
 
     getOngoingOrderDetails(orderId) {
-      var name = "Vibhu";
-      var address = "K-502, Amrapali Zodiac, Sector 120, Noida";
+      var userId = this.$getUserId();
+      var name = "";
+      var address = "";
 
-      if (!firebase.auth().currentUser.isAnonymous) {
-        name = firebase.auth().currentUser.displayName;
-      }
+      db.collection("Users")
+        .where("user_id", "==", userId)
+        .get()
+        .then(snap => {
+          snap.forEach(doc => {
+            name = doc.data().user_name;
+            address = doc.data().user_address;
+          });
+        })
+        .catch(err => {
+          console.log("Error getting documents", err);
+        });
 
       this.$router.push({
         name: "merchantList",
