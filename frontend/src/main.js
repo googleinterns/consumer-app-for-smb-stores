@@ -6,7 +6,7 @@ import router from './router'
 import VueMeta from 'vue-meta';
 import moment from 'moment';
 import * as VueGoogleMaps from "vue2-google-maps";
-import { config } from '../googleMap-config.js';
+import { config } from './googleMap-config.js';
 import { firebaseConfig } from '../firebase-config.js';
 import VueLogger from 'vuejs-logger';
 import { firestorePlugin } from 'vuefire'
@@ -50,14 +50,21 @@ firebase.auth().onAuthStateChanged(() => {
           userId: null
         }
       },
-      methods: {
+     methods: {
         $getUserId() {
+         if(firebase.auth().currentUser!=null)
+         {
+           return firebase.auth().currentUser.uid;
+         }
           let self = this;
+          if (localStorage.isAnon){
+            return localStorage.anonId
+          }
           if (firebase.auth().currentUser == null) {
             firebase.auth().signInAnonymously().then(() => {
               self.userId = firebase.auth().currentUser.uid;
             })
-          }else{
+          } else {
             self.userId = firebase.auth().currentUser.uid;
           }
           return this.userId
@@ -76,6 +83,8 @@ firebase.auth().onAuthStateChanged(() => {
       }
 
     })
+  
+  
 
     new Vue({
       router,
@@ -92,6 +101,10 @@ Vue.use(VueGoogleMaps, {
     key: config.apiKey,
   }
 });
+Notification.requestPermission(function(status) {
+  console.log('Notification permission status:', status);
+});
+
 
 Vue.use(firestorePlugin);
 export const db = firebase.firestore();
