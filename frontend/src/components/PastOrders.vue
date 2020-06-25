@@ -123,7 +123,6 @@ export default {
           }
           this.$set(this.pastOrders[i], "total", sum);
         }
-
         this.loading = false;
       })
       .catch(e => {

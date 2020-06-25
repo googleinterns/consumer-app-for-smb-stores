@@ -46,7 +46,8 @@
           </div>
           <div class="media-content">
             <strong class="is-size-5">{{merchant.merchantName}}</strong>
-            <tab /> <StarRating
+            <br />
+            <StarRating
               :inline="true"
               inactive-color="#FFFFFF"
               active-color="#008CBA"
@@ -79,7 +80,10 @@
           <div class="level-left">
             <strong class="is-size-6" style="color: #162ac9">Total Price: ₹ {{merchant.totalPrice}}</strong>
           </div>
-          <strong class="is-pulled-right" style="color: #162ac9">Delivery in {{ timeString }}</strong>
+          <strong
+            class="is-pulled-right"
+            style="color: #162ac9"
+          >Delivery in {{merchant.deliveryTime}}</strong>
         </nav>
       </div>
     </div>
@@ -94,9 +98,6 @@ import axios from "axios";
 import api from "../Api";
 import StarRating from "vue-star-rating";
 
-export var merchantexp;
-export var itemexp;
-export var time;
 export default {
   name: "merchantList",
   props: ["orderId", "address", "cust_name"],
@@ -107,7 +108,6 @@ export default {
   data() {
     return {
       merchants: [],
-      timeString: "",
       center: {
         lat: 28.535517,
         lng: 77.391029
@@ -137,9 +137,6 @@ export default {
   },
   methods: {
     ItemDetails(merchantdetails) {
-      merchantexp = merchantdetails;
-      itemexp = merchantdetails.itemDetails;
-      time = this.timeString;
       this.$router.push({
         name: "itemDetails",
         params: {
@@ -155,16 +152,13 @@ export default {
       var merchantIDs = [
         "VxWQKTpSLLRlsuhQzdb3rapz5zv1",
         // "1NIEhX1qQfPZv7oUZnSZjJdCkzf1",
-        // "cG4TthNTwwMSbtCeTRZbc38qyVi2",
-        // "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
+        "cG4TthNTwwMSbtCeTRZbc38qyVi2",
+        "0HTBsSc4x0Zi6W6rGiVE6ItIUgA2"
       ];
 
       var customer_name = "";
-      if (!firebase.auth().currentUser.isAnonymous) {
-        customer_name = firebase.auth().currentUser.displayName;
-      } else {
-        customer_name = self.cust_name;
-      }
+
+      customer_name = self.cust_name;
 
       api.fetchItemsForAnOrder(self.orderId).then(response => {
         response.data.forEach(item => {
@@ -222,28 +216,48 @@ export default {
         };
         that.merchant_markers.push({ position: marker });
       });
-      if (this.prevRoute.path == "/placeOrder") {
+      if (this.prevRoute.path == "/userDetails/" + this.orderId) {
         this.notifyMerchants();
       }
     }
   },
+
   created() {
     let dbref = firebase.database();
     var userId = this.$getUserId();
     var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
-      this.merchants.push(data);
+      console.log(data);
 
       var time = data.deliveryTime;
-      time = time / 60;
-      if (time / 60 == 0) {
-        this.timeString = (time % 60) + "mins";
+      time = parseInt(time / 60);
+      if (parseInt(time / 60) == 0) {
+        if (time % 60 == 1) data.deliveryTime = parseInt(time % 60) + " min";
+        else data.deliveryTime = parseInt(time % 60) + " mins";
       } else {
-        if (time / 60 < 2) this.timeString = parseInt(time / 60) + " hour ";
-        else this.timeString = parseInt(time / 60) + " hours ";
-        if (time % 60 != 0) this.timeString += (time % 60) + " mins";
+        if (parseInt(time / 60) < 2)
+          data.deliveryTime = parseInt(time / 60) + " hour ";
+        else data.deliveryTime = parseInt(time / 60) + " hours ";
+        if (time % 60 != 0) {
+          if (time % 60 == 1) data.deliveryTime += parseInt(time % 60) + " min";
+          else data.deliveryTime += parseInt(time % 60) + " mins";
+        }
       }
+
+      var rdb = dbref.ref("MerchantRatings/" + data.merchantId);
+      rdb.once("value").then(snapshot => {
+        var d = snapshot.val();
+        var Quality = d.TotalRatings.Quality;
+        var Timeliness = d.TotalRatings.Timeliness;
+        var ordersNum = d.Number_of_Orders.count;
+        var timeAvg = parseFloat(Quality) / parseFloat(ordersNum);
+        var qualityAvg = parseFloat(Timeliness) / parseFloat(ordersNum);
+        var finalRating = (timeAvg + qualityAvg) / 2;
+        data.rating = finalRating;
+      });
+      console.log(data);
+      this.merchants.push(data);
     });
   }
 };

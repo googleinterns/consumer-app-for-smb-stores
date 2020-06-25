@@ -58,7 +58,7 @@
                       style="background-color: #3298dc;"
                       v-on:click="addItemToCart(item)"
                     >
-                    <AddToCartButton />
+                      <AddToCartButton />
                     </button>
                   </div>
                 </div>
