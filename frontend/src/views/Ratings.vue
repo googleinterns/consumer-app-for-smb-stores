@@ -154,6 +154,10 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  margin-top: 50px;
+}
+
 .bd-lead {
   padding: 0.75rem;
 }

@@ -316,6 +316,7 @@ export default {
       this.itemsInCart = [];
     },
 
+  
     getEPOCHvalue() {
       var now = new Date();
       var secondsSinceEpoch = Math.round(now.getTime() / 1000);

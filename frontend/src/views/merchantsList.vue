@@ -8,7 +8,6 @@
             :position="center"
             icon="http://maps.google.com/mapfiles/ms/icons/green-dot.png"
           />
-
           <gmap-marker
             :key="merchant_index"
             v-for="(marker, merchant_index) in merchant_markers"
@@ -18,7 +17,6 @@
         </gmap-map>
       </div>
     </div>
-
     <div v-if="merchants.length == 0">
       <div class="card">
         <div class="card-content">
@@ -90,9 +88,11 @@
 import firebase from "firebase";
 import Logout from "@/components/Logout.vue";
 import * as Geofire from "geofire";
+
 import axios from "axios";
 import api from "../Api";
 import StarRating from "vue-star-rating";
+
 
 export var merchantexp;
 export var itemexp;
@@ -112,7 +112,6 @@ export default {
         lat: 28.535517,
         lng: 77.391029
       },
-      customer_markers: [],
       merchant_markers: [],
       FirebaseRef: null,
       geoFireRef: null,
@@ -129,10 +128,9 @@ export default {
   },
 
   mounted() {
-    console.log("received orderID", this.orderId);
-    console.log(this.$getUserId());
     this.FirebaseRef = firebase.database().ref("MerchantLocation");
     this.geoFireRef = new Geofire.GeoFire(this.FirebaseRef);
+
     this.geolocate();
   },
   methods: {
@@ -230,7 +228,7 @@ export default {
   created() {
     let dbref = firebase.database();
     var userId = this.$getUserId();
-    var mdb = dbref.ref("users/" + userId + "/" + this.orderId + "/merchants");
+    var mdb = dbref.ref("users/" + userId + "/Order1/merchants");
     mdb.on("child_added", snapshot => {
       var data = snapshot.val();
       this.merchants.push(data);
