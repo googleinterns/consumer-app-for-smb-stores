@@ -210,6 +210,7 @@ export default {
       var itemDoc = reference.push({
         item_name: item,
         item_quantity: 1,
+        EAN: EAN,
         item_image: itemImage
       });
       var item_id = itemDoc.key;
@@ -217,6 +218,7 @@ export default {
         item_id: item_id,
         item_name: item,
         item_quantity: 1,
+        EAN: EAN,
         item_image: itemImage
       });
     },

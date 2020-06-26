@@ -5,7 +5,7 @@
       <div class="container">
         <div>
           <div>
-            <h1 class="is-family-primary title is-size-3 has-text-info">Edit details</h1>
+            <h1 class="is-family-primary title is-size-3 has-text-info">Edit Details</h1>
           </div>
         </div>
         <div class="field">
@@ -47,20 +47,6 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="field">
-  <label class="label">Label</label>
-  <p class="control">
-    <div class="field has-addons">
-      <p class="control">
-        <input type="text"/>
-      </p>
-      <p class="control">
-        <a class="button">fghjk</a>
-      </p>
-    </div>
-  </p>
-        </div>-->
 
         <div class="field">
           <div class="field-label is-normal">

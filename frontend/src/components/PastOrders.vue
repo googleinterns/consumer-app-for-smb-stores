@@ -123,7 +123,6 @@ export default {
           }
           this.$set(this.pastOrders[i], "total", sum);
         }
-           console.log("vibhu is mad");
         this.loading = false;
       })
       .catch(e => {
