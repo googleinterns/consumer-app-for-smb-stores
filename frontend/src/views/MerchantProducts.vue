@@ -7,8 +7,8 @@
 </template>
 
 <script>
-// import axios from 'axios';
-import { db } from "../main.js";
+ import axios from 'axios';
+//import { db } from "../main.js";
 export default {
   name: "MerchantProducts",
   props: ["merchantName"],
@@ -22,26 +22,18 @@ export default {
   },
 
   created: function() {
-    db.collection("merchant_links")
-      .doc(this.merchantName)
-      .get()
-      .then(snap => {
-        if (snap.exists) {
-          this.validURL = true;
-          var merchant = {
-            mid: snap.data().mid,
-            name: snap.data().name
-          };
-          this.$router.push({
-            name: "PaginatedProducts",
-            params: { merchant: merchant }
-          });
-        } 
-        else {
-          console.log("Invalid URL");
-        }
-        this.loading = false;
+    axios.get(process.env.VUE_APP_MERCHANT_SERVER + "/merchant/domain/" + this.merchantName)
+    .then((response)=>{
+      var merchant = {
+        "mid": response.data.mid,
+        "name": response.data.store_name
+      }
+      console.log(merchant)
+      this.$router.push({
+        name: "PaginatedProducts",
+        params: { merchant: merchant }
       });
+    })
   }
 };
 </script>

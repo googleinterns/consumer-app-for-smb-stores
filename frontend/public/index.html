@@ -13,7 +13,7 @@
   <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
   <title><%= htmlWebpackPlugin.options.title %></title>
 
-  <link rel="manifest" href="manifest.json">
+  
 
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,6 +29,8 @@
   <link rel="apple-touch-icon" sizes="192x192" href="images/googlelogo.png">
   <link rel="icon" sizes="512x512" href="images/googlelogo.png">
   <link rel="apple-touch-icon" sizes="512x512" href="images/googlelogo.png">
+  <link rel="manifest" href="/manifest.json">
+
 
 
 </head>
@@ -43,4 +45,18 @@
   <div id="app"></div>
 </body>
 
+
+<script>
+  if ('serviceWorker' in navigator) {
+     console.log("Will the service worker register?");
+     navigator.serviceWorker.register('service-worker.js')
+       .then(function(reg){
+         console.log("Yes, it did.");
+      }).catch(function(err) {
+         console.log("No it didn't. This happened:", err)
+     });
+  }
+ </script>
+
 </html>
+

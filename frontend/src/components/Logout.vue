@@ -56,6 +56,8 @@ export default {
   name: "Logout",
   methods: {
     logout: function() {
+      localStorage.removeItem('isAnon')
+      localStorage.removeItem('anonId')
       firebase
         .auth()
         .signOut()
