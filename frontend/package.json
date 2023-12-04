@@ -10,7 +10,7 @@
   "dependencies": {
     "@firebase/app": "^0.6.5",
     "@firebase/firestore": "^1.15.1",
-    "@google-cloud/firestore": "^3.8.5",
+    "@google-cloud/firestore": "^6.2.0",
     "axios": "^0.19.2",
     "bulma": "^0.8.2",
     "core-js": "^3.6.5",
