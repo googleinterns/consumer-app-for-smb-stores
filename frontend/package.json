@@ -10,7 +10,7 @@
   "dependencies": {
     "@firebase/app": "^0.6.5",
     "@firebase/firestore": "^1.15.1",
-    "@google-cloud/firestore": "^3.8.5",
+    "@google-cloud/firestore": "^8.0.0",
     "axios": "^0.19.2",
     "bulma": "^0.8.2",
     "core-js": "^3.6.5",
@@ -38,7 +38,7 @@
     "@vue/cli-plugin-eslint": "~4.4.0",
     "@vue/cli-plugin-pwa": "~4.4.0",
     "@vue/cli-plugin-router": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
+    "@vue/cli-service": "~5.0.9",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
